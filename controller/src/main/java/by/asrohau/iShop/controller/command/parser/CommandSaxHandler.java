@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class CommandSaxHandler extends DefaultHandler {
 
-    private final String COMMAND_PATH = "by.asrohau.shop.controller.command.impl.";
+    private final String COMMAND_PATH = "by.asrohau.iShop.controller.command.impl.";
     private final String COMMAND_TAG = "command";
 
     private CommandObj commandObj;
