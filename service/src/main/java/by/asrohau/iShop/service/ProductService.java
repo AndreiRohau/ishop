@@ -4,12 +4,13 @@ import by.asrohau.iShop.bean.Product;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ProductService {
 
 	boolean validation(Product product);
 	boolean addNewProduct(Product newProduct) throws ServiceException;
-	ArrayList<Product> getAllProducts(int row) throws ServiceException;
+	List<Product> getAllProducts(int row) throws ServiceException; //ArrayList
 	Product findProductWithId(Product product) throws ServiceException;
 	boolean updateProduct(Product product) throws ServiceException;
 
@@ -18,5 +19,5 @@ public interface ProductService {
 	int countProducts() throws  ServiceException;
 
 	int countProductsComprehensive(Product product) throws  ServiceException;
-	ArrayList<Product>  findProductsComprehensive(Product product, int row) throws  ServiceException;
+	List<Product>  findProductsComprehensive(Product product, int row) throws  ServiceException; //ArrayList
 }

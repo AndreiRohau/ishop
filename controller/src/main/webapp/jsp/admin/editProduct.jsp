@@ -19,7 +19,7 @@
         <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
         <fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
         <fmt:message bundle="${loc}" key="local.deleteAccountButton" var="deleteAccountButton" />
-        <c:set var="product_id" value="${requestScope.get('productToEdit').id}"/>
+        <c:set var="rProductId" value="${requestScope.get('productToEdit').id}"/>
         <c:set var="product_name" value="${requestScope.get('productToEdit').name}"/>
         <c:set var="product_company" value="${requestScope.get('productToEdit').company}"/>
         <c:set var="product_type" value="${requestScope.get('productToEdit').type}"/>
@@ -86,7 +86,7 @@
                         <td>Link</td>
                     </tr>
                     <tr>
-                        <td>${product_id}</td>
+                        <td>${rProductId}</td>
                         <td>${product_company}</td>
                         <td>${product_name}</td>
                         <td>${product_type}</td>
@@ -94,7 +94,7 @@
                         <td>
                             <form action="FrontController" method="post">
                                 <input type="hidden" name="command" value="delete_product"/><br/>
-                                <input type="hidden" name="id" value="${product_id}"/><br/>
+                                <input type="hidden" name="id" value="${rProductId}"/><br/>
                                 <input type="submit" name="delete" value="${deleteAccountButton}"/>
                             </form>
                         </td>
@@ -106,7 +106,7 @@
                 <c:out value="${requestScope.get('updateFailed')}"/>
                 <form action="FrontController" method="post">
                     <input type="hidden" name="command" value="updateProduct" />
-                    <input type="hidden" name="id" value="${product_id}" />
+                    <input type="hidden" name="id" value="${rProductId}" />
 
                     <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
                         <tr>
@@ -139,7 +139,7 @@
                     -->
                     <a href="FrontController?command=goToPage&address=manageProducts.jsp">GOODS</a>
                     -->
-                    <a href="FrontController?command=editProduct&productId=${product_id}" style="text-transform: uppercase">${product_name}</a>
+                    <a href="FrontController?command=editProduct&productId=${rProductId}" style="text-transform: uppercase">${product_name}</a>
                 </p>
             </div>
         </div>

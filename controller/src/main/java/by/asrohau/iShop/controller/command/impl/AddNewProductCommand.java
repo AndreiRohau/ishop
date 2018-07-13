@@ -21,7 +21,7 @@ public class AddNewProductCommand implements Command {
 
         boolean isAdded; //= false
         Product newProduct = new Product(request.getParameter("company").trim(),
-                request.getParameter("name").trim(),
+                request.getParameter("inString").trim(),
                 request.getParameter("type").trim(),
                 request.getParameter("price").trim(),
                 request.getParameter("description").trim());

@@ -3,16 +3,17 @@ package by.asrohau.iShop.service.impl;
 import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.dao.DAOFactory;
-import by.asrohau.iShop.dao.UserDAO;
+import by.asrohau.iShop.dao.ClientDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-	private final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
+	private final ClientDAO clientDAO = DAOFactory.getInstance().getClientDAO();
 
 	public UserServiceImpl() {
 	}
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 		if (validation(user)) {
 
 			try {
-				return userDAO.findUserWithLoginAndPassword(user);
+				return clientDAO.findUserWithLoginAndPassword(user);
 			} catch (DAOException e) {
 				throw new ServiceException(e);
 			}
@@ -51,8 +52,8 @@ public class UserServiceImpl implements UserService {
 		if (validation(user)) {
 
 			try {
-				if (userDAO.findUserWithLogin(user) == null) {
-					return userDAO.saveUser(user);
+				if (clientDAO.findUserWithLogin(user) == null) {
+					return clientDAO.saveUser(user);
 				}
 
 			} catch (DAOException e) {
@@ -70,8 +71,8 @@ public class UserServiceImpl implements UserService {
 		if (validation(user) && !user.getNewPassword().trim().equals("")) {
 
 			try {
-				if (userDAO.findUserWithLoginAndPassword(user) != null) {
-					return userDAO.changePassword(user);
+				if (clientDAO.findUserWithLoginAndPassword(user) != null) {
+					return clientDAO.changePassword(user);
 				}
 				
 			} catch (DAOException e) {
@@ -87,8 +88,8 @@ public class UserServiceImpl implements UserService {
 		// validation!!! stub
 		if (validation(user)) {
 			try {
-				if (userDAO.findUserWithLoginAndPassword(user) != null) {
-					return userDAO.deleteUser(user);
+				if (clientDAO.findUserWithLoginAndPassword(user) != null) {
+					return clientDAO.deleteUser(user);
 				}
 			} catch (DAOException e) {
 				throw new ServiceException(e);
@@ -98,9 +99,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ArrayList<User> getAllUsers(int row) throws ServiceException {
+	public List<User> getAllUsers(int row) throws ServiceException { // ArrayList
 		try {
-			return userDAO.selectAllUsers(row);
+			return clientDAO.selectAllUsers(row);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService {
 		//validation!!! stub
 
 		try {
-			return userDAO.findUserWithId(user);
+			return clientDAO.findUserWithId(user);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -122,8 +123,8 @@ public class UserServiceImpl implements UserService {
 		// validation!!! stub
 		if (validation(user)) {
 			try {
-				UserDTO userCheck = userDAO.findUserWithLogin(user);
-				return (((userCheck == null) || (userCheck.getId() == user.getId())) && userDAO.updateUser(user));
+				UserDTO userCheck = clientDAO.findUserWithLogin(user);
+				return (((userCheck == null) || (userCheck.getId() == user.getId())) && clientDAO.updateUser(user));
 			} catch (DAOException e) {
 				throw new ServiceException(e);
 			}
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int countUsers() throws ServiceException {
 		try {
-			return userDAO.countProducts();
+			return clientDAO.countProducts();
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -145,7 +146,7 @@ public class UserServiceImpl implements UserService {
 
 		if (!user.getLogin().trim().equals("")){
 			try {
-				return userDAO.findUserWithLogin(user);
+				return clientDAO.findUserWithLogin(user);
 			} catch (DAOException e) {
 				throw new ServiceException(e);
 			}

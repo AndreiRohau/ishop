@@ -7,15 +7,16 @@ import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public interface OrderService {
     boolean validation(Reserve reserve);
     boolean saveReserve(Reserve reserve) throws ServiceException;
-    ArrayList<Product> getAllReserved(int user_id, int row) throws ServiceException;
+    List<Product> getAllReserved(int user_id, int row) throws ServiceException; //ArrayList
     int countReserved(int user_id) throws ServiceException;
     boolean deleteReserved(int reserveId) throws ServiceException;
 
-    LinkedList<Integer> getAllReservedIds(int user_id) throws ServiceException;
+    List<Integer> getAllReservedIds(int user_id) throws ServiceException; // LinkedList
 
     boolean deleteAllReserved(int user_id) throws ServiceException;
     boolean deleteAllOrdersWithUserID(int user_id) throws ServiceException;
@@ -24,7 +25,7 @@ public interface OrderService {
 
     int countOrders(String status) throws ServiceException;
 
-    ArrayList<Order> getAllOrders(int row, String status) throws ServiceException;
+    List<Order> getAllOrders(int row, String status) throws ServiceException; // ArrayList
 
     boolean deleteOrder(int orderId) throws ServiceException;
 
@@ -34,11 +35,11 @@ public interface OrderService {
 
     boolean deleteProductFromOrder(Order order) throws ServiceException;
 
-    ArrayList<Order> getAllActiveOrders(int row) throws ServiceException;
+    List<Order> getAllActiveOrders(int row) throws ServiceException; // ArrayList
 
-    ArrayList<Order> getAllSuccessOrders(int row) throws ServiceException;
+    List<Order> getAllSuccessOrders(int row) throws ServiceException; // ArrayList
 
     int countClientOrders(int user_id) throws ServiceException;
 
-    ArrayList<Order> getAllClientsOrders(int row, int user_id) throws ServiceException;
+    List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException; // ArrayList
 }

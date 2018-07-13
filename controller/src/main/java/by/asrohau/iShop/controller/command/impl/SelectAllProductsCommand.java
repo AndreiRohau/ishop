@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SelectAllProductsCommand implements Command {
     @Override
@@ -33,7 +34,7 @@ public class SelectAllProductsCommand implements Command {
             //count amount of all products
             maxPage = (int) Math.ceil(((double) productService.countProducts()) / 15);
 
-            ArrayList<Product> productArrayList = productService.getAllProducts(row);
+            List<Product> productArrayList = productService.getAllProducts(row); // ArrayList
             request.setAttribute("productArray", productArrayList);
 
             request.setAttribute("maxPage", maxPage);

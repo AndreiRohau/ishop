@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 //get user ID
 //get product list
@@ -48,8 +49,8 @@ public class CreateOrderCommand implements Command {
         //got user ID
         int user_id = userService.findIdWithLogin(user).getId();
         //got list of product IDs
-        LinkedList<Integer> products = orderService.getAllReservedIds(user_id);
-        //transform list into string of IDs divided with ,
+        List<Integer> products = orderService.getAllReservedIds(user_id); // LinkedList
+        //transform list into inString of IDs divided with ,
         for(int id : products){
             if(productIDs != null) {
                 productIDs = productIDs + String.valueOf(id) + ",";

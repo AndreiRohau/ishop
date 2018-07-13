@@ -120,11 +120,11 @@
                             <td>
                                 <form action="FrontController" method="post">
                                     <input type="hidden" name="command" value="deleteFromOrder" />
-                                    <input type="hidden" name="product_id" value="${product.id}" />
+                                    <input type="hidden" name="rProductId" value="${product.id}" />
                                     <input type="hidden" name="indexRemovingProduct" value="${indexRemovingProduct}" />
                                     <input type="hidden" name="currentPage" value="${current_page}" />
                                     <input type="hidden" name="productIDsString" value="<c:out value="${productIDsString}"/> " />
-                                    <input type="hidden" name="orderId" value="${product.order_id}" />
+                                    <input type="hidden" name="orderId" value="${product.orderId}" />
                                     <input type="submit" name="remove" value="REMOVE" /><br/>
                                 </form>
                                 <c:set value="${indexRemovingProduct + 1}" var="indexRemovingProduct"/>

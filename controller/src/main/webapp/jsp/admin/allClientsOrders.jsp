@@ -21,7 +21,7 @@
 
         <c:set var="current_page" value="${requestScope.get('currentPage')}"/>
         <c:set var="max_page" value="${requestScope.get('maxPage')}"/>
-        <c:set var="user_id" value="${requestScope.get('userId')}"/>
+        <c:set var="userId" value="${requestScope.get('userId')}"/>
 
     </head>
     <body>
@@ -64,7 +64,7 @@
                     <p><b>Get ALL orders</b>
                         <input type="hidden" name="command" value="showAllClientsOrders"/>
                         <input type="hidden" name="page_num" value="1"/>
-                        <input type="hidden" name="userId" value="${user_id}"/><br/>
+                        <input type="hidden" name="userId" value="${userId}"/><br/>
                         <input type="submit" name="get_orders" value="Show ALL Orders!"/>
                     </p>
                 </form>
@@ -92,7 +92,7 @@
                                     <form title="Go to user" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="editClient" />
                                         <input type="hidden" name="orderId" value="${element.id}" />
-                                        <input type="submit" name="userId" value="${element.user_id}" /><br/>
+                                        <input type="submit" name="userId" value="${element.userId}" /><br/>
                                     </form>
                                 </td>
                                     <%--order id - open order--%>
@@ -119,7 +119,7 @@
                     <div width="100%" style="background-color: deepskyblue; font-size: 1em">    
                         <c:forEach begin="1" end="${max_page}" var="i">
                             <c:if test="${i != current_page}">
-                                <a href="FrontController?command=showAllClientsOrders&userId=${user_id}&page_num=${i}">${i}</a>
+                                <a href="FrontController?command=showAllClientsOrders&userId=${userId}&page_num=${i}">${i}</a>
                             </c:if>
                             <c:if test="${i == current_page}">
                                 <c:out value="${i}"/>
@@ -147,7 +147,7 @@
                         <a href="FrontController?command=goToPage&address=basket.jsp">BASKET</a>
                     </c:if>
                     -->
-                    <a href="FrontController?command=showAllClientsOrders&userId=${user_id}&page_num=${current_page}">Page: ${current_page}</a>
+                    <a href="FrontController?command=showAllClientsOrders&userId=${userId}&page_num=${current_page}">Page: ${current_page}</a>
                 </p>
             </div>
         </div>

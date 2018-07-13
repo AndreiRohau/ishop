@@ -44,7 +44,7 @@ public class DeleteFromOrderCommand implements Command{
                 indexRemovingProduct++;
             }
 
-            order.setProductIDs(finalIDs);
+            order.setProductIds(finalIDs);
             String message = orderService.deleteProductFromOrder(order) ? "You have REMOVED product successfully" :
                     "Can NOT remove this product, try again!";
 

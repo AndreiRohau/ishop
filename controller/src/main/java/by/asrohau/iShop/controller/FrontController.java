@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 
-public class FrontController extends HttpServlet {
+public final class FrontController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private final CommandFactory commandFactory = CommandFactory.getInstance();

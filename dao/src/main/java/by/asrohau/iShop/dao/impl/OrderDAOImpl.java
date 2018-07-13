@@ -38,8 +38,8 @@ public class OrderDAOImpl extends AbstractDAO<Reserve> implements OrderDAO {
     @Override
     public boolean saveNewReservation(Reserve reserve) throws DAOException {
         try (PreparedStatement statement = getConnection().prepareStatement(SAVE_RESERVATION_QUERY)) {
-            statement.setInt(1, reserve.getUser_id());
-            statement.setInt(2, reserve.getProduct_id());
+            statement.setInt(1, reserve.getrUserId());
+            statement.setInt(2, reserve.getrProductId());
 
             int result = statement.executeUpdate();
             statement.close();
@@ -162,10 +162,10 @@ public class OrderDAOImpl extends AbstractDAO<Reserve> implements OrderDAO {
     @Override
     public boolean insertNewOrder(Order order) throws DAOException {
         try (PreparedStatement statement = getConnection().prepareStatement(SAVE_NEW_ORDER_QUERY)) {
-            statement.setInt(1, order.getUser_id());
-            statement.setString(2, order.getProductIDs());
-            statement.setString(3, order.getUser_address());
-            statement.setString(4, order.getUser_phone());
+            statement.setInt(1, order.getUserId());
+            statement.setString(2, order.getProductIds());
+            statement.setString(3, order.getUserAddress());
+            statement.setString(4, order.getUserPhone());
             statement.setString(5, order.getStatus());
 
             int result = statement.executeUpdate();
@@ -270,10 +270,10 @@ public class OrderDAOImpl extends AbstractDAO<Reserve> implements OrderDAO {
 
             while (resultSet.next()) {
                 foundOrder.setId(resultSet.getInt(1));
-                foundOrder.setUser_id(resultSet.getInt(2));
-                foundOrder.setProductIDs(resultSet.getString(3));
-                foundOrder.setUser_address(resultSet.getString(4));
-                foundOrder.setUser_phone(resultSet.getString(5));
+                foundOrder.setUserId(resultSet.getInt(2));
+                foundOrder.setProductIds(resultSet.getString(3));
+                foundOrder.setUserAddress(resultSet.getString(4));
+                foundOrder.setUserPhone(resultSet.getString(5));
                 foundOrder.setStatus(resultSet.getString(6));
             }
             preparedStatement.close();
@@ -293,7 +293,7 @@ public class OrderDAOImpl extends AbstractDAO<Reserve> implements OrderDAO {
     @Override
     public boolean updateOrdersProducts(Order order) throws DAOException {
         try (PreparedStatement statement = getConnection().prepareStatement(UPDATE_ORDERS_PRODUCTS_QUERY)) {
-            statement.setString(1, order.getProductIDs());
+            statement.setString(1, order.getProductIds());
             statement.setInt(2, order.getId());
 
             int result = statement.executeUpdate();

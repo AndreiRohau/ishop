@@ -8,6 +8,7 @@ import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -40,22 +41,21 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public boolean addNewProduct(Product newProduct) throws ServiceException {
 		// validation!!! stub
-		if (validation(newProduct)) {
+		if (!validation(newProduct)) { return false;}
 
-			try {
-				if (productDAO.findProduct(newProduct) == null) {
-					return productDAO.addProduct(newProduct);
-				}
-				Product product = productDAO.findProduct(newProduct); //for test
-			} catch (DAOException e) {
-				throw new ServiceException(e);
+		try {
+			if (productDAO.findProduct(newProduct) == null) {
+				return productDAO.addProduct(newProduct);
 			}
+			Product product = productDAO.findProduct(newProduct); //for test
+		} catch (DAOException e) {
+			throw new ServiceException(e);
 		}
-		return false;
+	    return true;
 	}
 
 	@Override
-	public ArrayList<Product> getAllProducts(int row) throws ServiceException {
+	public List<Product> getAllProducts(int row) throws ServiceException { //ArrayList
 		try {
 			return productDAO.selectAllProducts(row);
 		} catch (DAOException e) {
@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ArrayList<Product> findProductsComprehensive(Product product, int row) throws ServiceException {
+	public List<Product> findProductsComprehensive(Product product, int row) throws ServiceException { //ArrayList
 		try {
 			return productDAO.selectProductsComprehensive(product, row);
 		} catch (DAOException e) {

@@ -43,7 +43,7 @@ public class InspectOrderCommand implements Command {
             Order order = orderService.findOrderWithID(orderID);
 
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
-            String productIDsString = order.getProductIDs();
+            String productIDsString = order.getProductIds();
             String[] productIDsArray = productIDsString.split(",");
 
             //finding maxPage
@@ -61,7 +61,7 @@ public class InspectOrderCommand implements Command {
             for(int id : productIDs){
                 product.setId(id);
                 product = productService.findProductWithId(product);
-                product.setOrder_id(orderID);
+                product.setOrderId(orderID);
                 productArray.add(product);
                 product = new Product();
             }
@@ -77,28 +77,28 @@ public class InspectOrderCommand implements Command {
             request.setAttribute("new_status", request.getParameter("new_status"));
             request.setAttribute("status", order.getStatus());
             request.setAttribute("orderId", order.getId());
-            request.setAttribute("userId", order.getUser_id());
+            request.setAttribute("userId", order.getUserId());
             request.setAttribute("for_user", for_user);
-            request.setAttribute("address", order.getUser_address());
-            request.setAttribute("phone", order.getUser_phone());
+            request.setAttribute("address", order.getUserAddress());
+            request.setAttribute("phone", order.getUserPhone());
             request.setAttribute("status", order.getStatus());
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=inspectOrder&page_num=" + currentPage
                             + "&orderId=" + orderID
-                            + "&userId=" + order.getUser_id()
-                            + "&address=" + order.getUser_address()
-                            + "&phone=" + order.getUser_phone()
+                            + "&userId=" + order.getUserId()
+                            + "&address=" + order.getUserAddress()
+                            + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status"))
                             + "&from=" + request.getParameter("from"));
 
             request.setAttribute("lastCMDneedPage",
                     "FrontController?command=inspectOrder"
                             + "&orderId=" + orderID
-                            + "&userId=" + order.getUser_id()
-                            + "&address=" + order.getUser_address()
-                            + "&phone=" + order.getUser_phone()
+                            + "&userId=" + order.getUserId()
+                            + "&address=" + order.getUserAddress()
+                            + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status"))
                             + "&from=" + request.getParameter("from")
                             + "&page_num=");

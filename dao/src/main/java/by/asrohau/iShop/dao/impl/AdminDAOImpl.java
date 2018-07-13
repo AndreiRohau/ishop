@@ -17,8 +17,6 @@ public class AdminDAOImpl extends AbstractDAO<UserDTO> implements AdminDAO {
     private String FIND_USER_WITH_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
     private String UPDATE_USER_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
 
-
-
     @Override
     public UserDTO findUserWithLoginAndPassword(User user) throws DAOException {
         try (PreparedStatement preparedStatement = getConnection()

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FindSuitableCommand implements Command {
     @Override
@@ -31,7 +32,7 @@ public class FindSuitableCommand implements Command {
 
         String check = "";
         String company = request.getParameter("company").trim();
-        String name = request.getParameter("name").trim();
+        String name = request.getParameter("inString").trim();
         String type = request.getParameter("type").trim();
         String price = request.getParameter("price").trim();
 
@@ -53,7 +54,7 @@ public class FindSuitableCommand implements Command {
             //count amount of all products
             maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / 15);
 
-            ArrayList<Product> productArrayList = productService.findProductsComprehensive(product, row);
+            List<Product> productArrayList = productService.findProductsComprehensive(product, row); //ArrayList
             request.setAttribute("productArray", productArrayList);
 
             request.setAttribute("maxPage", maxPage);
@@ -61,14 +62,14 @@ public class FindSuitableCommand implements Command {
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=findSuitable"
                             + "&company=" + company
-                            + "&name=" + name
+                            + "&inString=" + name
                             + "&type=" + type
                             + "&price=" + price
                             + "&page_num=" + currentPage);
             request.getSession().setAttribute("lastCMDneedPage",
                     "FrontController?command=findSuitable"
                             + "&company=" + company
-                            + "&name=" + name
+                            + "&inString=" + name
                             + "&type=" + type
                             + "&price=" + price
                             + "&page_num=");

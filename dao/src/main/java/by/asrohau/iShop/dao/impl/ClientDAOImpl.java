@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.dao.AbstractDAO;
-import by.asrohau.iShop.dao.UserDAO;
+import by.asrohau.iShop.dao.ClientDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 
-public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
+public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	private String FIND_USER_WITH_LOGIN_PASSWORD_QUERY = "SELECT * FROM shop.users WHERE login = ? AND password = ?";
 	private String FIND_USER_WITH_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";

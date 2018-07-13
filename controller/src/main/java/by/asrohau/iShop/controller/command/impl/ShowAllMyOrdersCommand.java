@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowAllMyOrdersCommand implements Command {
     @Override
@@ -38,7 +39,7 @@ public class ShowAllMyOrdersCommand implements Command {
             //count amount of all NEW orders
             maxPage = (int) Math.ceil(((double) orderService.countClientOrders(user_id)) / 15);
 
-            ArrayList<Order> allOrdersList = orderService.getAllClientsOrders(row, user_id);
+            List<Order> allOrdersList = orderService.getAllClientsOrders(row, user_id); // ArrayList
             request.setAttribute("array", allOrdersList);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);

@@ -1,8 +1,7 @@
 package by.asrohau.iShop.bean;
 
-public class UserDTO {
+public class UserDTO extends Base {
 
-	private int id;
 	private String login;
 
 	public UserDTO() {}
@@ -17,14 +16,6 @@ public class UserDTO {
 		this.login = user.getLogin();
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -37,16 +28,16 @@ public class UserDTO {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
 
 		UserDTO userDTO = (UserDTO) o;
 
-		if (id != userDTO.id) return false;
 		return login != null ? login.equals(userDTO.login) : userDTO.login == null;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id;
+		int result = super.hashCode();
 		result = 31 * result + (login != null ? login.hashCode() : 0);
 		return result;
 	}
@@ -54,8 +45,8 @@ public class UserDTO {
 	@Override
 	public String toString() {
 		return "UserDTO{" +
-				"id=" + id +
-				", login='" + login + '\'' +
+				super.toString() +
+				"login='" + login + '\'' +
 				'}';
 	}
 }

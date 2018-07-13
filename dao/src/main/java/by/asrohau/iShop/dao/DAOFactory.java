@@ -3,21 +3,21 @@ package by.asrohau.iShop.dao;
 import by.asrohau.iShop.dao.impl.AdminDAOImpl;
 import by.asrohau.iShop.dao.impl.OrderDAOImpl;
 import by.asrohau.iShop.dao.impl.ProductDAOImpl;
-import by.asrohau.iShop.dao.impl.UserDAOImpl;
+import by.asrohau.iShop.dao.impl.ClientDAOImpl;
 
 public class DAOFactory {
 	
 	private static final DAOFactory INSTANCE = new DAOFactory();
 	
-	private final UserDAO userDAO = new UserDAOImpl();
+	private final ClientDAO clientDAO = new ClientDAOImpl();
 	private final AdminDAO adminDAO = new AdminDAOImpl();
 	private final ProductDAO productDAO = new ProductDAOImpl();
 	private final OrderDAO orderDAO = new OrderDAOImpl();
 
 	private DAOFactory() {}
 	
-	public UserDAO getUserDAO() {
-		return userDAO;
+	public ClientDAO getClientDAO() {
+		return clientDAO;
 	}
 	
 	public ProductDAO getProductDAO() {

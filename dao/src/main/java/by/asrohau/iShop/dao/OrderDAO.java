@@ -5,17 +5,16 @@ import by.asrohau.iShop.bean.Reserve;
 import by.asrohau.iShop.bean.Product;
 import by.asrohau.iShop.dao.exception.DAOException;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 
 public interface OrderDAO {
 
     boolean saveNewReservation(Reserve reserve) throws DAOException;
-    ArrayList<Product> selectAllReserved(int user_id, int row) throws DAOException;
+    List<Product> selectAllReserved(int user_id, int row) throws DAOException; //arraylist
     int countReserved(int user_id) throws DAOException;
     boolean deleteReserved(int reserveId) throws DAOException;
 
-    LinkedList<Integer> selectAllReservedIds(int user_id) throws DAOException;
+    List<Integer> selectAllReservedIds(int user_id) throws DAOException; //linkedlist
 
     boolean deleteAllReserved(int user_id) throws DAOException;
     boolean deleteAllOrdersWithUserID(int user_id) throws DAOException;
@@ -24,7 +23,7 @@ public interface OrderDAO {
 
     int countOrders(String status) throws DAOException;
 
-    ArrayList<Order> selectAllOrders(int row, String status) throws DAOException;
+    List<Order> selectAllOrders(int row, String status) throws DAOException; //arraylist
 
     boolean deleteOrder(int orderId) throws DAOException;
 
@@ -34,11 +33,11 @@ public interface OrderDAO {
 
     boolean updateOrdersProducts(Order order) throws DAOException;
 
-    ArrayList<Order> selectAllActiveOrders(int row) throws DAOException;
+    List<Order> selectAllActiveOrders(int row) throws DAOException; //arraylist
 
-    ArrayList<Order> selectAllSuccessOrders(int row) throws DAOException;
+    List<Order> selectAllSuccessOrders(int row) throws DAOException; //arraylist
 
     int countClientsOrders(int user_id) throws DAOException;
 
-    ArrayList<Order> selectAllClientsOrders(int row, int user_id) throws DAOException;
+    List<Order> selectAllClientsOrders(int row, int user_id) throws DAOException; //arraylist
 }

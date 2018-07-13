@@ -60,7 +60,7 @@
         <div class="middle">
             <div id="menu">
                 <form action="FrontController" method="post">
-                    <%--@returns new ORDERS list: user_id and order_id and adds command SET STATUS-ACTIVE and cmd EDIT
+                    <%--@returns new ORDERS list: userId and orderId and adds command SET STATUS-ACTIVE and cmd EDIT
                             where you can see detailed list of products and total sum of payment
                             and delete order--%>
                     <p><b>Get NEW orders</b>
@@ -72,7 +72,7 @@
                 <br/>
                 <br/>
                 <form action="FrontController" method="post">
-                    <%--returns Active orders list: user_id and order_id, look detailes but not to edite but delete order,
+                    <%--returns Active orders list: userId and orderId, look detailes but not to edite but delete order,
                             AND set status success--%>
                     <p><b>Get ACTIVE orders</b>
                         <input type="hidden" name="command" value="selectAllActiveOrders"/>
@@ -84,7 +84,7 @@
                 <br/>
                 <br/>
                 <form action="FrontController" method="post">
-                    <%--returns successed orders: user_id + order_id + link for detailed list of sold proDs + benifit--%>
+                    <%--returns successed orders: userId + orderId + link for detailed list of sold proDs + benifit--%>
                     <p><b>Get SUCCESSFUL orders</b>
                         <input type="hidden" name="command" value="selectAllSuccessfulOrders"/>
                         <input type="hidden" name="page_num" value="1"/>
@@ -116,7 +116,7 @@
                                     <form title="Go to user" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="editClient" />
                                         <input type="hidden" name="orderId" value="${element.id}" />
-                                        <input type="submit" name="userId" value="${element.user_id}" /><br/>
+                                        <input type="submit" name="userId" value="${element.userId}" /><br/>
                                     </form>
                                 </td>
                                     <%--order id - open order--%>
@@ -126,7 +126,7 @@
                                         <input type="hidden" name="new_status" value="${requestScope.get('command_3')}" />
                                         <input type="hidden" name="from" value="manageOrders" />
                                         <input type="hidden" name="page_num" value="1"/>
-                                        <input type="hidden" name="userId" value="${element.user_id}" />
+                                        <input type="hidden" name="userId" value="${element.userId}" />
                                         <input type="submit" name="orderId" value="${element.id}" /><br/>
                                     </form>
                                 </td>

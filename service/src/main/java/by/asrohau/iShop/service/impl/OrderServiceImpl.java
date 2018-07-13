@@ -11,6 +11,7 @@ import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class OrderServiceImpl implements OrderService{
 
@@ -21,7 +22,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public boolean validation(Reserve reserve) {
-        return reserve.getUser_id() != 0 && reserve.getProduct_id() != 0;
+        return reserve.getrUserId() != 0 && reserve.getrProductId() != 0;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Product> getAllReserved(int user_id, int row) throws ServiceException {
+    public List<Product> getAllReserved(int user_id, int row) throws ServiceException { //ArrayList
         try {
             return orderDAO.selectAllReserved(user_id, row);
         } catch (DAOException e) {
@@ -61,7 +62,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public LinkedList<Integer> getAllReservedIds(int user_id) throws ServiceException {
+    public List<Integer> getAllReservedIds(int user_id) throws ServiceException { // LinkedList
         try {
             return orderDAO.selectAllReservedIds(user_id);
         } catch (DAOException e) {
@@ -105,7 +106,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Order> getAllOrders(int row, String status)  throws ServiceException{
+    public List<Order> getAllOrders(int row, String status)  throws ServiceException{ // ArrayList
         try {
             return orderDAO.selectAllOrders(row, status);
         } catch (DAOException e) {
@@ -151,7 +152,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Order> getAllActiveOrders(int row) throws ServiceException {
+    public List<Order> getAllActiveOrders(int row) throws ServiceException { // ArrayList
         try {
             return orderDAO.selectAllActiveOrders(row);
         } catch (DAOException e) {
@@ -160,7 +161,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Order> getAllSuccessOrders(int row) throws ServiceException {
+    public List<Order> getAllSuccessOrders(int row) throws ServiceException { // ArrayList
         try {
             return orderDAO.selectAllSuccessOrders(row);
         } catch (DAOException e) {
@@ -178,7 +179,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Order> getAllClientsOrders(int row, int user_id) throws ServiceException {
+    public List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException { // ArrayList
         try {
             return orderDAO.selectAllClientsOrders(row, user_id);
         } catch (DAOException e) {

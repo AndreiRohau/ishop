@@ -191,7 +191,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND company = \'" + product.getCompany() + "\'";
 		}
 		if(product.getName() != null){
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND name = \'" + product.getName() + "\'";
+			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND inString = \'" + product.getName() + "\'";
 		}
 		if(product.getType() != null){
 			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND type = \'" + product.getType() + "\'";
@@ -221,7 +221,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND company = \'" + product.getCompany() + "\'";
 		}
 		if(product.getName() != null){
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND name = \'" + product.getName() + "\'";
+			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND inString = \'" + product.getName() + "\'";
 		}
 		if(product.getType() != null){
 			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND type = \'" + product.getType() + "\'";

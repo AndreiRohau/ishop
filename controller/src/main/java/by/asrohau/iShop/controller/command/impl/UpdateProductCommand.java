@@ -24,7 +24,7 @@ public class UpdateProductCommand implements Command {
         String goToPage;
         Product product = new Product(Integer.parseInt(request.getParameter("id")),
                 request.getParameter("company"),
-                request.getParameter("name"),
+                request.getParameter("inString"),
                 request.getParameter("type"),
                 request.getParameter("price"),
                 request.getParameter("description"));

@@ -87,9 +87,9 @@
                     <p><b>Buy all products in basket.</b></p>
                     <input type="hidden" name="command" value="createOrder"/><br/>
                     <p>Fill with the address:</p>
-                    <input type="text" name="user_address" value="" required/><br/><br/>
+                    <input type="text" name="userAddress" value="" required/><br/><br/>
                     <p>Fill with your contact phone number:</p>
-                    <input type="text" name="user_phone" value="" required/><br/><br/>
+                    <input type="text" name="userPhone" value="" required/><br/><br/>
                     <input type="submit" name="buy" value="Buy now!"/>
                 </form>
             </div>
@@ -127,7 +127,7 @@
                                 <td>
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="deleteReserved" />
-                                        <input type="hidden" name="reserveId" value="${product.reserve_id}" />
+                                        <input type="hidden" name="reserveId" value="${product.reserveId}" />
                                         <input type="submit" name="remove" value="REMOVE" /><br/>
                                     </form>
                                 </td>
