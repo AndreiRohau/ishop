@@ -4,6 +4,7 @@ import by.asrohau.iShop.bean.Product;
 import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.dao.util.DAOFinals;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,20 +13,9 @@ import java.util.ArrayList;
 
 public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
-	private String FIND_EQUAL_PRODUCT_QUERY = "SELECT * FROM shop.products WHERE company = ? AND name = ? AND type = ? AND price = ?";
-	private String ADD_NEW_PRODUCT_QUERY = "INSERT INTO shop.products (company, name, type, price, description) VALUES (?,?,?,?,?)";
-	private String FIND_PRODUCT_WITH_ID_QUERY = "SELECT * FROM shop.products WHERE id = ?";
-	private String UPDATE_PRODUCT_QUERY = "UPDATE shop.products SET company = ?, name = ?, type = ?, price = ?, description = ? WHERE id = ?";
-	private String DELETE_PRODUCT_QUERY = "DELETE FROM shop.products WHERE id = ?";
-	private String SELECT_ALL_PRODUCTS_QUERY = "SELECT * FROM shop.products LIMIT ?, ?";
-	private String COUNT_PRODUCTS_QUERY = "SELECT COUNT(*) FROM shop.products";
-	private String COUNT_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE id";
-	private String SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT * FROM shop.products WHERE id";
-
-
 	@Override
 	public Product findProduct(Product product) throws DAOException {
-		try (PreparedStatement preparedStatement = getConnection().prepareStatement(FIND_EQUAL_PRODUCT_QUERY)) {
+		try (PreparedStatement preparedStatement = getConnection().prepareStatement(DAOFinals.FIND_EQUAL_PRODUCT_QUERY.inString)) {
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -57,7 +47,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
 	@Override
 	public boolean addProduct(Product product) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(ADD_NEW_PRODUCT_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.ADD_NEW_PRODUCT_QUERY.inString)) {
 			statement.setString(1, product.getCompany());
 			statement.setString(2, product.getName());
 			statement.setString(3, product.getType());
@@ -76,7 +66,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 	@Override
 	public ArrayList<Product> selectAllProducts(int row) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(SELECT_ALL_PRODUCTS_QUERY)) {
+				.prepareStatement(DAOFinals.SELECT_ALL_PRODUCTS_QUERY.inString)) {
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, 15);
 			ArrayList<Product> productArrayList = new ArrayList<Product>();
@@ -112,7 +102,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 	@Override
 	public Product findProductWithId(Product product) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(FIND_PRODUCT_WITH_ID_QUERY)) {
+				.prepareStatement(DAOFinals.FIND_PRODUCT_WITH_ID_QUERY.inString)) {
 			preparedStatement.setInt(1, product.getId());
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -139,7 +129,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
 	@Override
 	public boolean updateProduct(Product product) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(UPDATE_PRODUCT_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.UPDATE_PRODUCT_QUERY.inString)) {
 			statement.setString(1, product.getCompany());
 			statement.setString(2, product.getName());
 			statement.setString(3, product.getType());
@@ -158,7 +148,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
 	@Override
 	public boolean deleteProduct(Product product) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(DELETE_PRODUCT_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.DELETE_PRODUCT_QUERY.inString)) {
 			statement.setInt(1, product.getId());
 
 			int result = statement.executeUpdate();
@@ -172,7 +162,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
 	@Override
 	public int countProducts() throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(COUNT_PRODUCTS_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.COUNT_PRODUCTS_QUERY.inString)) {
 			ResultSet resultSet = statement.executeQuery();
 
 			resultSet.next();
@@ -188,27 +178,27 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 	@Override
 	public int countProductsComprehensive(Product product) throws DAOException {
 		if(product.getCompany() != null){
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND company = \'" + product.getCompany() + "\'";
+			DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND company = \'" + product.getCompany() + "\'";
 		}
 		if(product.getName() != null){
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND inString = \'" + product.getName() + "\'";
+			DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND inString = \'" + product.getName() + "\'";
 		}
 		if(product.getType() != null){
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND type = \'" + product.getType() + "\'";
+			DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND type = \'" + product.getType() + "\'";
 		}
 		if(product.getPrice() != null){
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY += " AND price = \'" + product.getPrice() + "\'";
+			DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND price = \'" + product.getPrice() + "\'";
 		}
 
-		System.out.println("- - - QUERY is : [" + COUNT_PRODUCTS_COMPREHENSIVE_QUERY + "]");
-		try (PreparedStatement statement = getConnection().prepareStatement(COUNT_PRODUCTS_COMPREHENSIVE_QUERY)) {
+		System.out.println("- - - QUERY is : [" + DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString + "]");
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString)) {
 
 			ResultSet resultSet = statement.executeQuery();
 			resultSet.next();
 			int i = resultSet.getInt(1);
 			statement.close();
 			connection.close();
-			COUNT_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE id";
+			DAOFinals.COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString = "SELECT COUNT(*) FROM shop.products WHERE id";
 			return i;
 		} catch (SQLException e) {
 			throw new DAOException(e);
@@ -218,22 +208,22 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 	@Override
 	public ArrayList<Product> selectProductsComprehensive(Product product, int row) throws DAOException {
 		if(product.getCompany() != null){
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND company = \'" + product.getCompany() + "\'";
+			DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND company = \'" + product.getCompany() + "\'";
 		}
 		if(product.getName() != null){
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND inString = \'" + product.getName() + "\'";
+			DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND inString = \'" + product.getName() + "\'";
 		}
 		if(product.getType() != null){
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND type = \'" + product.getType() + "\'";
+			DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND type = \'" + product.getType() + "\'";
 		}
 		if(product.getPrice() != null){
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " AND price = \'" + product.getPrice() + "\'";
+			DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString += " AND price = \'" + product.getPrice() + "\'";
 		}
-		SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY += " LIMIT ?,?";
-		System.out.println("- - - QUERY is : [" + SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY + "]");
+		DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString += " LIMIT ?,?";
+		System.out.println("- - - QUERY is : [" + DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString + "]");
 
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY)) {
+				.prepareStatement(DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString)) {
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, 15);
 			ArrayList<Product> productArrayList = new ArrayList<Product>();
@@ -259,7 +249,7 @@ public class ProductDAOImpl extends AbstractDAO<Product> implements ProductDAO {
 
 			preparedStatement.close();
 			connection.close();
-			SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT * FROM shop.products WHERE id";
+			DAOFinals.SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString = "SELECT * FROM shop.products WHERE id";
 			return productArrayList;
 
 		} catch (SQLException e) {

@@ -4,7 +4,7 @@ public class User extends Base {
 
 	private String login;
 	private String password;
-	private String newPassword;
+	private String role;
 
 	public User(){}
 
@@ -19,17 +19,17 @@ public class User extends Base {
 		this.password = password;
 	}
 
-	public User(String login, String password, String newPassword) {
+	public User(String login, String password, String role) {
 		this.login = login;
 		this.password = password;
-		this.newPassword = newPassword;
+		this.role = role;
 	}
 
-	public User(int id, String login, String password, String newPassword) {
+	public User(int id, String login, String password, String role) {
 		super(id);
 		this.login = login;
 		this.password = password;
-		this.newPassword = newPassword;
+		this.role = role;
 	}
 
 	public String getLogin() {
@@ -48,12 +48,12 @@ public class User extends Base {
 		this.password = password;
 	}
 
-	public String getNewPassword() {
-		return newPassword;
+	public String getRole() {
+		return role;
 	}
 
-	public void setNewPassword(String newPassword) {
-		this.newPassword = newPassword;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class User extends Base {
 
 		if (login != null ? !login.equals(user.login) : user.login != null) return false;
 		if (password != null ? !password.equals(user.password) : user.password != null) return false;
-		return newPassword != null ? newPassword.equals(user.newPassword) : user.newPassword == null;
+		return role != null ? role.equals(user.role) : user.role == null;
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class User extends Base {
 		int result = super.hashCode();
 		result = 31 * result + (login != null ? login.hashCode() : 0);
 		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + (newPassword != null ? newPassword.hashCode() : 0);
+		result = 31 * result + (role != null ? role.hashCode() : 0);
 		return result;
 	}
 
@@ -84,7 +84,7 @@ public class User extends Base {
 				super.toString() +
 				"login='" + login + '\'' +
 				", password='" + password + '\'' +
-				", newPassword='" + newPassword + '\'' +
+				", role='" + role + '\'' +
 				'}';
 	}
 }

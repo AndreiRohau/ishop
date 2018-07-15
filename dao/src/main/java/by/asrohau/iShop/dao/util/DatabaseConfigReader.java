@@ -18,8 +18,8 @@ public class DatabaseConfigReader {
 		try (InputStream is = DatabaseConfigReader.class.getClassLoader().getResourceAsStream(DAOFinals.DATABASE_SETTINGS_PATH.inString)) {
 			properties = new Properties();
 			properties.load(is);
-		} catch (IOException ex) {
-			throw new DAOException(DAOFinals.DATABASE_CONFIG_INIT_ERROR.inString, ex);
+		} catch (IOException e) {
+			throw new DAOException(DAOFinals.DATABASE_CONFIG_INIT_ERROR.inString, e);
 		}
 	}
 

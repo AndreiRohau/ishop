@@ -6,7 +6,7 @@ import by.asrohau.iShop.dao.exception.DAOException;
 
 import java.util.List;
 
-public interface ClientDAO {
+public interface UserDAO {
 	
 	UserDTO findUserWithLoginAndPassword(User user) throws DAOException;
 	UserDTO findUserWithLogin(User user) throws DAOException;

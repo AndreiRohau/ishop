@@ -32,7 +32,7 @@ public class FindSuitableCommand implements Command {
 
         String check = "";
         String company = request.getParameter("company").trim();
-        String name = request.getParameter("inString").trim();
+        String name = request.getParameter("name").trim();
         String type = request.getParameter("type").trim();
         String price = request.getParameter("price").trim();
 
@@ -62,14 +62,14 @@ public class FindSuitableCommand implements Command {
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=findSuitable"
                             + "&company=" + company
-                            + "&inString=" + name
+                            + "&name=" + name
                             + "&type=" + type
                             + "&price=" + price
                             + "&page_num=" + currentPage);
             request.getSession().setAttribute("lastCMDneedPage",
                     "FrontController?command=findSuitable"
                             + "&company=" + company
-                            + "&inString=" + name
+                            + "&name=" + name
                             + "&type=" + type
                             + "&price=" + price
                             + "&page_num=");

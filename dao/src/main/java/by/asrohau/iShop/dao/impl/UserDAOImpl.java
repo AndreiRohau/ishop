@@ -8,25 +8,16 @@ import java.util.ArrayList;
 import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.dao.AbstractDAO;
-import by.asrohau.iShop.dao.ClientDAO;
+import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.dao.util.DAOFinals;
 
-public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
-
-	private String FIND_USER_WITH_LOGIN_PASSWORD_QUERY = "SELECT * FROM shop.users WHERE login = ? AND password = ?";
-	private String FIND_USER_WITH_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";
-	private String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password) VALUES (?,?)";
-	private String CHANGE_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
-	private String DELETE_USER_QUERY = "DELETE FROM shop.users WHERE login = ? AND password = ?";
-	private String SELECT_ALL_USERS_QUERY = "SELECT * FROM shop.users LIMIT ?,?";
-	private String FIND_USER_WITH_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
-	private String UPDATE_USER_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
-	private String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM shop.users";
+public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 	@Override
 	public UserDTO findUserWithLoginAndPassword(User user) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(FIND_USER_WITH_LOGIN_PASSWORD_QUERY)) {
+				.prepareStatement(DAOFinals.FIND_USER_WITH_LOGIN_PASSWORD_QUERY.inString)) {
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,7 +43,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	@Override
 	public UserDTO findUserWithLogin(User user) throws DAOException {
-		try (PreparedStatement preparedStatement = getConnection().prepareStatement(FIND_USER_WITH_LOGIN_QUERY)) {
+		try (PreparedStatement preparedStatement = getConnection().prepareStatement(DAOFinals.FIND_USER_WITH_LOGIN_QUERY.inString)) {
 			preparedStatement.setString(1, user.getLogin());
 			ResultSet resultSet = preparedStatement.executeQuery();
 			UserDTO userDTO = new UserDTO();
@@ -77,7 +68,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	@Override
 	public boolean saveUser(User user) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(SAVE_USER_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.SAVE_USER_QUERY.inString)) {
 			statement.setString(1, user.getLogin());
 			statement.setString(2, user.getPassword());
 
@@ -92,8 +83,8 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	@Override
 	public boolean changePassword(User user) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(CHANGE_PASSWORD_QUERY)) {
-			statement.setString(1, user.getNewPassword());
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.CHANGE_PASSWORD_QUERY.inString)) {
+			statement.setString(1, user.getNewPassword());//todo
 			statement.setString(2, user.getLogin());
 			statement.setString(3, user.getPassword());
 
@@ -109,7 +100,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	@Override
 	public boolean deleteUser(User user) throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(DELETE_USER_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.DELETE_USER_QUERY.inString)) {
 			statement.setString(1, user.getLogin());
 			statement.setString(2, user.getPassword());
 
@@ -125,7 +116,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 	@Override
 	public ArrayList<User> selectAllUsers(int row) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(SELECT_ALL_USERS_QUERY)) {
+				.prepareStatement(DAOFinals.SELECT_ALL_USERS_QUERY.inString)) {
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, 15);
 			ArrayList<User> userArrayList = new ArrayList<User>();
@@ -155,7 +146,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 	@Override
 	public User findUserWithId(User user) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(FIND_USER_WITH_ID_QUERY)) {
+				.prepareStatement(DAOFinals.FIND_USER_WITH_ID_QUERY.inString)) {
 			preparedStatement.setInt(1, user.getId());
 			ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -180,7 +171,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 	@Override
 	public boolean updateUser(User user) throws DAOException {
 		try (PreparedStatement preparedStatement = getConnection()
-				.prepareStatement(UPDATE_USER_QUERY)) {
+				.prepareStatement(DAOFinals.UPDATE_USER_QUERY.inString)) {
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setInt(3, user.getId());
@@ -196,7 +187,7 @@ public class ClientDAOImpl extends AbstractDAO<User> implements ClientDAO {
 
 	@Override
 	public int countProducts() throws DAOException {
-		try (PreparedStatement statement = getConnection().prepareStatement(COUNT_USERS_QUERY)) {
+		try (PreparedStatement statement = getConnection().prepareStatement(DAOFinals.COUNT_USERS_QUERY.inString)) {
 			ResultSet resultSet = statement.executeQuery();
 
 			resultSet.next();
