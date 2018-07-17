@@ -3,6 +3,7 @@ package by.asrohau.iShop.controller;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.command.CommandFactory;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public final class FrontController extends HttpServlet {
+	private final static Logger logger = Logger.getLogger(FrontController.class);
 
 	private static final long serialVersionUID = 1L;
 	private final CommandFactory commandFactory = CommandFactory.getInstance();
@@ -30,7 +32,7 @@ public final class FrontController extends HttpServlet {
 	}
 
 	private void doExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("in servlet " + request.getMethod() + ": command : " + request.getParameter("command"));
+		logger.info("in servlet " + request.getMethod() + ": command : " + request.getParameter("command"));
 		Map commandMap = CommandFactory.getInstance().getCommandMap();
 		Command command;
 		try {
@@ -38,7 +40,7 @@ public final class FrontController extends HttpServlet {
 					request.getParameter("command").matches("logination") ||
 					request.getParameter("command").matches("registration") ||
 					request.getParameter("command").matches("change_language") ||
-					request.getSession().getAttribute("userName") != null) {
+					request.getSession().getAttribute("role") != null) {
 				command = (Command) commandMap.get(request.getParameter("command"));
 			} else {
 				command = (Command) commandMap.get("goToPage");
@@ -47,8 +49,7 @@ public final class FrontController extends HttpServlet {
 
 		} catch (ControllerException e) {
 			request.setAttribute("errorMessage", e.toString());
-			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-			dispatcher.forward(request, response);
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 

@@ -13,11 +13,14 @@ public enum ControllerFinals {
     USER("user"),
     LAST_COMMAND("lastCMD"),
     ADDRESS("address"),
+    ERROR_MESSAGE("errorMessage"),
 
     /*
     urls
      */
 
+    INDEX("index.jsp"),
+    ERROR("error.jsp"),
     GO_TO_PAGE_("FrontController?command=goToPage&address="),
     GO_TO_PAGE_INDEX("FrontController?command=goToPage&address=index.jsp"),
     GO_TO_PAGE_MAIN("FrontController?command=goToPage&address=main.jsp"),
@@ -25,7 +28,7 @@ public enum ControllerFinals {
     /*
     Commands
      */
-    REGISTR_USER_COMMAND("Register user command"),
+    REGISTRATION_COMMAND("Registration command"),
     LOGINATION_COMMAND("Logination command"),
     GO_TO_PAGE_COMMAND("GoToPage command");
 

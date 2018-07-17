@@ -20,6 +20,7 @@
 	<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
 	<fmt:message bundle="${loc}" key="local.loginationText" var="loginationText" />
 	<fmt:message bundle="${loc}" key="local.registrationText" var="registrationText" />
+	<fmt:message bundle="${loc}" key="local.successRegistration" var="successRegistration" />
 	<fmt:message bundle="${loc}" key="local.login" var="login" />
 	<fmt:message bundle="${loc}" key="local.password" var="password" />
 	<fmt:message bundle="${loc}" key="local.logbutton" var="log_button" />
@@ -92,7 +93,11 @@
 			<c:out value="${registrationText}" />
 		</p>
 		<hr/>
-		<span><c:out value="${requestScope.isRegistered}"/></span>
+		<c:if test="${requestScope.isRegistered == true}">
+			<span>
+				<c:out value="${successRegistration}"/>
+			</span>
+		</c:if>
 		<form action="FrontController" method="post">
 			<input type="hidden" name="command" value="registration" />
 			<c:out value="${login}" />:<br/>

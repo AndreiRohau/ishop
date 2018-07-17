@@ -6,6 +6,7 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,32 +14,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class RegistrationCommand implements Command {
+
+	private final static Logger logger = Logger.getLogger(RegistrationCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		System.out.println("We got to REGISTRATION");
-		boolean isRegistered;
-		User user = new User(request.getParameter("login").trim(), request.getParameter("password").trim());
+		logger.info(REGISTRATION_COMMAND.inString);
+		boolean isRegistered = false;
+		User user = new User(request.getParameter(LOGIN.inString).trim(),
+				request.getParameter(PASSWORD.inString).trim(),
+				USER.inString);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
-		String lastCMD = "FrontController?command=goToPage&address=index.jsp";
+		String lastCMD = GO_TO_PAGE_INDEX.inString;
 		String goToPage;
 		try {
-			isRegistered = request.getSession().getAttribute("userName") == null
-					&& !request.getParameter("login").equals("Admin")
-					&& userService.registration(user);
-
-			if (isRegistered) {
-				request.setAttribute("isRegistered", "You registered successfully");
-				goToPage = "index.jsp";
-			} else {
-				goToPage = "error.jsp";
-				String message = request.getSession().getAttribute("userName") == null
-						? "Login exists" : "Log out!";
-				request.setAttribute("errorMessage", message);
+			if(request.getSession().getAttribute(ROLE.inString) == null) {
+				isRegistered = userService.registration(user);
 			}
-			request.getSession().setAttribute("lastCMD", lastCMD);
+			if (isRegistered) {
+				request.setAttribute("isRegistered", true);
+				goToPage = INDEX.inString;
+			} else {
+				String message = request.getSession().getAttribute(ROLE.inString) == null ? "exists" : "logout";
+				goToPage = ERROR.inString;
+				request.setAttribute(ERROR_MESSAGE.inString, message);
+			}
+			request.getSession().setAttribute(LAST_COMMAND.inString, lastCMD);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 			dispatcher.forward(request, response);
 			
