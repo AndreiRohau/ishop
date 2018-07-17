@@ -41,12 +41,12 @@ public class SelectAllReservedCommand implements Command {
 
         try {
             user.setLogin((String) request.getSession().getAttribute("userName"));
-            int user_id = userService.findIdWithLogin(user).getId();
+            int userId = userService.findIdWithLogin(user).getId();
 
             //count amount of all products
-            maxPage = (int) Math.ceil(((double) orderService.countReserved(user_id)) / 15);
+            maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / 15);
 
-            List<Product> reservedWithIdsList = orderService.getAllReserved(user_id, row); //product_id & reserve_id // ArrayList
+            List<Product> reservedWithIdsList = orderService.getAllReserved(userId, row); //product_id & reserve_id // ArrayList
 
             ArrayList<Product> productArray = new ArrayList<>();
 

@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface ProductService {
 
-	boolean validation(Product product);
 	boolean addNewProduct(Product newProduct) throws ServiceException;
 	List<Product> getAllProducts(int row) throws ServiceException; //ArrayList
 	Product findProductWithId(Product product) throws ServiceException;

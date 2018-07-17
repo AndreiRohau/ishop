@@ -48,11 +48,12 @@ public class DeleteFromOrderCommand implements Command{
             String message = orderService.deleteProductFromOrder(order) ? "You have REMOVED product successfully" :
                     "Can NOT remove this product, try again!";
 
+
             if(!finalIDs.equals("")) {
                 response.sendRedirect(String.valueOf(request.getSession(true).getAttribute("lastCMD"))
                         + "&msg=" + message + "&orderId=" + order.getId());
             }else {
-                orderService.deleteOrder(order.getId());
+                orderService.deleteOrder(order);
                 request.getSession().setAttribute("lastCMD",
                         "FrontController?command=goToPage&address=manageOrders.jsp");
                 request.getRequestDispatcher("/jsp/admin/manageOrders.jsp").forward(request, response);

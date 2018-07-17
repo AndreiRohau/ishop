@@ -20,8 +20,8 @@ public class ChangePasswordCommand implements Command {
 		System.out.println("We got to ChangePasswordCommand");
 
 		User user = new User(request.getParameter("login").trim(),
-				request.getParameter("password").trim(),
-				request.getParameter("newPassword").trim());
+				request.getParameter("password").trim());
+		String newPassword = request.getParameter("newPassword").trim();
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
 
@@ -29,10 +29,10 @@ public class ChangePasswordCommand implements Command {
 		boolean isChanged; //was false
 
 		try {
-			isChanged = request.getSession().getAttribute("userName").equals(user.getLogin()) && userService.changePassword(user);
+			isChanged = request.getSession().getAttribute("userName").equals(user.getLogin()) && userService.changePassword(user, newPassword);
 			String goToPage;
 			if (isChanged) {
-				request.setAttribute("isChanged", "new password is: " + user.getNewPassword());
+				request.setAttribute("isChanged", "new password is: " + newPassword);
 				goToPage = "/jsp/user/profile.jsp"; //was just address
 			} else {
 				goToPage = "error.jsp";

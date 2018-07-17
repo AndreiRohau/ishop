@@ -3,6 +3,11 @@ package by.asrohau.iShop.dao.util;
 public enum DAOFinals {
 
     /*
+    simple finals
+     */
+    MAX_ROWS_AT_PAGE("15"),
+
+    /*
     Database config finals
      */
     DATABASE_SETTINGS_PATH("databaseConfig.properties"),
@@ -18,25 +23,25 @@ public enum DAOFinals {
     CONNECTION_FAILED("Connection to database failed"),
     MYSQL_DRIVER_NOT_LOADED("MySQL driver is not loaded"),
     DATABASE_CONFIG_INIT_ERROR("Error while initializing DatabaseConfigReader"),
+    ERROR_IN_DAO_METHOD_FINAL_BLOCK("Error while closing resultSet or prepared statement, or connection"),
+    CANNOT_IDENTIFY_USER_BY_LOGIN_AND_PASSWORD("Can not identify User with login and password"),
+    CANNOT_IDENTIFY_PRODUCT("Can not identify Product"),
+    CANNOT_IDENTIFY_USER_BY_ID("Can not identify User with id"),
+    CANNOT_IDENTIFY_ORDER_BY_ID("Can not identify Order with id"),
+    CANNOT_IDENTIFY_PRODUCT_BY_ID("Can not identify Product with id"),
+    EXCEPTION_WHILE_EXECUTING_DAO_METHOD("Error in DAO method"),
+    EXCEPTION_WHILE_ROLL_BACK("Error during rollback"),
 
     /*
     SQL QUERIES
      */
 
     /*
-    AdminDAO queries
-     */
-    FIND_ADMIN_WITH_LOGIN_PASSWORD_QUERY("SELECT * FROM shop.admins WHERE login = ? AND password = ?"),
-    SELECT_ALL_ADMINS_QUERY("SELECT * FROM shop.users"),
-    FIND_ADMIN_WITH_ID_QUERY("SELECT * FROM shop.users WHERE id = ?"),
-    UPDATE_ADMIN_QUERY("UPDATE shop.users SET login = ?, password = ? WHERE id = ?"),
-
-    /*
     UserDAO queries
      */
     FIND_USER_WITH_LOGIN_PASSWORD_QUERY("SELECT * FROM shop.users WHERE login = ? AND password = ?"),
     FIND_USER_WITH_LOGIN_QUERY("SELECT * FROM shop.users WHERE login = ?"),
-    SAVE_USER_QUERY("INSERT INTO shop.users (login, password) VALUES (?,?)"),
+    SAVE_USER_QUERY("INSERT INTO shop.users (login, password, role) VALUES (?,?,?)"),
     CHANGE_PASSWORD_QUERY("UPDATE shop.users SET password = ? WHERE login = ? AND password = ?"),
     DELETE_USER_QUERY("DELETE FROM shop.users WHERE login = ? AND password = ?"),
     SELECT_ALL_USERS_QUERY("SELECT * FROM shop.users LIMIT ?,?"),

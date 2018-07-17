@@ -32,10 +32,10 @@ public class EditNewOrderCommand implements Command {
         int row = (currentPage - 1)*15;
 
         try {
-
-            int orderID = Integer.parseInt(request.getParameter("orderId"));
-            Order order = orderService.findOrderWithID(orderID);
-
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            Order order = new Order();
+            order.setId(orderId);
+            order = orderService.findOrderWithID(order);
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
             String productIDsString = order.getProductIds();
             String[] productIDsArray = productIDsString.split(",");
@@ -55,7 +55,7 @@ public class EditNewOrderCommand implements Command {
             for(int id : productIDs){
                 product.setId(id);
                 product = productService.findProductWithId(product);
-                product.setOrderId(orderID);
+                product.setOrderId(orderId);
                 productArray.add(product);
                 product = new Product();
             }
@@ -72,13 +72,13 @@ public class EditNewOrderCommand implements Command {
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=editNewOrder&page_num=" + currentPage
-                            + "&orderId=" + orderID
+                            + "&orderId=" + orderId
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
                             + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status")));
             request.setAttribute("lastCMDneedPage",
-                    "FrontController?command=editNewOrder&orderId=" + orderID
+                    "FrontController?command=editNewOrder&orderId=" + orderId
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
                             + "&phone=" + order.getUserPhone()

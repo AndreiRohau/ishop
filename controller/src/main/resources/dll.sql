@@ -4,16 +4,6 @@ DROP DATABASE IF EXISTS `shop`;
 CREATE SCHEMA IF NOT EXISTS `shop` DEFAULT CHARACTER SET utf8 ;
 USE `shop` ;
 
-CREATE TABLE IF NOT EXISTS `shop`.`admins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `role` varchar(20) NOT NULL DEFAULT 'admin',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `admins_id_uindex` (`id`),
-  UNIQUE KEY `admins_login_uindex` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
 CREATE TABLE IF NOT EXISTS `shop`.`orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
@@ -53,4 +43,4 @@ CREATE TABLE IF NOT EXISTS `shop`.`users` (
   UNIQUE KEY `users_id_uindex` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
-INSERT INTO `shop`.`admins` (`id`, `login`, `password`, `role`) VALUES ('1', 'admin', 'admin', 'admin');
+INSERT INTO `shop`.`users` (`id`, `login`, `password`, `role`) VALUES ('1', 'admin', 'admin', 'admin');

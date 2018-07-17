@@ -47,9 +47,9 @@ public class CreateOrderCommand implements Command {
 
     try{
         //got user ID
-        int user_id = userService.findIdWithLogin(user).getId();
+        int userId = userService.findIdWithLogin(user).getId();
         //got list of product IDs
-        List<Integer> products = orderService.getAllReservedIds(user_id); // LinkedList
+        List<Integer> products = orderService.getAllReservedIds(userId); // LinkedList
         //transform list into inString of IDs divided with ,
         for(int id : products){
             if(productIDs != null) {
@@ -65,13 +65,13 @@ public class CreateOrderCommand implements Command {
         user_phone = request.getParameter("user_phone");
 
         //creating order obj
-        Order order = new Order(user_id, productIDs, user_address, user_phone, "new");
+        Order order = new Order(userId, productIDs, user_address, user_phone, "new");
         //save into orders TABLE
         boolean orderIsSaved = orderService.saveNewOrder(order);
 
         if(orderIsSaved) {
             //delete reserved
-            boolean reservedIsDeleted = orderService.deleteAllReserved(user_id);
+            boolean reservedIsDeleted = orderService.deleteAllReserved(userId);
             goToPage = "/jsp/user/main.jsp";
             message = "Order created - wait for the delivery.";
         } else {
