@@ -20,6 +20,10 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 
 	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
 
+	private PreparedStatement preparedStatement = null;
+	private Connection connection = null;
+	private ResultSet resultSet = null;
+
 	/*
 	save new User
 	 */
@@ -28,8 +32,6 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		if(findUserWithLogin(user) != null){
 			return false;
 		}
-		PreparedStatement preparedStatement = null;
-		Connection connection = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -49,17 +51,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(preparedStatement != null){
-					preparedStatement.close();
-
-					if(connection != null) {
-						connection.close();
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(preparedStatement, connection);
 		}
 	}
 
@@ -68,11 +60,9 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 	 */
 	@Override
 	public User find(User user) throws DAOException {
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
-			preparedStatement = getConnection().prepareStatement(FIND_USER_WITH_LOGIN_PASSWORD_QUERY.inString);
-
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(FIND_USER_WITH_LOGIN_PASSWORD_QUERY.inString);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			resultSet = preparedStatement.executeQuery();
@@ -92,21 +82,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(resultSet != null) {
-					resultSet.close();
-
-					if(preparedStatement != null){
-						preparedStatement.close();
-
-						if(connection != null) {
-							connection.close();
-						}
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(resultSet, preparedStatement, connection);
 		}
 	}
 
@@ -119,8 +95,6 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		if(userCheck != null && userCheck.getId() != user.getId()){
 			return false;
 		}
-		PreparedStatement preparedStatement = null;
-		Connection connection = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -141,17 +115,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(preparedStatement != null){
-					preparedStatement.close();
-
-					if(connection != null) {
-						connection.close();
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(preparedStatement, connection);
 		}
 	}
 
@@ -163,8 +127,6 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		if(find(user) == null){
 			return false;
 		}
-		PreparedStatement preparedStatement = null;
-		Connection connection = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -184,17 +146,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(preparedStatement != null){
-					preparedStatement.close();
-
-					if(connection != null) {
-						connection.close();
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(preparedStatement, connection);
 		}
 	}
 
@@ -203,10 +155,9 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 	 */
 	@Override
 	public List<User> findAll(int row) throws DAOException {
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
-			preparedStatement = getConnection().prepareStatement(SELECT_ALL_USERS_QUERY.inString);
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_QUERY.inString);
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 			List<User> userArrayList = new ArrayList<User>();
@@ -230,21 +181,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(resultSet != null) {
-					resultSet.close();
-
-					if(preparedStatement != null){
-						preparedStatement.close();
-
-						if(connection != null) {
-							connection.close();
-						}
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(resultSet, preparedStatement, connection);
 		}
 	}
 
@@ -253,41 +190,25 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 	 */
 	@Override
 	public long countAll() throws DAOException {
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
-			preparedStatement = getConnection().prepareStatement(COUNT_USERS_QUERY.inString);
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY.inString);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			return resultSet.getInt(1);
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(resultSet != null) {
-					resultSet.close();
-
-					if(preparedStatement != null){
-						preparedStatement.close();
-
-						if(connection != null) {
-							connection.close();
-						}
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(resultSet, preparedStatement, connection);
 		}
 
 	}
 
 	@Override
 	public UserDTO findUserWithLogin(User user) throws DAOException {
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
-			preparedStatement = getConnection().prepareStatement(FIND_USER_WITH_LOGIN_QUERY.inString);
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(FIND_USER_WITH_LOGIN_QUERY.inString);
 			preparedStatement.setString(1, user.getLogin());
 			resultSet = preparedStatement.executeQuery();
 			UserDTO userDTO = new UserDTO();
@@ -306,30 +227,15 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(resultSet != null) {
-					resultSet.close();
-
-					if(preparedStatement != null){
-						preparedStatement.close();
-
-						if(connection != null) {
-							connection.close();
-						}
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(resultSet, preparedStatement, connection);
 		}
 	}
 
 	@Override
 	public User findUserWithId(User user) throws DAOException {
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
 		try {
-			preparedStatement = getConnection().prepareStatement(FIND_USER_WITH_ID_QUERY.inString);
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(FIND_USER_WITH_ID_QUERY.inString);
 			preparedStatement.setInt(1, user.getId());
 			resultSet = preparedStatement.executeQuery();
 
@@ -348,21 +254,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(resultSet != null) {
-					resultSet.close();
-
-					if(preparedStatement != null){
-						preparedStatement.close();
-
-						if(connection != null) {
-							connection.close();
-						}
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(resultSet, preparedStatement, connection);
 		}
 	}
 
@@ -371,9 +263,6 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		if(find(user) == null){
 			return false;
 		}
-
-		PreparedStatement preparedStatement = null;
-		Connection connection = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -395,17 +284,7 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			try {
-				if(preparedStatement != null){
-					preparedStatement.close();
-
-					if(connection != null) {
-						connection.close();
-					}
-				}
-			} catch (SQLException e) {
-				throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-			}
+			close(preparedStatement, connection);
 		}
 	}
 

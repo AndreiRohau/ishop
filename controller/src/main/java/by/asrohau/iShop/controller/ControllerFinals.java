@@ -11,6 +11,7 @@ public enum ControllerFinals {
     ROLE("role"),
     ADMIN("admin"),
     USER("user"),
+    USER_NAME("userName"),
     LAST_COMMAND("lastCMD"),
     ADDRESS("address"),
     ERROR_MESSAGE("errorMessage"),

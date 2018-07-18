@@ -12,8 +12,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.List;
+
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class FindSuitableCommand implements Command {
     @Override
@@ -74,7 +76,7 @@ public class FindSuitableCommand implements Command {
                             + "&price=" + price
                             + "&page_num=");
 
-            if(!request.getSession().getAttribute("userName").equals("Admin")){
+            if(!request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString)){
                 goToPage = "/jsp/user/main.jsp";
             } else {
                 goToPage = "/jsp/admin/manageProducts.jsp";

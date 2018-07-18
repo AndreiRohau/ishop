@@ -23,14 +23,18 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
 
     private final static Logger logger = Logger.getLogger(OrderDAOImpl.class);
 
+    private PreparedStatement preparedStatement = null;
+    private Connection connection = null;
+    private ResultSet resultSet = null;
+
     /*
-    create new Order
-     */
+        create new Order
+         */
     @Override
     public boolean save(Order order) throws DAOException {
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SAVE_NEW_ORDER_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SAVE_NEW_ORDER_QUERY.inString);
             preparedStatement.setInt(1, order.getUserId());
             preparedStatement.setString(2, order.getProductIds());
             preparedStatement.setString(3, order.getUserAddress());
@@ -41,17 +45,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -60,10 +54,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public Order find(Order order) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ORDER_WITH_ID_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ORDER_WITH_ID_QUERY.inString);
             preparedStatement.setInt(1, order.getId());
 
             resultSet = preparedStatement.executeQuery();
@@ -86,21 +79,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -109,9 +88,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean update(Order order) throws DAOException {
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = getConnection().prepareStatement(UPDATE_ORDERS_PRODUCTS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(UPDATE_ORDERS_PRODUCTS_QUERY.inString);
             preparedStatement.setString(1, order.getProductIds());
             preparedStatement.setInt(2, order.getId());
 
@@ -120,17 +99,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -139,8 +108,6 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean delete(Order order) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
@@ -159,17 +126,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             }
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
 
     }
@@ -195,9 +152,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean save(Reserve reserve) throws DAOException {
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SAVE_RESERVATION_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY.inString);
             preparedStatement.setInt(1, reserve.getrUserId());
             preparedStatement.setInt(2, reserve.getrProductId());
 
@@ -207,17 +164,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -226,10 +173,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Product> findAllReserved(int userId, int row) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_RESERVED_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_RESERVED_QUERY.inString);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
@@ -248,21 +194,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -271,10 +203,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public int countReserved(int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(COUNT_RESERVED_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY.inString);
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -282,21 +213,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -305,8 +222,6 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean delete(int reserveId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
@@ -324,17 +239,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             }
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -343,10 +248,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Integer> findAllReservedIds(int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_RESERVED_IDS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_RESERVED_IDS_QUERY.inString);
             preparedStatement.setInt(1, userId);
             List<Integer> productIdsList = new LinkedList<>();
             resultSet = preparedStatement.executeQuery();
@@ -359,21 +263,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -382,8 +272,6 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean deleteAllReserved(int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
@@ -402,17 +290,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             }
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -421,8 +299,6 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public boolean deleteAllOrders(int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
@@ -440,17 +316,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             }
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -459,10 +325,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public int countOrders(String status) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(COUNT_All_ORDERS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(COUNT_All_ORDERS_QUERY.inString);
             preparedStatement.setString(1, status);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -470,21 +335,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -493,10 +344,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Order> findAllOrders(int row, String status) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_ORDERS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_QUERY.inString);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
@@ -524,21 +374,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -547,9 +383,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     */
     @Override
     public boolean update(Order order, String status) throws DAOException {
-        PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = getConnection().prepareStatement(UPDATE_SET_ORDER_STATUS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(UPDATE_SET_ORDER_STATUS_QUERY.inString);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, order.getId());
 
@@ -558,17 +394,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(preparedStatement != null){
-                    preparedStatement.close();
-
-                    if(connection != null) {
-                        connection.close();
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -577,10 +403,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Order> findAllActiveOrders(int row) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_ACTIVE_ORDERS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ACTIVE_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, row);
             preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             List<Order> orderList = new ArrayList<>();
@@ -606,21 +431,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -629,13 +440,12 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Order> findAllSuccessOrders(int row) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_SUCCESS_ORDERS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_SUCCESS_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, row);
             preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            ArrayList<Order> orderList = new ArrayList<>();
+            List<Order> orderList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
             int orderId;
             int userId;
@@ -659,21 +469,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -682,8 +478,6 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public int countClientsOrders(int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
             preparedStatement = getConnection().prepareStatement(COUNT_All_CLIENTS_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, userId);
@@ -694,21 +488,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 
@@ -717,10 +497,9 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
      */
     @Override
     public List<Order> findAllClientsOrders(int row, int userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-            preparedStatement = getConnection().prepareStatement(SELECT_ALL_CLIENTS_ORDERS_QUERY.inString);
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_CLIENTS_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
@@ -747,21 +526,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         } catch (SQLException e) {
             throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
         } finally {
-            try {
-                if(resultSet != null) {
-                    resultSet.close();
-
-                    if(preparedStatement != null){
-                        preparedStatement.close();
-
-                        if(connection != null) {
-                            connection.close();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
-            }
+            close(resultSet, preparedStatement, connection);
         }
     }
 }

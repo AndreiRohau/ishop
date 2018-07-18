@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO findIdWithLogin(User user) throws ServiceException {
-		if (!user.getLogin().trim().equals("")){
+		if (user.getLogin().trim().equals("")){
 			return null;
 		}
 		try {

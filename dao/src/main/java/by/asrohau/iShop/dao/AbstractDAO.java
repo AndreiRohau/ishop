@@ -2,6 +2,9 @@ package by.asrohau.iShop.dao;
 
 import by.asrohau.iShop.dao.exception.DAOException;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 /*
     abstract CRUD and abstract findAll() and abstract countAll()
@@ -36,5 +39,4 @@ public interface AbstractDAO<T> {
     count all
      */
     public abstract long countAll() throws DAOException;
-
 }

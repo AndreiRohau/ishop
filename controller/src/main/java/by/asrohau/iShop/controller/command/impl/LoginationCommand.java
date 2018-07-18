@@ -41,6 +41,7 @@ public class LoginationCommand implements Command {
 				goToPage = "/jsp/" + userDTO.getRole() + "/main.jsp";
 				lastCMD = GO_TO_PAGE_MAIN.inString;
 				request.getSession().setAttribute(ROLE.inString, userDTO.getRole());
+				request.getSession().setAttribute(USER_NAME.inString, userDTO.getLogin());
 			} else {
 				goToPage = "error.jsp";
 				lastCMD = GO_TO_PAGE_INDEX.inString;
