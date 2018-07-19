@@ -1,11 +1,13 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.bean.Product;
+import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,9 +20,12 @@ import java.util.List;
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class FindSuitableCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(FindSuitableCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to FindSuitableCommand");
+        logger.info("We got to FindSuitableCommand");
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         ProductService productService = serviceFactory.getProductService();
 
@@ -30,7 +35,7 @@ public class FindSuitableCommand implements Command {
         int row;
 
         currentPage = Integer.parseInt(request.getParameter("page_num"));
-        row = (currentPage - 1)*15;
+        row = (currentPage - 1)* Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
 
         String check = "";
         String company = request.getParameter("company").trim();
@@ -61,20 +66,14 @@ public class FindSuitableCommand implements Command {
 
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=findSuitable"
-                            + "&company=" + company
-                            + "&name=" + name
-                            + "&type=" + type
-                            + "&price=" + price
-                            + "&page_num=" + currentPage);
-            request.getSession().setAttribute("lastCMDneedPage",
-                    "FrontController?command=findSuitable"
-                            + "&company=" + company
-                            + "&name=" + name
-                            + "&type=" + type
-                            + "&price=" + price
-                            + "&page_num=");
+            String path = "FrontController?command=findSuitable"
+                    + "&company=" + company
+                    + "&name=" + name
+                    + "&type=" + type
+                    + "&price=" + price
+                    + "&page_num=";
+            request.getSession().setAttribute("lastCMDneedPage", path);
+            request.getSession().setAttribute("lastCMD", path + currentPage);
 
             if(!request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString)){
                 goToPage = "/jsp/user/main.jsp";

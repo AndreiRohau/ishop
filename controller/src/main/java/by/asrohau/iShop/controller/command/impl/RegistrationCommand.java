@@ -29,7 +29,6 @@ public class RegistrationCommand implements Command {
 				USER.inString);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
-		String lastCMD = GO_TO_PAGE_INDEX.inString;
 		String goToPage;
 		try {
 			if(request.getSession().getAttribute(ROLE.inString) == null) {
@@ -43,7 +42,7 @@ public class RegistrationCommand implements Command {
 				goToPage = ERROR.inString;
 				request.setAttribute(ERROR_MESSAGE.inString, message);
 			}
-			request.getSession().setAttribute(LAST_COMMAND.inString, lastCMD);
+			request.getSession().setAttribute(LAST_COMMAND.inString, INDEX.inString);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 			dispatcher.forward(request, response);
 			

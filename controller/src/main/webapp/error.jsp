@@ -15,6 +15,7 @@
  <fmt:setBundle basename="localization.local" var="loc" />
  <fmt:message bundle="${loc}" key="local.loginExists" var="loginExists" />
  <fmt:message bundle="${loc}" key="local.logout" var="logout" />
+ <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
  <fmt:message bundle="${loc}" key="local.errorOccupied" var="errorOccupied" />
  <fmt:message bundle="${loc}" key="local.toIndexPage" var="toIndexPage" />
  <fmt:message bundle="${loc}" key="local.toPreviousPage" var="toPreviousPage" />
@@ -32,9 +33,16 @@
   <h2><c:out value="${loginExists}"/></h2>
  </span>
 </c:if>
+
 <c:if test="${requestScope.errorMessage == 'logout'}">
  <span>
   <h2><c:out value="${logout}"/></h2>
+ </span>
+</c:if>
+
+<c:if test="${requestScope.errorMessage == 'noSuchUser'}">
+ <span>
+  <h2><c:out value="${noSuchUser}"/></h2>
  </span>
 </c:if>
 

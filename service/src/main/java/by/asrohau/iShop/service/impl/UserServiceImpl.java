@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 		try {
-			return new UserDTO(userDAO.find(user));
+			user = userDAO.find(user);
+			return user == null ? null : new UserDTO(user);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

@@ -5,6 +5,8 @@ public enum ControllerFinals {
     /*
     simple finals
      */
+    MAX_ROWS_AT_PAGE("15"), //same number is at DAOFinals.java
+
     ID("id"),
     LOGIN("login"),
     PASSWORD("password"),
@@ -27,8 +29,14 @@ public enum ControllerFinals {
     GO_TO_PAGE_MAIN("FrontController?command=goToPage&address=main.jsp"),
 
     /*
+    errors
+     */
+    NO_SUCH_USER("noSuchUser"),
+
+    /*
     Commands
      */
+    COMMAND("command"),
     REGISTRATION_COMMAND("Registration command"),
     LOGINATION_COMMAND("Logination command"),
     GO_TO_PAGE_COMMAND("GoToPage command");

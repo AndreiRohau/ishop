@@ -25,34 +25,31 @@ public class LoginationCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(LOGINATION_COMMAND.inString);
 
+		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		User user = new User(request.getParameter(LOGIN.inString).trim(),
 				request.getParameter(PASSWORD.inString).trim());
-		UserDTO userDTO;
 		String lastCMD;
 		String goToPage;
-		ServiceFactory serviceFactory = ServiceFactory.getInstance();
-		String errorMessage = "No such User";//todo
 
 		try {
 			UserService userService = serviceFactory.getUserService();
-			userDTO = userService.logination(user);
+			UserDTO userDTO = userService.logination(user);
 
-			if (userDTO != null) {
+			if (userDTO == null) {
+				goToPage = ERROR.inString;
+				lastCMD = GO_TO_PAGE_INDEX.inString;
+				request.setAttribute(ERROR_MESSAGE.inString, NO_SUCH_USER.inString);
+			} else {
 				goToPage = "/jsp/" + userDTO.getRole() + "/main.jsp";
 				lastCMD = GO_TO_PAGE_MAIN.inString;
 				request.getSession().setAttribute(ROLE.inString, userDTO.getRole());
 				request.getSession().setAttribute(USER_NAME.inString, userDTO.getLogin());
-			} else {
-				goToPage = "error.jsp";
-				lastCMD = GO_TO_PAGE_INDEX.inString;
 			}
 
 			request.getSession(true).setAttribute(LAST_COMMAND.inString, lastCMD);
-
-			request.setAttribute("errorMessage", errorMessage);
 			RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 			dispatcher.forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) {
+		} catch (ServiceException | ServletException | IOException e) { //
 			throw new ControllerException(e);
 		}
 
