@@ -44,6 +44,7 @@ public class JDBCFactory {
 			try {
 				Class.forName(databaseConfigReader.get(SQL_DRIVER.inString));
 				driverIsLoaded = true;
+				logger.info(MYSQL_DRIVER_IS_LOADED.inString);
 			} catch (ClassNotFoundException e) {
 				logger.error(MYSQL_DRIVER_NOT_LOADED.inString);
 				e.printStackTrace();
