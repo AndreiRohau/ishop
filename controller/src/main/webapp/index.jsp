@@ -8,7 +8,6 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Logination</title>
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<!-- Latest compiled and minified CSS -->
@@ -50,7 +49,9 @@
 		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
 		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
 
-
+		<title>
+			<c:out value="${home}"/>
+		</title>
 	</head>
 	
 	<body>
@@ -174,6 +175,13 @@
 							</h3>
 						</div>
 						<div class="panel-body">
+							<c:if test="${sessionScope.role == null}">
+								<div class="alert alert-info" role="alert">
+									<span>
+										<c:out value="${login_to_start}"/>
+									</span>
+								</div>
+							</c:if>
 							<c:if test="${requestScope.isRegistered == true}">
 								<div class="alert alert-danger" role="alert">
 									<span>
@@ -210,9 +218,7 @@
 								</div>
 							</c:if>
 
-							<p>
-								<c:out value="${login_to_start}"/>
-							</p>
+
 						</div>
 					</div>
 				</div>

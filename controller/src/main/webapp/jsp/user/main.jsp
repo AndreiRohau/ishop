@@ -1,175 +1,234 @@
+<!--
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+		 pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<link rel="stylesheet" type="text/css" href="style.css">
-		<title>Profile</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+		<link rel="stylesheet" type="text/css" href="my.css">
 
 		<fmt:setLocale value="${sessionScope.local}" />
 		<fmt:setBundle basename="localization.local" var="loc" />
+		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
+		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
 		<fmt:message bundle="${loc}" key="local.shop" var="shop" />
+		<fmt:message bundle="${loc}" key="local.admin" var="admin" />
+		<fmt:message bundle="${loc}" key="local.client" var="client" />
+		<fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
 		<fmt:message bundle="${loc}" key="local.hello" var="hello" />
+		<fmt:message bundle="${loc}" key="local.home" var="home" />
+		<fmt:message bundle="${loc}" key="local.main" var="main" />
+		<fmt:message bundle="${loc}" key="local.info" var="info" />
+		<fmt:message bundle="${loc}" key="local.reg_form" var="reg_form" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
-		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
+		<fmt:message bundle="${loc}" key="local.loginationText" var="loginationText" />
+		<fmt:message bundle="${loc}" key="local.registrationText" var="registrationText" />
+		<fmt:message bundle="${loc}" key="local.successRegistration" var="successRegistration" />
+		<fmt:message bundle="${loc}" key="local.login" var="login" />
+		<fmt:message bundle="${loc}" key="local.password" var="password" />
+		<fmt:message bundle="${loc}" key="local.logbutton" var="log_button" />
+		<fmt:message bundle="${loc}" key="local.log_out_button" var="log_out_button" />
+		<fmt:message bundle="${loc}" key="local.regbutton" var="reg_button" />
+		<fmt:message bundle="${loc}" key="local.success_log_out" var="success_log_out" />
+		<fmt:message bundle="${loc}" key="local.invalid_log_or_password" var="invalid_log_or_password" />
+		<fmt:message bundle="${loc}" key="local.plz_log_out" var="plz_log_out" />
+		<fmt:message bundle="${loc}" key="local.login_exists" var="login_exists" />
+		<fmt:message bundle="${loc}" key="local.login_to_start" var="login_to_start" />
+		<fmt:message bundle="${loc}" key="local.loginExists" var="loginExists" />
+		<fmt:message bundle="${loc}" key="local.logout" var="logout" />
+		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
+		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
 
 		<c:set var="current_page" value="${requestScope.get('currentPage')}"/>
 		<c:set var="max_page" value="${requestScope.get('maxPage')}"/>
 
+		<title>
+			<c:out value="${main}"/>
+		</title>
 	</head>
 	<body>
-		<div class="header">
-
-			<div id="header1">
-				<p><c:out value="${shop}"/></p>
-				<p><c:out value="${hello}"/> <c:out value="${sessionScope.userName}"/>!!!</p>
-			</div>
-
-			<div id="header2" style="display:flex; flex-flow: row wrap; justify-content:space-between">
-				<div>
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="change_language"/>
-						<input type="hidden" name="local" value="en"/>
-						<input type="submit" value="ENG"/>
-					</form>
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="change_language"/>
-						<input type="hidden" name="local" value="ru"/>
-						<input type="submit" value="РУС"/>
-					</form>
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="change_language"/>
-						<input type="hidden" name="local" value="ch"/>
-						<input type="submit" value="汉语"/>
-					</form>
-				</div>
-				<div>
-					<form action="FrontController" method="post" style="height:100%">
-						<input type="hidden" name="command" value="logout"/>
-						<input type="submit" value="Log out" style="height:100%"/>
-					</form>
-				</div>
-			</div>
-
-
-		</div>
-
-
-		<div class="middle">
-			<div id="menu">
-				<p>
-					<a href="FrontController?command=goToPage&address=profile.jsp">
-						${goToProfile_button}
-					</a>
-				</p>
-				<p>
-					<a href="FrontController?command=goToPage&address=basket.jsp">
-						${goToBasket_button}
-					</a>
-				</p>
-				<br/>
-				<hr/>
-
-				<p><b><c:out value="${requestScope.get('msg')}"/></b></p>
-
-			</div>
-
-			<div id="content">
-				<form action="FrontController" method="post">
-					<p><b>Fill</b>
-						<input type="hidden" name="command" value="findSuitable"/>
-						<input type="hidden" name="page_num" value="1"/>
-						<input title="company" type="text" name="company" value="" />
-						<input title="name" type="text" name="name" value="" />
-						<input title="type" type="text" name="type" value="" />
-						<input title="price" type="text" name="price" value="" />
-						<input type="submit" name="get_products" value="Find it!"/>
-					</p>
-				</form>
-				<br/>
-				<hr/>
-
-				<form action="FrontController" method="post">
-					<p><b>Get all products</b>
-						<input type="hidden" name="command" value="selectAllProducts"/>
-						<input type="hidden" name="page_num" value="1"/>
-						<input type="submit" name="get_products" value="Get them!"/>
-					</p>
-				</form>
-				<hr/>
-				<br/>
-
-				<c:if test="${current_page != null}">
-					<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
-						<tr>
-							<td>INFO</td>
-							<td>COMPANY</td>
-							<td>NAME</td>
-							<td>TYPE</td>
-							<td>PRICE</td>
-							<td>BUY</td>
-						</tr>
-						<c:forEach items="${requestScope.productArray}" var="product">
-							<tr>
-								<td>
-									<form action="FrontController" method="post">
-										<input type="hidden" name="command" value="productInfo" />
-										<input type="hidden" name="productId" value="${product.id}" />
-										<input type="submit" name="info" value="INFO" /><br/>
-									</form>
-								</td>
-								<td>${product.company}</td>
-								<td>${product.name}</td>
-								<td>${product.type}</td>
-								<td>${product.price}</td>
-								<td>
-									<form action="FrontController" method="post">
-										<input type="hidden" name="command" value="addToBasket" />
-										<input type="hidden" name="productId" value="${product.id}" />
-										<input type="submit" name="buy" value="BUY" /><br/>
-									</form>
-								</td>
-							</tr>
-						</c:forEach>
-					</table>
-
-					<div width="100%" style="background-color: deepskyblue; font-size: 1em">    
-						<c:forEach begin="1" end="${max_page}" var="i">
-				            <c:if test="${i != current_page}">
-				        		<a href="${sessionScope.get('lastCMDneedPage')}${i}">${i}</a>
-				            </c:if>
-				            <c:if test="${i == current_page}">
-				                <c:out value="${i}"/>
-					        </c:if>
-					    </c:forEach>
+	<!-- HEADER -->
+		<div class="headerAnim" >
+			<div class="row">
+				<div class="col-md-1">
+					<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="change_language"/>
+							<input type="hidden" name="local" value="en"/>
+							<button class="btn btn-default" type="submit" name="lang" value="en_EN">
+								EN
+							</button>
+						</form>
 					</div>
-				</c:if>
-			</div>
+					<div class="col-md-12">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="change_language"/>
+							<input type="hidden" name="local" value="ru"/>
+							<button class="btn btn-default" type="submit" name="lang" value="ru_RU">
+								РУ
+							</button>
+						</form>
 
-		</div>
-
-		<div class="footer" >
-			<div id="footer" >
-				<h1>footer</h1>
-				<p>
-					<a href="FrontController?command=goToPage&address=index.jsp">INDEX</a>
-					  -->
-					<a href="FrontController?command=goToPage&address=main.jsp">MAIN</a>
-
-					<c:if test="${current_page != null}">
-						-->
-						 <a href="${sessionScope.get('lastCMDneedPage')}${current_page}">Page: ${current_page}</a>
+					</div>
+				</div>
+				<div class="col-md-1" style="text-align:center">
+					<c:if test="${sessionScope.role == 'admin'}">
+						<span>
+							<c:out value="${admin}"/>
+						</span>
 					</c:if>
-				</p>
+					<c:if test="${sessionScope.role == 'user'}">
+						<span>
+							<c:out value="${client}"/>
+						</span>
+					</c:if>
+					<c:if test="${sessionScope.role == null}">
+						<span>
+							<c:out value="${anonymous}"/>
+						</span>
+					</c:if>
+				</div>
+				<div class="col-md-7" style="text-align:center">
+					<h1>
+						<c:out value="${main}" />
+					</h1>
+				</div>			
+				<div class="col-md-1" style="padding-top:10px;">
+					<form method="get" action="FrontController">
+						<input type="hidden" name="command" value="goToPage"/>
+						<input type="hidden" name="address" value="basket.jsp"/>
+						<button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
+							<c:out value="${goToBasket_button}"/>
+						</button>
+					</form>
+				</div>
+				<div class="col-md-1" style="padding-top:10px;">
+					<form method="get" action="FrontController">
+						<input type="hidden" name="command" value="goToPage"/>
+						<input type="hidden" name="address" value="profile.jsp"/>
+						<button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+							<c:out  value="${goToProfile_button}"/>
+						</button>
+					</form>
+				</div>
+				<div class="col-md-1">
+					<div class="col-md-12">
+						<h4>
+							<c:out value="${sessionScope.userName}"/>
+						</h4>
+					</div>	
+					<div class="col-md-12">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="logout"/>
+							<button class="btn btn-default" type="submit" value="log_out">
+								<c:out value="${log_out_button}"/>
+							</button>
+						</form>
+					</div>
+				</div>
+				<%--<div class="col-md-1">--%>
+				 <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
+				<%--</div>--%>
 			</div>
 		</div>
+
+	<!-- NAVIGATION -->
+		<div class="well well-sm" style="padding:30px; padding-bottom:0px;  background:0; border:1px; margin:0%;">
+			<ul class="nav nav-pills" >
+				<li role="presentation">
+					<a href="FrontController?command=goToPage&address=index.jsp">
+						<c:out value="${home}"/>
+					</a>
+				</li>
+				<li role="presentation" class="active">
+					<a href="FrontController?command=goToPage&address=main.jsp">
+						<c:out value="${main}"/>
+					</a>
+				</li>
+			</ul>		
+		</div>
+		
+	<!-- MAIN -->
+		<div class="col-md-12">
+			<div class="panel panel-default" style="margin-top:15px">
+				<div class="panel-heading">
+					<form action="FrontController" method="post">
+						<div class="form-inline">
+							<input class="form-control" type="hidden" name="command" value="findSuitable"/>
+							<input class="form-control" type="hidden" name="page_num" value="1"/>
+							<input class="form-control" title="company" type="text" name="company" value="" placeholder="company"/>
+							<input class="form-control" title="name" type="text" name="name" value="" placeholder="name"/>
+							<input class="form-control" title="type" type="text" name="type" value="" placeholder="type"/>
+							<input class="form-control" title="price" type="text" name="price" value="" placeholder="price"/>
+							<input class="form-control" type="submit" name="get_products" value="Find it!" class="btn btn-default"/>
+						</div>
+					</form>
+				</div>
+				<div class="panel-body">
+					<c:if test="${current_page != null}">
+						<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
+							<tr>
+								<td>INFO</td>
+								<td>COMPANY</td>
+								<td>NAME</td>
+								<td>TYPE</td>
+								<td>PRICE</td>
+								<td>BUY</td>
+							</tr>
+							<c:forEach items="${requestScope.productArray}" var="product">
+								<tr>
+									<td>
+										<form action="FrontController" method="post">
+											<input type="hidden" name="command" value="productInfo" />
+											<input type="hidden" name="productId" value="${product.id}" />
+											<input type="submit" name="info" value="INFO" class="btn btn-default"/><br/>
+										</form>
+									</td>
+									<td>${product.company}</td>
+									<td>${product.name}</td>
+									<td>${product.type}</td>
+									<td>${product.price}</td>
+									<td>
+										<form action="FrontController" method="post">
+											<input type="hidden" name="command" value="addToBasket" />
+											<input type="hidden" name="productId" value="${product.id}" />
+											<input type="submit" name="buy" value="BUY" class="btn btn-default"/><br/>
+										</form>
+									</td>
+								</tr>
+							</c:forEach>
+						</table>
+
+						<ul class="pagination pull-right">
+							<c:forEach begin="1" end="${max_page}" var="i">
+					            <c:if test="${i == current_page}">
+					                <li class="active">
+										<a href="${sessionScope.get('lastCMDneedPage')}${i}">${i}</a>
+									</li>
+								</c:if>
+					            <c:if test="${i != current_page}">
+									<li>
+						        		<a href="${sessionScope.get('lastCMDneedPage')}${i}">${i}</a>
+						            </li>
+								</c:if>
+						    </c:forEach>
+						</ul>
+					</c:if>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>
