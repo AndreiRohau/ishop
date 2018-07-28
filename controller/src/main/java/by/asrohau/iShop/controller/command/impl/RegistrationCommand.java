@@ -6,6 +6,7 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -23,28 +24,29 @@ public class RegistrationCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(REGISTRATION_COMMAND.inString);
-		boolean isRegistered = false;
-		User user = new User(request.getParameter(LOGIN.inString).trim(),
-				request.getParameter(PASSWORD.inString).trim(),
-				USER.inString);
-		ServiceFactory serviceFactory = ServiceFactory.getInstance();
-		UserService userService = serviceFactory.getUserService();
-		String goToPage;
 		try {
-			if(request.getSession().getAttribute(ROLE.inString) == null) {
+			ServiceFactory serviceFactory = ServiceFactory.getInstance();
+			UserService userService = serviceFactory.getUserService();
+
+			User user = new User(request.getParameter(LOGIN.inString).trim(),
+					request.getParameter(PASSWORD.inString).trim(),
+					USER.inString);
+			boolean isRegistered = false;
+			boolean passwordEquals = request.getParameter("password2").trim().equals(user.getPassword());
+
+			if(passwordEquals && request.getSession().getAttribute(ROLE.inString) == null) {
 				isRegistered = userService.registration(user);
 			}
+
 			if (isRegistered) {
 				request.setAttribute("isRegistered", true);
-				goToPage = INDEX.inString;
 			} else {
-				String message = request.getSession().getAttribute(ROLE.inString) == null ? "exists" : "logout";
-				goToPage = ERROR.inString;
-				request.setAttribute(ERROR_MESSAGE.inString, message);
+				String errorMessage = passwordEquals ? "exists" : "passwordsUnequal";
+				errorMessage = request.getSession().getAttribute(ROLE.inString) == null ? errorMessage : "logout";
+				request.setAttribute(ERROR_MESSAGE.inString, errorMessage);
 			}
 			request.getSession().setAttribute(LAST_COMMAND.inString, INDEX.inString);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-			dispatcher.forward(request, response);
+			request.getRequestDispatcher(INDEX.inString).forward(request, response);
 			
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);
