@@ -10,6 +10,7 @@ public enum ControllerFinals {
     ID("id"),
     LOGIN("login"),
     PASSWORD("password"),
+    NEW_PASSWORD("newPassword"),
     ROLE("role"),
     ADMIN("admin"),
     USER("user"),
@@ -17,6 +18,8 @@ public enum ControllerFinals {
     LAST_COMMAND("lastCMD"),
     ADDRESS("address"),
     ERROR_MESSAGE("errorMessage"),
+    IS_CHANGED("isChanged"),
+    MESSAGE("message"),
 
     /*
     urls
@@ -27,6 +30,7 @@ public enum ControllerFinals {
     GO_TO_PAGE_("FrontController?command=goToPage&address="),
     GO_TO_PAGE_INDEX("FrontController?command=goToPage&address=index.jsp"),
     GO_TO_PAGE_MAIN("FrontController?command=goToPage&address=main.jsp"),
+    GO_TO_PAGE_PROFILE("FrontController?command=goToPage&address=profile.jsp"),
 
     /*
     errors
@@ -37,9 +41,12 @@ public enum ControllerFinals {
     Commands
      */
     COMMAND("command"),
+    GO_TO_PAGE_COMMAND("GoToPage command"),
     REGISTRATION_COMMAND("Registration command"),
     LOGINATION_COMMAND("Logination command"),
-    GO_TO_PAGE_COMMAND("GoToPage command");
+    CREATE_ORDER_COMMAND("CreateOrderCommand command"),
+    CHANGE_PASSWORD_COMMAND("ChangePasswordCommand command"),
+    DELETE_USER_COMMAND("DeleteUserCommand command");
 
     public String inString;
     ControllerFinals(String inString){

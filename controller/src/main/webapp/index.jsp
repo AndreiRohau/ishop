@@ -183,7 +183,7 @@
 								</div>
 							</c:if>
 							<c:if test="${requestScope.isRegistered == true}">
-								<div class="alert alert-danger" role="alert">
+								<div class="alert alert-success" role="alert">
 									<span>
 										<c:out value="${successRegistration}"/>
 									</span>
