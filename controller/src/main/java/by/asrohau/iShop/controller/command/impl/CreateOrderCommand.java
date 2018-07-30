@@ -19,15 +19,6 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-//get user ID
-//get product list
-//delete reserved products from this USER
-//(add to Reserve Table) convert product list into ( id(key) ---- user_id ---- product_id %,% ---- address ---- phone)
-//доделать - удаление юзера
-//доделать - удаление его корзины
-//доделать - удаление его заказа
-
-
 public class CreateOrderCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(CreateOrderCommand.class);
@@ -42,16 +33,16 @@ public class CreateOrderCommand implements Command {
 
             User user = new User((String) request.getSession().getAttribute(USER_NAME.inString));
             user.setId(userService.findIdWithLogin(user).getId());
-            String productIds = "";
+            StringBuilder productIds = new StringBuilder();
             for(int id : orderService.getAllReservedIds(user.getId())){
-                productIds = productIds + String.valueOf(id) + ",";
+                productIds.append(String.valueOf(id)).append(",");
             }
 
-            Order order = new Order(user.getId(), productIds, request.getParameter("user_address"),
-                    request.getParameter("user_phone"), "new");
+            Order order = new Order(user.getId(), productIds.toString(), request.getParameter("user_address"),
+                    request.getParameter("user_phone"), NEW.inString);
 
             if (orderService.saveNewOrder(order)) {
-                boolean reservedIsDeleted = orderService.deleteAllReserved(user.getId());
+                orderService.deleteAllReserved(user.getId());
                 request.setAttribute(MESSAGE.inString, "order_created");
             } else {
                 request.setAttribute(ERROR_MESSAGE.inString, "order_creation_error");

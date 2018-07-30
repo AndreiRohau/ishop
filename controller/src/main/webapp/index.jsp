@@ -11,11 +11,14 @@
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>--%>
 		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
-		<link rel="stylesheet" type="text/css" href="my.css">
+		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"--%>
+          <%--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>--%>
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
+			  integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+		<link rel="stylesheet" type="text/css" href="my.css"/>
 
 		<fmt:setLocale value="${sessionScope.local}" />
 		<fmt:setBundle basename="localization.local" var="loc" />
@@ -48,6 +51,8 @@
 		<fmt:message bundle="${loc}" key="local.logout" var="logout" />
 		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
 		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
+		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
+		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
 
 		<title>
 			<c:out value="${home}"/>
@@ -90,60 +95,91 @@
 							<c:out value="${client}"/>
 						</span>
 					</c:if>
-					<c:if test="${sessionScope.role == null}">
-						<span>
-							<c:out value="${anonymous}"/>
-						</span>
-					</c:if>
 				</div>
 				<div class="col-md-5" style="text-align:center">
 					<h1>
 						<c:out value="${hello}" />
 					</h1>
-				</div>			
-				<div class="col-md-1" style="padding-top:10px;">
-					<label for="login" style="padding-bottom:25px;">
-						<c:out value="${login}" />:
-					</label>
-					<br/>
-					<label for="password">
-						<c:out value="${password}" />:
-					</label>
-					
 				</div>
-				<div class="col-md-2">
-					<div style="padding-top:5px">
-						<form action="FrontController" id="login_form" method="post">
-							<input type="hidden" name="command" value="logination" />
-							<div class="form-group">
-								<input type="text" class="form-control" id="login" placeholder="login" name="login" value="" />
-							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" id="password" placeholder="password" name="password" value="" />
-							</div>
-						</form>
-					</div>
-				</div>
+				<c:if test="${sessionScope.role == null}">
+					<div class="col-md-1" style="padding-top:10px;">
+						<label for="login" style="padding-bottom:25px;">
+							<c:out value="${login}" />:
+						</label>
+						<br/>
+						<label for="password">
+							<c:out value="${password}" />:
+						</label>
 
-				<div class="col-md-1">
-					<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-						<button form="login_form" class="btn btn-default" type="submit" value="log_in">
-							<c:out value="${log_button}"/>
-						</button>
-					</div>	
-					<div class="col-md-12">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="logout"/>
-							<button class="btn btn-default" type="submit" value="log_out">
-								<c:out value="${log_out_button}"/>
+					</div>
+					<div class="col-md-2">
+						<div style="padding-top:5px">
+							<form action="FrontController" id="login_form" method="post">
+								<input type="hidden" name="command" value="logination" />
+								<div class="form-group">
+									<input type="text" class="form-control" id="login" placeholder="login" name="login" value="" />
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" id="password" placeholder="password" name="password" value="" />
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
+							<button form="login_form" class="btn btn-default" type="submit" value="log_in">
+								<c:out value="${log_button}"/>
+							</button>
+						</div>
+						<div class="col-md-12">
+							<form action="FrontController" method="post">
+								<input type="hidden" name="command" value="logout"/>
+								<button class="btn btn-default" type="submit" value="log_out">
+									<c:out value="${log_out_button}"/>
+								</button>
+							</form>
+						</div>
+					</div>
+					<div class="col-md-1">
+							<%--should be empty --%>
+					</div>
+				</c:if>
+				<c:if test="${sessionScope.role != null}">
+					<div class="col-md-1" style="padding-top:10px;">
+						<form method="get" action="FrontController">
+							<input type="hidden" name="command" value="goToPage"/>
+							<input type="hidden" name="address" value="basket.jsp"/>
+							<button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
+								<c:out value="${goToBasket_button}"/>
 							</button>
 						</form>
 					</div>
-				</div>
+					<div class="col-md-1" style="padding-top:10px;">
+						<form method="get" action="FrontController">
+							<input type="hidden" name="command" value="goToPage"/>
+							<input type="hidden" name="address" value="profile.jsp"/>
+							<button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+								<c:out  value="${goToProfile_button}"/>
+							</button>
+						</form>
+					</div>
+					<div class="col-md-1">
+						<div class="col-md-12">
+							<h4>
+								<c:out value="${sessionScope.userName}"/>
+							</h4>
+						</div>
+						<div class="col-md-12">
+							<form action="FrontController" method="post">
+								<input type="hidden" name="command" value="logout"/>
+								<button class="btn btn-default" type="submit" value="log_out">
+									<c:out value="${log_out_button}"/>
+								</button>
+							</form>
+						</div>
+					</div>
+				</c:if>
 
-				<div class="col-md-1">
-				 <%--should be empty --%>
-				</div>
 
 			</div>
 		</div>

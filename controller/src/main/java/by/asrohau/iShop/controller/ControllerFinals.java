@@ -6,6 +6,7 @@ public enum ControllerFinals {
     simple finals
      */
     MAX_ROWS_AT_PAGE("15"), //same number is at DAOFinals.java
+    NEW("new"),
 
     ID("id"),
     LOGIN("login"),
