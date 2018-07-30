@@ -13,17 +13,20 @@ public class EncodingFilter implements Filter{
 
     private String encoding;
 
+    @Override
     public void destroy(){
     }
 
-    public void doFilter(ServletRequest req, ServletResponse resp,
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws ServletException, IOException{
-        String contentType = req.getContentType();
+        String contentType = request.getContentType();
         if (contentType != null && contentType.startsWith(FILTERABLE_CONTENT_TYPE))
-            req.setCharacterEncoding(encoding);
-        chain.doFilter(req, resp);
+            request.setCharacterEncoding(encoding);
+        chain.doFilter(request, response);
     }
 
+    @Override
     public void init(FilterConfig config) throws ServletException{
         encoding = config.getInitParameter(ENCODING_INIT_PARAM_NAME);
         if (encoding == null)

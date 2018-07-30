@@ -1,79 +1,69 @@
 package by.asrohau.iShop.bean;
 
-public class Order {
+public class Order extends Base {
 
-    private int id;
-    private int user_id;
-    private String productIDs;
-    private String user_address;
-    private String user_phone;
+    private int userId;
+    private String productIds;
+    private String userAddress;
+    private String userPhone;
     private String status;
 
-    public Order() {
+    public Order() {}
+
+    public Order(int userId, String productIds, String userAddress, String userPhone) {
+        this.userId = userId;
+        this.productIds = productIds;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
     }
 
-    public Order(int user_id, String productIDs, String user_address, String user_phone) {
-        this.user_id = user_id;
-        this.productIDs = productIDs;
-        this.user_address = user_address;
-        this.user_phone = user_phone;
-    }
-
-    public Order(int user_id, String productIDs, String user_address, String user_phone, String status) {
-        this.user_id = user_id;
-        this.productIDs = productIDs;
-        this.user_address = user_address;
-        this.user_phone = user_phone;
+    public Order(int userId, String productIds, String userAddress, String userPhone, String status) {
+        this.userId = userId;
+        this.productIds = productIds;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
         this.status = status;
     }
 
-    public Order(int id, int user_id, String productIDs, String user_address, String user_phone, String status) {
-        this.id = id;
-        this.user_id = user_id;
-        this.productIDs = productIDs;
-        this.user_address = user_address;
-        this.user_phone = user_phone;
+    public Order(int id, int userId, String productIds, String userAddress, String userPhone, String status) {
+        super(id);
+        this.userId = userId;
+        this.productIds = productIds;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
         this.status = status;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public String getProductIds() {
+        return productIds;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setProductIds(String productIds) {
+        this.productIds = productIds;
     }
 
-    public String getProductIDs() {
-        return productIDs;
+    public String getUserAddress() {
+        return userAddress;
     }
 
-    public void setProductIDs(String productIDs) {
-        this.productIDs = productIDs;
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 
-    public String getUser_address() {
-        return user_address;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public void setUser_address(String user_address) {
-        this.user_address = user_address;
-    }
-
-    public String getUser_phone() {
-        return user_phone;
-    }
-
-    public void setUser_phone(String user_phone) {
-        this.user_phone = user_phone;
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
 
     public String getStatus() {
@@ -88,24 +78,24 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Order order = (Order) o;
 
-        if (id != order.id) return false;
-        if (user_id != order.user_id) return false;
-        if (productIDs != null ? !productIDs.equals(order.productIDs) : order.productIDs != null) return false;
-        if (user_address != null ? !user_address.equals(order.user_address) : order.user_address != null) return false;
-        if (user_phone != null ? !user_phone.equals(order.user_phone) : order.user_phone != null) return false;
+        if (userId != order.userId) return false;
+        if (productIds != null ? !productIds.equals(order.productIds) : order.productIds != null) return false;
+        if (userAddress != null ? !userAddress.equals(order.userAddress) : order.userAddress != null) return false;
+        if (userPhone != null ? !userPhone.equals(order.userPhone) : order.userPhone != null) return false;
         return status != null ? status.equals(order.status) : order.status == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + user_id;
-        result = 31 * result + (productIDs != null ? productIDs.hashCode() : 0);
-        result = 31 * result + (user_address != null ? user_address.hashCode() : 0);
-        result = 31 * result + (user_phone != null ? user_phone.hashCode() : 0);
+        int result = super.hashCode();
+        result = 31 * result + userId;
+        result = 31 * result + (productIds != null ? productIds.hashCode() : 0);
+        result = 31 * result + (userAddress != null ? userAddress.hashCode() : 0);
+        result = 31 * result + (userPhone != null ? userPhone.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
@@ -113,11 +103,11 @@ public class Order {
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + id +
-                ", user_id=" + user_id +
-                ", productIDs='" + productIDs + '\'' +
-                ", user_address='" + user_address + '\'' +
-                ", user_phone='" + user_phone + '\'' +
+                 super.toString() +
+                "userId=" + userId +
+                ", productIds='" + productIds + '\'' +
+                ", userAddress='" + userAddress + '\'' +
+                ", userPhone='" + userPhone + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

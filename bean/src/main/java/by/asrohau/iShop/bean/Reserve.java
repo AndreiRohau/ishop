@@ -1,75 +1,66 @@
 package by.asrohau.iShop.bean;
 
-public class Reserve {
+public class Reserve extends Base {
 
-    private int id;
-    private int user_id;
-    private int product_id;
+    private int rUserId;
+    private int rProductId;
 
     public Reserve() {
     }
 
-    public Reserve(int user_id, int product_id) {
-        this.user_id = user_id;
-        this.product_id = product_id;
+    public Reserve(int rUserId, int rProductId) {
+        this.rUserId = rUserId;
+        this.rProductId = rProductId;
     }
 
-    public Reserve(int id, int user_id, int product_id) {
-        this.id = id;
-        this.user_id = user_id;
-        this.product_id = product_id;
+    public Reserve(int id, int rUserId, int rProductId) {
+        super(id);
+        this.rUserId = rUserId;
+        this.rProductId = rProductId;
     }
 
-    public int getId() {
-        return id;
+    public int getrUserId() {
+        return rUserId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setrUserId(int rUserId) {
+        this.rUserId = rUserId;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getrProductId() {
+        return rProductId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public int getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(int product_id) {
-        this.product_id = product_id;
+    public void setrProductId(int rProductId) {
+        this.rProductId = rProductId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Reserve reserve = (Reserve) o;
 
-        if (id != reserve.id) return false;
-        if (user_id != reserve.user_id) return false;
-        return product_id == reserve.product_id;
+        if (rUserId != reserve.rUserId) return false;
+        return rProductId == reserve.rProductId;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + user_id;
-        result = 31 * result + product_id;
+        int result = super.hashCode();
+        result = 31 * result + rUserId;
+        result = 31 * result + rProductId;
         return result;
     }
 
     @Override
     public String toString() {
         return "Reserve{" +
-                "id=" + id +
-                ", user_id=" + user_id +
-                ", product_id=" + product_id +
+                super.toString() +
+                "rUserId=" + rUserId +
+                ", rProductId=" + rProductId +
                 '}';
     }
 }

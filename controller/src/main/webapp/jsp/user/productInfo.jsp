@@ -20,7 +20,7 @@
     <fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
     <fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
 
-    <c:set var="product_id" value="${requestScope.get('productToEdit').id}"/>
+    <c:set var="rProductId" value="${requestScope.get('productToEdit').id}"/>
     <c:set var="product_name" value="${requestScope.get('productToEdit').name}"/>
     <c:set var="product_company" value="${requestScope.get('productToEdit').company}"/>
     <c:set var="product_type" value="${requestScope.get('productToEdit').type}"/>
@@ -130,7 +130,7 @@
             -->
             <a href="FrontController?command=goToPage&address=main.jsp">MAIN</a>
             -->
-            <a href="FrontController?command=productInfo&productId=${product_id}" style="text-transform: uppercase">${product_name}</a>
+            <a href="FrontController?command=productInfo&productId=${rProductId}" style="text-transform: uppercase">${product_name}</a>
         </p>
     </div>
 </div>

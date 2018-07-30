@@ -127,7 +127,7 @@
                                 <td>
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="deleteReserved" />
-                                        <input type="hidden" name="reserveId" value="${product.reserve_id}" />
+                                        <input type="hidden" name="reserveId" value="${product.reserveId}" />
                                         <input type="submit" name="remove" value="REMOVE" /><br/>
                                     </form>
                                 </td>

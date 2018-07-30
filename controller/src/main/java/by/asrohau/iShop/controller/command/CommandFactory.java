@@ -5,6 +5,7 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommandFactory {
@@ -30,5 +31,4 @@ public class CommandFactory {
     public Map<String, Command> getCommandMap() {
         return commandMap;
     }
-
 }

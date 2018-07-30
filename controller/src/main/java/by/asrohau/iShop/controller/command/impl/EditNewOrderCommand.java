@@ -32,12 +32,12 @@ public class EditNewOrderCommand implements Command {
         int row = (currentPage - 1)*15;
 
         try {
-
-            int orderID = Integer.parseInt(request.getParameter("orderId"));
-            Order order = orderService.findOrderWithID(orderID);
-
+            int orderId = Integer.parseInt(request.getParameter("orderId"));
+            Order order = new Order();
+            order.setId(orderId);
+            order = orderService.findOrderWithID(order);
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
-            String productIDsString = order.getProductIDs();
+            String productIDsString = order.getProductIds();
             String[] productIDsArray = productIDsString.split(",");
 
             //finding maxPage
@@ -55,7 +55,7 @@ public class EditNewOrderCommand implements Command {
             for(int id : productIDs){
                 product.setId(id);
                 product = productService.findProductWithId(product);
-                product.setOrder_id(orderID);
+                product.setOrderId(orderId);
                 productArray.add(product);
                 product = new Product();
             }
@@ -65,23 +65,23 @@ public class EditNewOrderCommand implements Command {
             request.setAttribute("new_status", request.getParameter("new_status"));
             request.setAttribute("status", order.getStatus());
             request.setAttribute("orderId", order.getId());
-            request.setAttribute("userId", order.getUser_id());
-            request.setAttribute("address", order.getUser_address());
-            request.setAttribute("phone", order.getUser_phone());
+            request.setAttribute("userId", order.getUserId());
+            request.setAttribute("address", order.getUserAddress());
+            request.setAttribute("phone", order.getUserPhone());
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=editNewOrder&page_num=" + currentPage
-                            + "&orderId=" + orderID
-                            + "&userId=" + order.getUser_id()
-                            + "&address=" + order.getUser_address()
-                            + "&phone=" + order.getUser_phone()
+                            + "&orderId=" + orderId
+                            + "&userId=" + order.getUserId()
+                            + "&address=" + order.getUserAddress()
+                            + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status")));
             request.setAttribute("lastCMDneedPage",
-                    "FrontController?command=editNewOrder&orderId=" + orderID
-                            + "&userId=" + order.getUser_id()
-                            + "&address=" + order.getUser_address()
-                            + "&phone=" + order.getUser_phone()
+                    "FrontController?command=editNewOrder&orderId=" + orderId
+                            + "&userId=" + order.getUserId()
+                            + "&address=" + order.getUserAddress()
+                            + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status"))
                             + "&page_num=");
 

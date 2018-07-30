@@ -1,6 +1,7 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.bean.Product;
+import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
@@ -19,9 +20,10 @@ public class AddNewProductCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         System.out.println("We got to AddProductCommand");
 
+
         boolean isAdded; //= false
         Product newProduct = new Product(request.getParameter("company").trim(),
-                request.getParameter("name").trim(),
+                request.getParameter("inString").trim(),
                 request.getParameter("type").trim(),
                 request.getParameter("price").trim(),
                 request.getParameter("description").trim());
@@ -32,6 +34,12 @@ public class AddNewProductCommand implements Command {
         request.getSession().setAttribute("lastCMD", "FrontController?command=goToPage&address=manageProducts.jsp");
         request.setAttribute("isAdded", null);
         try {
+            /*
+            //Check accessability if there's no proper filter
+            if(request.getSession().getAttribute(ControllerFinals.ROLE.inString) == null){
+                response.sendRedirect(ControllerFinals.INDEX.inString);
+            }
+            */
             isAdded = productService.addNewProduct(newProduct);
             String goToPage;
             if (isAdded) {

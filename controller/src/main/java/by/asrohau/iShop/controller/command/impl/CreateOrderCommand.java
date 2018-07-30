@@ -8,13 +8,16 @@ import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.List;
+
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 //get user ID
 //get product list
@@ -27,65 +30,37 @@ import java.util.LinkedList;
 
 public class CreateOrderCommand implements Command {
 
+    private static final Logger logger = Logger.getLogger(CreateOrderCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to CreateOrderCommand");
+        logger.info(CREATE_ORDER_COMMAND.inString);
+        try{
+            ServiceFactory serviceFactory = ServiceFactory.getInstance();
+            OrderService orderService = serviceFactory.getOrderService();
+            UserService userService = serviceFactory.getUserService();
 
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        OrderService orderService = serviceFactory.getOrderService();
-        UserService userService = serviceFactory.getUserService();
-
-        String goToPage;
-        String productIDs = null;
-        String message = null;
-        String user_address;
-        String user_phone;
-        User user = new User();
-        user.setLogin((String) request.getSession().getAttribute("userName"));
-
-
-    try{
-        //got user ID
-        int user_id = userService.findIdWithLogin(user).getId();
-        //got list of product IDs
-        LinkedList<Integer> products = orderService.getAllReservedIds(user_id);
-        //transform list into string of IDs divided with ,
-        for(int id : products){
-            if(productIDs != null) {
-                productIDs = productIDs + String.valueOf(id) + ",";
-            } else {
-                productIDs = String.valueOf(id) + ",";
+            User user = new User((String) request.getSession().getAttribute(USER_NAME.inString));
+            user.setId(userService.findIdWithLogin(user).getId());
+            String productIds = "";
+            for(int id : orderService.getAllReservedIds(user.getId())){
+                productIds = productIds + String.valueOf(id) + ",";
             }
 
+            Order order = new Order(user.getId(), productIds, request.getParameter("user_address"),
+                    request.getParameter("user_phone"), "new");
+
+            if (orderService.saveNewOrder(order)) {
+                boolean reservedIsDeleted = orderService.deleteAllReserved(user.getId());
+                request.setAttribute(MESSAGE.inString, "order_created");
+            } else {
+                request.setAttribute(ERROR_MESSAGE.inString, "order_creation_error");
+            }
+
+            request.setAttribute(LAST_COMMAND.inString, "FrontController?command=goToPage&address=basket.jsp");
+            request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);
+        } catch (ServiceException | ServletException | IOException e) {
+            throw new ControllerException(e);
         }
-        //get user_address
-        user_address = request.getParameter("user_address");
-        //get user_phone
-        user_phone = request.getParameter("user_phone");
-
-        //creating order obj
-        Order order = new Order(user_id, productIDs, user_address, user_phone, "new");
-        //save into orders TABLE
-        boolean orderIsSaved = orderService.saveNewOrder(order);
-
-        if(orderIsSaved) {
-            //delete reserved
-            boolean reservedIsDeleted = orderService.deleteAllReserved(user_id);
-            goToPage = "/jsp/user/main.jsp";
-            message = "Order created - wait for the delivery.";
-        } else {
-            goToPage = "error.jsp";
-            request.setAttribute("errorMessage", "Error while creating the order.");
-        }
-
-        //what if not null??
-        request.setAttribute("msg", message);
-        // what if not null ??
-        RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-        dispatcher.forward(request, response);
-
-    } catch (ServiceException | ServletException | IOException e) {
-        throw new ControllerException(e);
-    }
     }
 }

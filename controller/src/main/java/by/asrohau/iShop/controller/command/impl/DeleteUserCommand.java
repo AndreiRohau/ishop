@@ -7,6 +7,7 @@ import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,54 +15,69 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class DeleteUserCommand implements Command {
+
+	private static final Logger logger = Logger.getLogger(DeleteUserCommand.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		System.out.println("We got to delete User Command");
-
-		User user = new User(request.getParameter("login").trim(), request.getParameter("password").trim());
-		ServiceFactory serviceFactory = ServiceFactory.getInstance();
-		UserService userService = serviceFactory.getUserService();
-		OrderService orderService = serviceFactory.getOrderService();
-		User userDTO = new User();
-
-
-		boolean isLogedin; // = false
-
+		logger.info(DELETE_USER_COMMAND.inString);
 		try {
-			//getting actual user's ID
-			int user_id = userService.findIdWithLogin(user).getId();
+			ServiceFactory serviceFactory = ServiceFactory.getInstance();
+			UserService userService = serviceFactory.getUserService();
+			OrderService orderService = serviceFactory.getOrderService();
 
-			boolean isUser = request.getSession().getAttribute("userName").equals(user.getLogin());
-			boolean isAdmin = request.getSession().getAttribute("userName").equals("Admin");
-			isLogedin = isUser || isAdmin;
-			isLogedin = (isLogedin && userService.deleteUser(user));
+			User user = new User(request.getParameter(LOGIN.inString).trim(),
+					request.getParameter(PASSWORD.inString).trim());
+			User userDTO = new User();
+
+			boolean deleted = false;
+			String l = ((String) request.getSession().getAttribute(USER_NAME.inString));
+			logger.info(l);
+			logger.info(user.getLogin());
+			boolean isUser = l.equals(user.getLogin());
+			boolean isAdmin = request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString);
+
 			String goToPage;
 			String lastCMD;
-			if (isLogedin && isUser) {
-				orderService.deleteAllReserved(user_id);
-				request.getSession().invalidate();
-				goToPage = "index.jsp";
-				lastCMD = "FrontController?command=goToPage&address=index.jsp";
-			} else if (isLogedin) {
-				orderService.deleteAllReserved(user_id);
-				goToPage = "/jsp/admin/manageClients.jsp";
-				lastCMD = "FrontController?command=goToPage&address=manageClients.jsp";
-			} else if (!isAdmin){
+			if (!isAdmin) {
 				goToPage = "/jsp/user/profile.jsp";
-				request.setAttribute("errorMessage", "cannot delete user");
-				lastCMD = "FrontController?command=goToPage&address=profile.jsp";
+				lastCMD = GO_TO_PAGE_PROFILE.inString;
+				request.setAttribute(ERROR_MESSAGE.inString, "delete_user_error");
 			} else {
-				goToPage = "error.jsp";
-				request.setAttribute("errorMessage", "cannot delete user");
+				goToPage = "/jsp/admin/manageClients.jsp";
 				lastCMD = "FrontController?command=goToPage&address=manageClients.jsp";
 			}
 
+			if (isUser) {
+				userDTO.setId(userService.findIdWithLogin(user).getId());
+				deleted = userService.deleteUser(user);
+				request.setAttribute(ERROR_MESSAGE.inString, "delete_user_error");
+				goToPage = "/jsp/user/profile.jsp";
+				lastCMD = GO_TO_PAGE_PROFILE.inString;
+			}
+			if (deleted && isUser) {
+				orderService.deleteAllReserved(userDTO.getId());
+				request.getSession().invalidate();
+				goToPage = INDEX.inString;
+				lastCMD = GO_TO_PAGE_INDEX.inString;
+			}
+			if (isAdmin) {
+				userDTO.setId(userService.findIdWithLogin(user).getId());
+				deleted = userService.deleteUser(user);
+				request.setAttribute(ERROR_MESSAGE.inString, "delete_user_error");
+				goToPage = "/jsp/admin/manageClients.jsp";
+				lastCMD = "FrontController?command=goToPage&address=manageClients.jsp";
+			}
+			if (deleted && isAdmin) {
+				orderService.deleteAllReserved(userDTO.getId());
+				request.setAttribute(ERROR_MESSAGE.inString, null);
+			}
+
 			request.getSession().setAttribute("lastCMD", lastCMD);
-			RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-			dispatcher.forward(request, response);
-			
+			request.getRequestDispatcher(goToPage).forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);
 		}

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SelectAllReservedCommand implements Command {
     @Override
@@ -40,18 +41,18 @@ public class SelectAllReservedCommand implements Command {
 
         try {
             user.setLogin((String) request.getSession().getAttribute("userName"));
-            int user_id = userService.findIdWithLogin(user).getId();
+            int userId = userService.findIdWithLogin(user).getId();
 
             //count amount of all products
-            maxPage = (int) Math.ceil(((double) orderService.countReserved(user_id)) / 15);
+            maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / 15);
 
-            ArrayList<Product> reservedWithIdsList = orderService.getAllReserved(user_id, row); //product_id & reserve_id
+            List<Product> reservedWithIdsList = orderService.getAllReserved(userId, row); //product_id & reserve_id // ArrayList
 
             ArrayList<Product> productArray = new ArrayList<>();
 
             for(Product prod : reservedWithIdsList){
                 product = productService.findProductWithId(prod);
-                product.setReserve_id(prod.getReserve_id());
+                product.setReserveId(prod.getReserveId());
                 productArray.add(product);
                 product = new Product();
             }

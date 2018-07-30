@@ -9,8 +9,9 @@ import by.asrohau.iShop.dao.OrderDAO;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
+
+import static by.asrohau.iShop.service.util.ServiceValidator.validation;
 
 public class OrderServiceImpl implements OrderService{
 
@@ -20,67 +21,12 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean validation(Reserve reserve) {
-        return reserve.getUser_id() != 0 && reserve.getProduct_id() != 0;
-    }
-
-    @Override
     public boolean saveReserve(Reserve reserve) throws ServiceException {
-        try {
-            return validation(reserve) && orderDAO.saveNewReservation(reserve);
-        } catch(DAOException e){
-            throw new ServiceException(e);
+        if(!validation(reserve)){
+            return false;
         }
-    }
-
-    @Override
-    public ArrayList<Product> getAllReserved(int user_id, int row) throws ServiceException {
         try {
-            return orderDAO.selectAllReserved(user_id, row);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public int countReserved(int user_id) throws ServiceException {
-        try {
-            return orderDAO.countReserved(user_id);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public boolean deleteReserved(int reserveId) throws ServiceException {
-        try {
-            return orderDAO.deleteReserved(reserveId);
-        } catch(DAOException e){
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public LinkedList<Integer> getAllReservedIds(int user_id) throws ServiceException {
-        try {
-            return orderDAO.selectAllReservedIds(user_id);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public boolean deleteAllReserved(int user_id) throws ServiceException {
-        try {
-            return orderDAO.deleteAllReserved(user_id);
-        } catch(DAOException e){
-            throw new ServiceException(e);
-        }
-    }
-    @Override
-    public boolean deleteAllOrdersWithUserID(int user_id) throws ServiceException {
-        try {
-            return orderDAO.deleteAllOrdersWithUserID(user_id);
+            return orderDAO.save(reserve);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
@@ -89,7 +35,60 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public boolean saveNewOrder(Order order) throws ServiceException {
         try {
-            return orderDAO.insertNewOrder(order);
+            return orderDAO.save(order);
+        } catch(DAOException e){
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Product> getAllReserved(int userId, int row) throws ServiceException { //ArrayList
+        try {
+            return orderDAO.findAllReserved(userId, row);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public int countReserved(int userId) throws ServiceException {
+        try {
+            return orderDAO.countReserved(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean deleteReserved(int reserveId) throws ServiceException {
+        try {
+            return orderDAO.delete(reserveId);
+        } catch(DAOException e){
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Integer> getAllReservedIds(int userId) throws ServiceException { // LinkedList
+        try {
+            return orderDAO.findAllReservedIds(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean deleteAllReserved(int userId) throws ServiceException {
+        try {
+            return orderDAO.deleteAllReserved(userId);
+        } catch(DAOException e){
+            throw new ServiceException(e);
+        }
+    }
+    @Override
+    public boolean deleteAllOrdersWithUserId(int userId) throws ServiceException {
+        try {
+            return orderDAO.deleteAllOrders(userId);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
@@ -105,9 +104,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public ArrayList<Order> getAllOrders(int row, String status)  throws ServiceException{
+    public List<Order> getAllOrders(int row, String status)  throws ServiceException{ // ArrayList
         try {
-            return orderDAO.selectAllOrders(row, status);
+            return orderDAO.findAllOrders(row, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -115,72 +114,73 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean deleteOrder(int orderId) throws ServiceException {
+    public boolean deleteOrder(Order order) throws ServiceException {
         try {
-            return orderDAO.deleteOrder(orderId);
+            return orderDAO.delete(order);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public boolean orderSetStatus(int orderId, String status) throws ServiceException {
+    public boolean orderSetStatus(Order order, String status) throws ServiceException {
         try {
-            return orderDAO.updateOrderSetStatus(orderId, status);
+            return orderDAO.update(order, status);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Order findOrderWithID(int orderId)  throws ServiceException{
+    public Order findOrderWithID(Order order)  throws ServiceException{
         try {
-            return orderDAO.selectOrderWithID(orderId);
+            return orderDAO.find(order);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
+    //update list of products in Order
     @Override
     public boolean deleteProductFromOrder(Order order) throws ServiceException {
         try {
-            return orderDAO.updateOrdersProducts(order);
+            return orderDAO.update(order);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public ArrayList<Order> getAllActiveOrders(int row) throws ServiceException {
+    public List<Order> getAllActiveOrders(int row) throws ServiceException { // ArrayList
         try {
-            return orderDAO.selectAllActiveOrders(row);
+            return orderDAO.findAllActiveOrders(row);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public ArrayList<Order> getAllSuccessOrders(int row) throws ServiceException {
+    public List<Order> getAllSuccessOrders(int row) throws ServiceException { // ArrayList
         try {
-            return orderDAO.selectAllSuccessOrders(row);
+            return orderDAO.findAllSuccessOrders(row);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public int countClientOrders(int user_id) throws ServiceException {
+    public int countClientOrders(int userId) throws ServiceException {
         try {
-            return orderDAO.countClientsOrders(user_id);
+            return orderDAO.countClientsOrders(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public ArrayList<Order> getAllClientsOrders(int row, int user_id) throws ServiceException {
+    public List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException { // ArrayList
         try {
-            return orderDAO.selectAllClientsOrders(row, user_id);
+            return orderDAO.findAllClientsOrders(row, user_id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

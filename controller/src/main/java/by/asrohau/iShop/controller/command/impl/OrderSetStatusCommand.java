@@ -1,5 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.bean.Order;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
@@ -23,7 +24,9 @@ public class OrderSetStatusCommand implements Command {
         String status = request.getParameter("new_status").split("Set")[1].toLowerCase();
         try {
             String message;
-            if (orderService.orderSetStatus(Integer.parseInt(request.getParameter("orderId")), status)) {
+            Order order = new Order();
+            order.setId(Integer.parseInt(request.getParameter("orderId")));
+            if (orderService.orderSetStatus(order, status)) {
                 message = "You have Setted ORDER as " + status + " successfully";
             } else {
                 message = "Can NOT SET this order as " + status + ", try again!";

@@ -22,7 +22,7 @@
         <fmt:message bundle="${loc}" key="local.login" var="login" />
         <fmt:message bundle="${loc}" key="local.password" var="password" />
 
-        <c:set var="user_id" value="${requestScope.get('userToEdit').id}"/>
+        <c:set var="userId" value="${requestScope.get('userToEdit').id}"/>
         <c:set var="user_login" value="${requestScope.get('userToEdit').login}"/>
         <c:set var="user_password" value="${requestScope.get('userToEdit').password}"/>
         
@@ -77,7 +77,7 @@
                     <p><b>Get ALL orders</b>
                         <input type="hidden" name="command" value="showAllClientsOrders"/>
                         <input type="hidden" name="page_num" value="1"/>
-                        <input type="hidden" name="userId" value="${user_id}"/><br/>
+                        <input type="hidden" name="userId" value="${userId}"/><br/>
                         <input type="submit" name="get_orders" value="Show ALL Orders!"/>
                     </p>
                 </form>
@@ -93,7 +93,7 @@
                         <td>LINK</td>
                     </tr>
                     <tr>
-                        <td>${user_id}</td>
+                        <td>${userId}</td>
                         <td>${user_login}</td>
                         <td>${user_password}</td>
                         <td>
@@ -113,7 +113,7 @@
                 <c:out value="${requestScope.get('updateFailed')}"/>
                 <form action="FrontController" method="post">
                     <input type="hidden" name="command" value="updateClient" />
-                    <input type="hidden" name="id" value="${user_id}" />
+                    <input type="hidden" name="id" value="${userId}" />
 
                     <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
                         <tr>
@@ -148,7 +148,7 @@
                     -->
                     <a href="FrontController?command=goToPage&address=manageClients.jsp">CLIENTS</a>
                     -->
-                    <a href="FrontController?command=editClient&userId=${user_id}" style="text-transform: uppercase">${user_login}</a>
+                    <a href="FrontController?command=editClient&userId=${userId}" style="text-transform: uppercase">${user_login}</a>
                 </p>
             </div>
         </div>

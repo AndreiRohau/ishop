@@ -12,7 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
+
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class SelectAllProductsCommand implements Command {
     @Override
@@ -33,7 +35,7 @@ public class SelectAllProductsCommand implements Command {
             //count amount of all products
             maxPage = (int) Math.ceil(((double) productService.countProducts()) / 15);
 
-            ArrayList<Product> productArrayList = productService.getAllProducts(row);
+            List<Product> productArrayList = productService.getAllProducts(row); // ArrayList
             request.setAttribute("productArray", productArrayList);
 
             request.setAttribute("maxPage", maxPage);
@@ -43,7 +45,7 @@ public class SelectAllProductsCommand implements Command {
             request.getSession().setAttribute("lastCMDneedPage",
                     "FrontController?command=selectAllProducts&page_num=");
 
-            if(!request.getSession().getAttribute("userName").equals("Admin")){
+            if(!request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString)){
                 goToPage = "/jsp/user/main.jsp";
             } else {
                 goToPage = "/jsp/admin/manageProducts.jsp";

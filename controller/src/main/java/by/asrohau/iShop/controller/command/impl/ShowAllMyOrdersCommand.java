@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowAllMyOrdersCommand implements Command {
     @Override
@@ -34,22 +35,22 @@ public class ShowAllMyOrdersCommand implements Command {
 
         try {
             user.setLogin((String) request.getSession().getAttribute("userName"));
-            int user_id = userService.findIdWithLogin(user).getId();
+            int userId = userService.findIdWithLogin(user).getId();
             //count amount of all NEW orders
-            maxPage = (int) Math.ceil(((double) orderService.countClientOrders(user_id)) / 15);
+            maxPage = (int) Math.ceil(((double) orderService.countClientOrders(userId)) / 15);
 
-            ArrayList<Order> allOrdersList = orderService.getAllClientsOrders(row, user_id);
+            List<Order> allOrdersList = orderService.getAllClientsOrders(row, userId); // ArrayList
             request.setAttribute("array", allOrdersList);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.setAttribute("for_user", "for_user");
-            request.setAttribute("userId", user_id);
+            request.setAttribute("userId", userId);
             request.setAttribute("command_2", "editNewOrder");
             request.setAttribute("command_3", "orderSetActive");
             request.setAttribute("command_4", "deleteOrder");
             request.getSession().setAttribute("lastCMD",
                     "FrontController?command=showAllClientsOrders&page_num=" + currentPage +
-                            "&userId=" + user_id);
+                            "&userId=" + userId);
 
             String goToPage = "/jsp/admin/allClientsOrders.jsp";
             RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);

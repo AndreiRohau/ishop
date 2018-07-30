@@ -1,28 +1,22 @@
 package by.asrohau.iShop.bean;
 
-public class UserDTO {
+public class UserDTO extends Base {
 
-	private int id;
 	private String login;
+	private String role;
 
 	public UserDTO() {}
 	
-	public UserDTO(String login) {
+	public UserDTO(String login, String role) {
 		super();
 		this.login = login;
+		this.role = role;
 	}
 	
 	public UserDTO(User user) {
-		super();
+		super(user.getId());
 		this.login = user.getLogin();
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+		this.role = user.getRole();
 	}
 
 	public String getLogin() {
@@ -33,29 +27,39 @@ public class UserDTO {
 		this.login = login;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
 
 		UserDTO userDTO = (UserDTO) o;
 
-		if (id != userDTO.id) return false;
-		return login != null ? login.equals(userDTO.login) : userDTO.login == null;
+		if (login != null ? !login.equals(userDTO.login) : userDTO.login != null) return false;
+		return role != null ? role.equals(userDTO.role) : userDTO.role == null;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = id;
+		int result = super.hashCode();
 		result = 31 * result + (login != null ? login.hashCode() : 0);
+		result = 31 * result + (role != null ? role.hashCode() : 0);
 		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "UserDTO{" +
-				"id=" + id +
-				", login='" + login + '\'' +
+				"login='" + login + '\'' +
+				", role='" + role + '\'' +
 				'}';
 	}
 }

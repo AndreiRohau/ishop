@@ -7,38 +7,38 @@ import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public interface OrderService {
-    boolean validation(Reserve reserve);
     boolean saveReserve(Reserve reserve) throws ServiceException;
-    ArrayList<Product> getAllReserved(int user_id, int row) throws ServiceException;
-    int countReserved(int user_id) throws ServiceException;
+    List<Product> getAllReserved(int userId, int row) throws ServiceException; //ArrayList
+    int countReserved(int userId) throws ServiceException;
     boolean deleteReserved(int reserveId) throws ServiceException;
 
-    LinkedList<Integer> getAllReservedIds(int user_id) throws ServiceException;
+    List<Integer> getAllReservedIds(int userId) throws ServiceException; // LinkedList
 
-    boolean deleteAllReserved(int user_id) throws ServiceException;
-    boolean deleteAllOrdersWithUserID(int user_id) throws ServiceException;
+    boolean deleteAllReserved(int userId) throws ServiceException;
+    boolean deleteAllOrdersWithUserId(int userId) throws ServiceException;
 
     boolean saveNewOrder(Order order) throws ServiceException;
 
     int countOrders(String status) throws ServiceException;
 
-    ArrayList<Order> getAllOrders(int row, String status) throws ServiceException;
+    List<Order> getAllOrders(int row, String status) throws ServiceException; // ArrayList
 
-    boolean deleteOrder(int orderId) throws ServiceException;
+    boolean deleteOrder(Order order) throws ServiceException;
 
-    boolean orderSetStatus(int orderId, String status) throws ServiceException;
+    boolean orderSetStatus(Order order, String status) throws ServiceException;
 
-    Order findOrderWithID(int orderId) throws ServiceException;
+    Order findOrderWithID(Order order) throws ServiceException;
 
     boolean deleteProductFromOrder(Order order) throws ServiceException;
 
-    ArrayList<Order> getAllActiveOrders(int row) throws ServiceException;
+    List<Order> getAllActiveOrders(int row) throws ServiceException; // ArrayList
 
-    ArrayList<Order> getAllSuccessOrders(int row) throws ServiceException;
+    List<Order> getAllSuccessOrders(int row) throws ServiceException; // ArrayList
 
-    int countClientOrders(int user_id) throws ServiceException;
+    int countClientOrders(int userId) throws ServiceException;
 
-    ArrayList<Order> getAllClientsOrders(int row, int user_id) throws ServiceException;
+    List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException; // ArrayList
 }

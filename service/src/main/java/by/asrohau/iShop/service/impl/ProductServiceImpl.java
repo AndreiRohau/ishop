@@ -7,7 +7,9 @@ import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import static by.asrohau.iShop.service.util.ServiceValidator.validation;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -16,48 +18,32 @@ public class ProductServiceImpl implements ProductService {
 	public ProductServiceImpl(){}
 
 	@Override
-	public boolean validation(Product product) {
-		String toCompare = "";
-		return (!toCompare.equals(product.getCompany()) &&
-				!toCompare.equals(product.getName()) &&
-				!toCompare.equals(product.getType()) &&
-				!toCompare.equals(product.getPrice()));
-	}
-
-	@Override
 	public Product findProduct(Product product) throws ServiceException {
-		// validation!!! stub
-		if (validation(product)) {
-			try {
-				return productDAO.findProduct(product);
-			} catch (DAOException e) {
-				throw new ServiceException(e);
-			}
+		if (!validation(product)) {
+			return null;
 		}
-		return null;
+		try {
+			return productDAO.find(product);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	@Override
 	public boolean addNewProduct(Product newProduct) throws ServiceException {
-		// validation!!! stub
-		if (validation(newProduct)) {
+		if (!validation(newProduct)) { return false;}
 
-			try {
-				if (productDAO.findProduct(newProduct) == null) {
-					return productDAO.addProduct(newProduct);
-				}
-				Product product = productDAO.findProduct(newProduct); //for test
-			} catch (DAOException e) {
-				throw new ServiceException(e);
-			}
+		try {
+			return productDAO.save(newProduct);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
 		}
-		return false;
 	}
 
 	@Override
-	public ArrayList<Product> getAllProducts(int row) throws ServiceException {
+	public List<Product> getAllProducts(int row) throws ServiceException { //ArrayList
 		try {
-			return productDAO.selectAllProducts(row);
+			return productDAO.findAll(row);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -65,8 +51,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product findProductWithId(Product product) throws ServiceException {
-		//validation!!! stub
-
 		try {
 			return productDAO.findProductWithId(product);
 		} catch (DAOException e) {
@@ -76,35 +60,32 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public boolean updateProduct(Product product) throws ServiceException {
-		// validation!!! stub
-		if (validation(product)) {
-			try {
-				Product productCheck = productDAO.findProduct(product);
-				return (((productCheck == null) || (productCheck.getId() == product.getId())) && productDAO.updateProduct(product));
-			} catch (DAOException e) {
-				throw new ServiceException(e);
-			}
+		if (!validation(product)) {
+			return false;
 		}
-		return false;
+		try {
+			return productDAO.update(product);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	@Override
 	public boolean deleteProduct(Product product) throws ServiceException {
-		// validation!!! stub
+		if(!validation(product)){
+			return false;
+		}
 		try {
-			if (productDAO.findProductWithId(product) != null) {
-				return productDAO.deleteProduct(product);
-			}
+			return productDAO.delete(product);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-		return false;
 	}
 
 	@Override
 	public int countProducts() throws ServiceException {
 		try {
-			return productDAO.countProducts();
+			return (int) productDAO.countAll();
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -120,11 +101,12 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ArrayList<Product> findProductsComprehensive(Product product, int row) throws ServiceException {
+	public List<Product> findProductsComprehensive(Product product, int row) throws ServiceException { //ArrayList
 		try {
-			return productDAO.selectProductsComprehensive(product, row);
+			return productDAO.findProductsComprehensive(product, row);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 }
+

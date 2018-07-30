@@ -1,5 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.bean.Order;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
@@ -22,7 +23,9 @@ public class DeleteOrderCommand implements Command {
 
         try {
             String message;
-            if (orderService.deleteOrder(Integer.parseInt(request.getParameter("orderId")))) {
+            Order order = new Order();
+            order.setId(Integer.parseInt(request.getParameter("orderId")));
+            if (orderService.deleteOrder(order)) {
                 message = "You have REMOVED new ORDER successfully";
                 System.out.println(message);
             } else {

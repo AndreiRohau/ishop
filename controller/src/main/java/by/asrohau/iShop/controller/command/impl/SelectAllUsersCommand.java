@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SelectAllUsersCommand implements Command {
     @Override
@@ -34,7 +35,7 @@ public class SelectAllUsersCommand implements Command {
             maxPage = (int) Math.ceil(((double) userService.countUsers()) / 15);
             System.out.println("maxPage is " + maxPage);
 
-            ArrayList<User> userArrayList = userService.getAllUsers(row);
+            List<User> userArrayList = userService.getAllUsers(row); // ArrayList
             request.setAttribute("usersArray", userArrayList);
 
             request.setAttribute("maxPage", maxPage);

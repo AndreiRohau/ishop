@@ -1,20 +1,20 @@
 package by.asrohau.iShop.bean;
 
-public class Product {
-	private int id;
+public class Product extends Base{
+
 	private String company;
 	private String name;
 	private String type;
 	private String price;
 	private String description;
-	private int reserve_id;
-	private int order_id;
+	private int reserveId;
+	private int orderId;
 
 	public Product() {}
 
-	public Product(int id, int reserve_id) {
-		this.id = id;
-		this.reserve_id = reserve_id;
+	public Product(int id, int reserveId) {
+		super(id);
+		this.reserveId = reserveId;
 	}
 
 	public Product(String company, String name, String type, String price) {
@@ -33,20 +33,12 @@ public class Product {
 	}
 
 	public Product(int id, String company, String name, String type, String price, String description) {
-		this.id = id;
+		super(id);
 		this.company = company;
 		this.name = name;
 		this.type = type;
 		this.price = price;
 		this.description = description;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getCompany() {
@@ -89,32 +81,32 @@ public class Product {
 		this.description = description;
 	}
 
-	public int getReserve_id() {
-		return reserve_id;
+	public int getReserveId() {
+		return reserveId;
 	}
 
-	public void setReserve_id(int reserve_id) {
-		this.reserve_id = reserve_id;
+	public void setReserveId(int reserveId) {
+		this.reserveId = reserveId;
 	}
 
-	public int getOrder_id() {
-		return order_id;
+	public int getOrderId() {
+		return orderId;
 	}
 
-	public void setOrder_id(int order_id) {
-		this.order_id = order_id;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
 
 		Product product = (Product) o;
 
-		if (id != product.id) return false;
-		if (reserve_id != product.reserve_id) return false;
-		if (order_id != product.order_id) return false;
+		if (reserveId != product.reserveId) return false;
+		if (orderId != product.orderId) return false;
 		if (company != null ? !company.equals(product.company) : product.company != null) return false;
 		if (name != null ? !name.equals(product.name) : product.name != null) return false;
 		if (type != null ? !type.equals(product.type) : product.type != null) return false;
@@ -124,28 +116,28 @@ public class Product {
 
 	@Override
 	public int hashCode() {
-		int result = id;
+		int result = super.hashCode();
 		result = 31 * result + (company != null ? company.hashCode() : 0);
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (type != null ? type.hashCode() : 0);
 		result = 31 * result + (price != null ? price.hashCode() : 0);
 		result = 31 * result + (description != null ? description.hashCode() : 0);
-		result = 31 * result + reserve_id;
-		result = 31 * result + order_id;
+		result = 31 * result + reserveId;
+		result = 31 * result + orderId;
 		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "Product{" +
-				"id=" + id +
-				", company='" + company + '\'' +
+				super.toString() +
+				"company='" + company + '\'' +
 				", name='" + name + '\'' +
 				", type='" + type + '\'' +
 				", price='" + price + '\'' +
 				", description='" + description + '\'' +
-				", reserve_id=" + reserve_id +
-				", order_id=" + order_id +
+				", reserveId=" + reserveId +
+				", orderId=" + orderId +
 				'}';
 	}
 }
