@@ -17,15 +17,16 @@ public class ChangeLanguageCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info("We got to ChangeLanguageCommand");
+		logger.info(CHANGE_LANGUAGE);
+
 		try {
-			request.getSession(true).setAttribute("local", request.getParameter("local"));
+			request.getSession(true).setAttribute(LOCAL.inString, request.getParameter(LOCAL.inString));
 
 			String lastCommand = String.valueOf(request.getSession(true).getAttribute(LAST_COMMAND.inString));
-			String path = "null".equals(lastCommand) ? INDEX.inString : lastCommand;
+			String path = NULL.inString.equals(lastCommand) ? INDEX.inString : lastCommand;
 
 			response.sendRedirect(path);
-		} catch ( IOException e) { //	ServletException |
+		} catch ( IOException e) { 				//	ServletException |
 			throw new ControllerException(e);
 		}
 	}

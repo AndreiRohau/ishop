@@ -1,28 +1,24 @@
 package by.asrohau.iShop.controller.command.parser;
 
-/**
- * Created by rohau.andrei on 23-Feb-18.
- */
 public class CommandObj {
-    private String webname;
-    private String classname;
+    private String webName;
+    private String className;
 
-    public CommandObj(){
+    public CommandObj(){}
+
+    public String getWebName() {
+        return webName;
     }
 
-    public String getWebname() {
-        return webname;
+    public void setWebName(String webName) {
+        this.webName = webName;
     }
 
-    public void setWebname(String webname) {
-        this.webname = webname;
+    public String getClassName() {
+        return className;
     }
 
-    public String getClassname() {
-        return classname;
-    }
-
-    public void setClassname(String classname) {
-        this.classname = classname;
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

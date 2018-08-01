@@ -1,19 +1,25 @@
 package by.asrohau.iShop.controller.command.parser;
 
+import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class CommandSaxHandler extends DefaultHandler {
 
-    private final String COMMAND_PATH = "by.asrohau.iShop.controller.command.impl.";
-    private final String COMMAND_TAG = "command";
+    private static final Logger logger = Logger.getLogger(CommandSaxHandler.class);
+
+    private final String PATH = COMMAND_PATH.inString;
+    private final String COMMAND_TAG = COMMAND.inString;
 
     private CommandObj commandObj;
     private StringBuilder text;
@@ -26,12 +32,12 @@ public class CommandSaxHandler extends DefaultHandler {
     }
 
     public void startDocument() throws SAXException {
-        System.out.println("Parsing started.");
+        logger.info("Parsing started.");
     }
 
     public void endDocument() throws SAXException {
-        System.out.println(getCommandMap().size());
-        System.out.println("Parsing ended.");
+        logger.info("CommandMap includes : " + getCommandMap().size() + " commands");
+        logger.info("Parsing ended.");
 
     }
 
@@ -48,20 +54,20 @@ public class CommandSaxHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        CommandTagName tagName = CommandTagName.valueOf(qName.toUpperCase().replace("-", "_"));
+        ControllerFinals tagName = ControllerFinals.valueOf(qName.toUpperCase().replace("-", "_"));
         switch(tagName){
             case WEBNAME:
-                commandObj.setWebname(text.toString());
+                commandObj.setWebName(text.toString());
                 break;
             case CLASSNAME:
-                commandObj.setClassname(text.toString());
+                commandObj.setClassName(text.toString());
                 break;
             case COMMAND:
                 try {
-                    System.out.println(commandObj.getWebname() + " & " + COMMAND_PATH + commandObj.getClassname());
+                    logger.info(commandObj.getWebName() + " & " + PATH + commandObj.getClassName());
 
-                    commandMap.put(commandObj.getWebname(),
-                            (Command) Class.forName(COMMAND_PATH + commandObj.getClassname()).newInstance());
+                    commandMap.put(commandObj.getWebName(),
+                            (Command) Class.forName(PATH + commandObj.getClassName()).newInstance());
                     commandObj = null;
                     break;
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -72,18 +78,17 @@ public class CommandSaxHandler extends DefaultHandler {
     }
 
     public void warning(SAXParseException exception) {
-        System.err.println("WARNING: line " + exception.getLineNumber() + ": "
+        logger.warn("WARNING: line " + exception.getLineNumber() + ": "
                 + exception.getMessage());
     }
 
     public void error(SAXParseException exception) {
-        System.err.println("ERROR: line " + exception.getLineNumber() + ": "
+        logger.error("ERROR: line " + exception.getLineNumber() + ": "
                 + exception.getMessage());
     }
 
     public void fatalError(SAXParseException exception) throws SAXException {
-        System.err.println("FATAL: line " + exception.getLineNumber() + ": "
+        logger.fatal("FATAL: line " + exception.getLineNumber() + ": "
                 + exception.getMessage());
-        throw (exception);
     }
 }

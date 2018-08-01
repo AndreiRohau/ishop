@@ -23,7 +23,7 @@ public class RegistrationCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(REGISTRATION_COMMAND.inString);
+		logger.info(REGISTRATION_COMMAND);
 		try {
 			ServiceFactory serviceFactory = ServiceFactory.getInstance();
 			UserService userService = serviceFactory.getUserService();

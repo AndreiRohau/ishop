@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class ParserSax {
-        public Map<String, Command> CommandMap() throws SAXException, IOException {
+        public Map<String, Command> getCommandMap() throws SAXException, IOException {
 
                 XMLReader reader = XMLReaderFactory.createXMLReader();
 
@@ -19,12 +21,10 @@ public class ParserSax {
 
                 reader.setContentHandler(handler);
 
-                InputStream is = getClass().getClassLoader().getResourceAsStream("Commands.xml");
+                InputStream is = getClass().getClassLoader().getResourceAsStream(COMMANDS_XML.inString);
 
                 reader.parse(new InputSource(is));
 
-                Map<String, Command> commandMap = handler.getCommandMap();
-
-                return commandMap;
+                return handler.getCommandMap();
         }
 }

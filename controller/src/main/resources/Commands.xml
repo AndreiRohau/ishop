@@ -99,10 +99,6 @@
         <classname>SelectAllActiveOrdersCommand</classname>
     </command>
     <command>
-        <webname>selectAllSuccessfulOrders</webname>
-        <classname>SelectAllSuccessfulOrdersCommand</classname>
-    </command>
-    <command>
         <webname>selectAllSuccessOrders</webname>
         <classname>SelectAllSuccessOrdersCommand</classname>
     </command>

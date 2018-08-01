@@ -34,6 +34,13 @@ public class AddToBasketCommand implements Command {
             int uid = userDTO.getId();
             reserve = new Reserve(uid,
                     Integer.parseInt(request.getParameter("productId")));
+
+            /*
+            boolean isAdded = orderService.saveReserve(reserve);
+            response.sendRedirect(String.valueOf(request.getSession(true).getAttribute(LAST_COMMAND.inString))
+                    + "&msg=" + isAdded);
+             */
+
             String message;
             if (orderService.saveReserve(reserve)) {
                 message = "You have added new product successfully";

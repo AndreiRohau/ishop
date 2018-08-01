@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectAllSuccessfulOrdersCommand implements Command {
+public class SelectAllSuccessOrdersCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to SelectAllSuccessfulOrdersCommand");
+        System.out.println("We got to SelectAllSuccessOrdersCommand");
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         OrderService orderService = serviceFactory.getOrderService();
