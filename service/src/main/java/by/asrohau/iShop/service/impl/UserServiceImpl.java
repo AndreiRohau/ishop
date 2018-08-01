@@ -70,6 +70,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getAllUsers(int row) throws ServiceException { // ArrayList
+		if (!validation(row)){
+			return null;
+		}
 		try {
 			return userDAO.findAll(row);
 		} catch (DAOException e) {
@@ -79,6 +82,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserWithId(User user) throws ServiceException {
+		if (!validation(user.getId())){
+			return null;
+		}
 		try {
 			return userDAO.findUserWithId(user);
 		} catch (DAOException e) {
