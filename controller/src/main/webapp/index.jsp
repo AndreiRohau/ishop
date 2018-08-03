@@ -8,13 +8,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<!-- Latest compiled and minified CSS -->
-		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>--%>
-		<!-- Optional theme -->
-		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"--%>
-          <%--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>--%>
 		<link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
 			  integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
@@ -52,7 +46,7 @@
 		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
 		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
 		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
+		<fmt:message bundle="${loc}" key="local.basket" var="basket" />
 
 		<title>
 			<c:out value="${home}"/>
@@ -117,17 +111,17 @@
 							<form action="FrontController" id="login_form" method="post">
 								<input type="hidden" name="command" value="logination" />
 								<div class="form-group">
-									<input type="text" class="form-control" id="login" placeholder="login" name="login" value="" />
+									<input type="text" class="form-control" id="login" placeholder="${login}" name="login" value="" />
 								</div>
 								<div class="form-group">
-									<input type="password" class="form-control" id="password" placeholder="password" name="password" value="" />
+									<input type="password" class="form-control" id="password" placeholder="${password}" name="password" value="" />
 								</div>
 							</form>
 						</div>
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-							<button form="login_form" class="btn btn-default" type="submit" value="log_in">
+							<button form="login_form" class="btn btn-default" type="submit" name="log_in" value="log_in">
 								<c:out value="${log_button}"/>
 							</button>
 						</div>
@@ -144,13 +138,13 @@
 							<%--should be empty --%>
 					</div>
 				</c:if>
-				<c:if test="${sessionScope.role != null}">
+				<c:if test="${sessionScope.role == 'user'}">
 					<div class="col-md-1" style="padding-top:10px;">
 						<form method="get" action="FrontController">
-							<input type="hidden" name="command" value="goToPage"/>
-							<input type="hidden" name="address" value="basket.jsp"/>
+							<input type="hidden" name="command" value="selectAllReserved"/>
+							<input type="hidden" name="page_num" value="1"/>
 							<button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
-								<c:out value="${goToBasket_button}"/>
+								<c:out value="${basket}"/>
 							</button>
 						</form>
 					</div>
@@ -162,6 +156,29 @@
 								<c:out  value="${goToProfile_button}"/>
 							</button>
 						</form>
+					</div>
+					<div class="col-md-1">
+						<div class="col-md-12">
+							<h4>
+								<c:out value="${sessionScope.userName}"/>
+							</h4>
+						</div>
+						<div class="col-md-12">
+							<form action="FrontController" method="post">
+								<input type="hidden" name="command" value="logout"/>
+								<button class="btn btn-default" type="submit" value="log_out">
+									<c:out value="${log_out_button}"/>
+								</button>
+							</form>
+						</div>
+					</div>
+				</c:if>
+				<c:if test="${sessionScope.role == 'admin'}">
+					<div class="col-md-1" style="padding-top:10px;">
+
+					</div>
+					<div class="col-md-1" style="padding-top:10px;">
+
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12">
@@ -213,44 +230,56 @@
 						<div class="panel-body">
 							<c:if test="${sessionScope.role == null}">
 								<div class="alert alert-info" role="alert">
-									<span>
-										<c:out value="${login_to_start}"/>
-									</span>
+									<p>
+										<span>
+											<c:out value="${login_to_start}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 							<c:if test="${requestScope.isRegistered == true}">
 								<div class="alert alert-success" role="alert">
-									<span>
-										<c:out value="${successRegistration}"/>
-									</span>
+									<p>
+										<span>
+											<c:out value="${successRegistration}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 							<c:if test="${requestScope.errorMessage == 'exists'}">
 								<div class="alert alert-danger" role="alert">
-									<span>
-										<p><c:out value="${loginExists}"/></p>
-									</span>
+									<p>
+										<span>
+											<c:out value="${loginExists}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 							<c:if test="${requestScope.errorMessage == 'logout'}">
 								<div class="alert alert-info" role="alert">
-									<span>
-										<p><c:out value="${logout}"/></p>
-									</span>
+									<p>
+										<span>
+											<c:out value="${logout}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 							<c:if test="${requestScope.errorMessage == 'noSuchUser'}">
 								<div class="alert alert-danger" role="alert">
-									<span>
-										<p><c:out value="${noSuchUser}"/></p>
-									</span>
+									<p>
+										<span>
+											<c:out value="${noSuchUser}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 							<c:if test="${requestScope.errorMessage == 'passwordsUnequal'}">
 								<div class="alert alert-danger" role="alert">
-									<span>
-										<p><c:out value="${unequalPasswords}"/></p>
-									</span>
+									<p>
+										<span>
+											<c:out value="${unequalPasswords}"/>
+										</span>
+									</p>
 								</div>
 							</c:if>
 
@@ -270,22 +299,22 @@
 							<form action="FrontController" method="post">
 								<input type="hidden" name="command" value="registration" />
 								<div class="form-group">
-									<label for="username" value="${login}">
+									<label for="username">
 										<c:out value="${login}" />:
 									</label>
-									<input type="text" class="form-control" id="username" placeholder="login" name="login"/>
+									<input type="text" class="form-control" id="username" placeholder="${login}" name="login"/>
 								</div>
 								<div class="form-group">
 									<label for="password1">
 										<c:out value="${password}" />:
 									</label>
-									<input type="password" class="form-control" id="password1" placeholder="password" name="password"/>
+									<input type="password" class="form-control" id="password1" placeholder="${password}" name="password"/>
 								</div>
 								<div class="form-group">
 									<label for="password2">
 										<c:out value="${password}" />:
 									</label>
-									<input type="password" class="form-control" id="password2" placeholder="password" name="password2"/>
+									<input type="password" class="form-control" id="password2" placeholder="${password}" name="password2"/>
 								</div>
 								<input type="submit" class="btn btn-default"  name="sign up" value="${reg_button}" /><br/>
 							</form><br/>

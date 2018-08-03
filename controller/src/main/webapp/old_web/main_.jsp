@@ -19,7 +19,7 @@
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
 		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
+		<fmt:message bundle="${loc}" key="local.basket" var="basket" />
 
 		<c:set var="current_page" value="${requestScope.get('currentPage')}"/>
 		<c:set var="max_page" value="${requestScope.get('maxPage')}"/>
@@ -72,7 +72,7 @@
 				</p>
 				<p>
 					<a href="FrontController?command=goToPage&address=basket.jsp">
-						${goToBasket_button}
+						${basket}
 					</a>
 				</p>
 				<br/>

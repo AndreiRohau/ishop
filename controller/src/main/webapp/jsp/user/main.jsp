@@ -8,13 +8,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<%--<!-- Latest compiled and minified CSS -->--%>
-		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"--%>
-		<%--<!-- Optional theme -->--%>
-		<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"--%>
-          <%--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>--%>
 		<link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
 			  integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
@@ -23,7 +17,7 @@
 		<fmt:setLocale value="${sessionScope.local}" />
 		<fmt:setBundle basename="localization.local" var="loc" />
 		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-		<fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
+		<fmt:message bundle="${loc}" key="local.basket" var="basket" />
 		<fmt:message bundle="${loc}" key="local.shop" var="shop" />
 		<fmt:message bundle="${loc}" key="local.admin" var="admin" />
 		<fmt:message bundle="${loc}" key="local.client" var="client" />
@@ -53,9 +47,15 @@
 		<fmt:message bundle="${loc}" key="local.logout" var="logout" />
 		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
 		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
+		<fmt:message bundle="${loc}" key="local.company" var="company" />
+		<fmt:message bundle="${loc}" key="local.name" var="name" />
+		<fmt:message bundle="${loc}" key="local.type" var="type" />
+		<fmt:message bundle="${loc}" key="local.price" var="price" />
+		<fmt:message bundle="${loc}" key="local.find" var="find" />
+		<fmt:message bundle="${loc}" key="local.buy" var="buy" />
 
-		<c:set var="current_page" value="${requestScope.get('currentPage')}"/>
-		<c:set var="max_page" value="${requestScope.get('maxPage')}"/>
+		<c:set var="current_page" value="${requestScope.currentPage}"/>
+		<c:set var="max_page" value="${requestScope.maxPage}"/>
 
 		<title>
 			<c:out value="${main}"/>
@@ -110,10 +110,10 @@
 				</div>			
 				<div class="col-md-1" style="padding-top:10px;">
 					<form method="get" action="FrontController">
-						<input type="hidden" name="command" value="goToPage"/>
-						<input type="hidden" name="address" value="basket.jsp"/>
+						<input type="hidden" name="command" value="selectAllReserved"/>
+						<input type="hidden" name="page_num" value="1"/>
 						<button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
-							<c:out value="${goToBasket_button}"/>
+							<c:out value="${basket}"/>
 						</button>
 					</form>
 				</div>
@@ -171,11 +171,11 @@
 						<div class="form-inline">
 							<input class="form-control" type="hidden" name="command" value="findSuitable"/>
 							<input class="form-control" type="hidden" name="page_num" value="1"/>
-							<input class="form-control" title="company" type="text" name="company" value="" placeholder="company"/>
-							<input class="form-control" title="name" type="text" name="name" value="" placeholder="name"/>
-							<input class="form-control" title="type" type="text" name="type" value="" placeholder="type"/>
-							<input class="form-control" title="price" type="text" name="price" value="" placeholder="price"/>
-							<input class="form-control" type="submit" name="get_products" value="Find it!" class="btn btn-default"/>
+							<input class="form-control" type="text" name="company" value="" placeholder="${company}"/>
+							<input class="form-control" type="text" name="name" value="" placeholder="${name}"/>
+							<input class="form-control" type="text" name="type" value="" placeholder="${type}"/>
+							<input class="form-control" type="text" name="price" value="" placeholder="${price}"/>
+							<input class="btn btn-default" type="submit" name="get_products" value="${find}!"/>
 						</div>
 					</form>
 				</div>
@@ -183,12 +183,12 @@
 					<c:if test="${current_page != null}">
 						<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
 							<tr>
-								<td>INFO</td>
-								<td>COMPANY</td>
-								<td>NAME</td>
-								<td>TYPE</td>
-								<td>PRICE</td>
-								<td>BUY</td>
+								<td><c:out value="${info}"/></td>
+								<td><c:out value="${company}"/></td>
+								<td><c:out value="${name}"/></td>
+								<td><c:out value="${type}"/></td>
+								<td><c:out value="${price}"/></td>
+								<td><c:out value="${buy}"/></td>
 							</tr>
 							<c:forEach items="${requestScope.productArray}" var="product">
 								<tr>
@@ -196,7 +196,7 @@
 										<form action="FrontController" method="post">
 											<input type="hidden" name="command" value="productInfo" />
 											<input type="hidden" name="productId" value="${product.id}" />
-											<input type="submit" name="info" value="INFO" class="btn btn-default"/><br/>
+											<input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
 										</form>
 									</td>
 									<td>${product.company}</td>
@@ -207,7 +207,7 @@
 										<form action="FrontController" method="post">
 											<input type="hidden" name="command" value="addToBasket" />
 											<input type="hidden" name="productId" value="${product.id}" />
-											<input type="submit" name="buy" value="BUY" class="btn btn-default"/><br/>
+											<input type="submit" name="buy" value="${buy}" class="btn btn-default"/><br/>
 										</form>
 									</td>
 								</tr>
@@ -218,12 +218,12 @@
 							<c:forEach begin="1" end="${max_page}" var="i">
 					            <c:if test="${i == current_page}">
 					                <li class="active">
-										<a href="${sessionScope.get('lastCMDneedPage')}${i}">${i}</a>
+										<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
 									</li>
 								</c:if>
 					            <c:if test="${i != current_page}">
 									<li>
-						        		<a href="${sessionScope.get('lastCMDneedPage')}${i}">${i}</a>
+						        		<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
 						            </li>
 								</c:if>
 						    </c:forEach>

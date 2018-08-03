@@ -23,7 +23,7 @@
         <fmt:setLocale value="${sessionScope.local}" />
         <fmt:setBundle basename="localization.local" var="loc" />
         <fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-        <fmt:message bundle="${loc}" key="local.goToBasket" var="goToBasket_button" />
+        <fmt:message bundle="${loc}" key="local.basket" var="basket" />
         <fmt:message bundle="${loc}" key="local.shop" var="shop" />
         <fmt:message bundle="${loc}" key="local.admin" var="admin" />
         <fmt:message bundle="${loc}" key="local.client" var="client" />
@@ -119,10 +119,10 @@
                 </div>
                 <div class="col-md-1" style="padding-top:10px;">
                     <form method="get" action="FrontController">
-                        <input type="hidden" name="command" value="goToPage"/>
-                        <input type="hidden" name="address" value="basket.jsp"/>
+                        <input type="hidden" name="command" value="selectAllReserved"/>
+                        <input type="hidden" name="page_num" value="1"/>
                         <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
-                            <c:out value="${goToBasket_button}"/>
+                            <c:out value="${basket}"/>
                         </button>
                     </form>
                 </div>
@@ -194,19 +194,19 @@
                             <label for="login" value="${login}">
                                 <c:out value="${login}" />:
                             </label>
-                            <input type="text" class="form-control" id="login" placeholder="login" name="login"/>
+                            <input type="text" class="form-control" id="login" placeholder="${login}" name="login"/>
                         </div>
                         <div class="form-group">
                             <label for="password">
                                 <c:out value="${password}" />:
                             </label>
-                            <input type="password" class="form-control" id="password" placeholder="password" name="password"/>
+                            <input type="password" class="form-control" id="password" placeholder="${password}" name="password"/>
                         </div>
                         <div class="form-group">
                             <label for="newPassword">
                                 <c:out value="${newPassword}" />:
                             </label>
-                            <input type="password" class="form-control" id="newPassword" placeholder="new password" name="newPassword"/>
+                            <input type="password" class="form-control" id="newPassword" placeholder="${newPassword}" name="newPassword"/>
                         </div>
                         <input type="submit" class="btn btn-default" name="change" value="${changePasswordButton}"/>
                     </form>
@@ -244,13 +244,13 @@
                             <label for="username" value="${login}">
                                 <c:out value="${login}" />:
                             </label>
-                            <input type="text" class="form-control" id="username" placeholder="login" name="login" value=""/>
+                            <input type="text" class="form-control" id="username" placeholder="${login}" name="login" value=""/>
                         </div>
                         <div class="form-group">
                             <label for="password1">
                                 <c:out value="${password}" />:
                             </label>
-                            <input type="password" class="form-control" id="password1" placeholder="password" name="password" value=""/>
+                            <input type="password" class="form-control" id="password1" placeholder="${password}" name="password" value=""/>
                         </div>
                         <input type="submit" class="btn btn-default" name="delete" value="${deleteAccountButton}"/>
                     </form>

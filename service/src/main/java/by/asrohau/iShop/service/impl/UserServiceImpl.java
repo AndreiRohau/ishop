@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean changePassword(User user, String newPassword) throws ServiceException {
-		if (!validation(user) && newPassword.trim().equals("")) {
+		if (!validation(user) || "".equals(newPassword)) {
 			return false;
 		}
 		try {

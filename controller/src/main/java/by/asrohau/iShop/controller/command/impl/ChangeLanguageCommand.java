@@ -22,11 +22,11 @@ public class ChangeLanguageCommand implements Command {
 		try {
 			request.getSession(true).setAttribute(LOCAL.inString, request.getParameter(LOCAL.inString));
 
-			String lastCommand = String.valueOf(request.getSession(true).getAttribute(LAST_COMMAND.inString));
-			String path = NULL.inString.equals(lastCommand) ? INDEX.inString : lastCommand;
+			String lastCommand = String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString));
+			String path = lastCommand.equals(NULL.inString) ? INDEX.inString : lastCommand;
 
 			response.sendRedirect(path);
-		} catch ( IOException e) { 				//	ServletException |
+		} catch ( IOException e) {
 			throw new ControllerException(e);
 		}
 	}

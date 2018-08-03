@@ -14,8 +14,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class ShowAllMyOrdersCommand implements Command {
     @Override
@@ -52,7 +53,7 @@ public class ShowAllMyOrdersCommand implements Command {
                     "FrontController?command=showAllClientsOrders&page_num=" + currentPage +
                             "&userId=" + userId);
 
-            String goToPage = "/jsp/admin/allClientsOrders.jsp";
+            String goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orders.jsp";
             RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
             dispatcher.forward(request, response);
 

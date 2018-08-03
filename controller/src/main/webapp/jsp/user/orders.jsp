@@ -40,7 +40,6 @@
     <fmt:message bundle="${loc}" key="local.log_out_button" var="log_out_button" />
     <fmt:message bundle="${loc}" key="local.regbutton" var="reg_button" />
     <fmt:message bundle="${loc}" key="local.success_log_out" var="success_log_out" />
-    <fmt:message bundle="${loc}" key="local.buy" var="buy" />
     <fmt:message bundle="${loc}" key="local.invalid_log_or_password" var="invalid_log_or_password" />
     <fmt:message bundle="${loc}" key="local.plz_log_out" var="plz_log_out" />
     <fmt:message bundle="${loc}" key="local.login_exists" var="login_exists" />
@@ -49,20 +48,12 @@
     <fmt:message bundle="${loc}" key="local.logout" var="logout" />
     <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
     <fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
-    <fmt:message bundle="${loc}" key="local.address" var="address" />
-    <fmt:message bundle="${loc}" key="local.phone" var="phone" />
-    <fmt:message bundle="${loc}" key="local.prods_in_ur_basket" var="prods_in_ur_basket" />
-    <fmt:message bundle="${loc}" key="local.company" var="company" />
-    <fmt:message bundle="${loc}" key="local.name" var="name" />
-    <fmt:message bundle="${loc}" key="local.type" var="type" />
-    <fmt:message bundle="${loc}" key="local.price" var="price" />
-    <fmt:message bundle="${loc}" key="local.remove" var="remove" />
 
     <c:set var="current_page" value="${requestScope.currentPage}"/>
     <c:set var="max_page" value="${requestScope.maxPage}"/>
 
     <title>
-        <c:out value="${basket}"/>
+        <c:out value="${orders}"/>
     </title>
 </head>
 <body>
@@ -109,7 +100,7 @@
         </div>
         <div class="col-md-7" style="text-align:center">
             <h1>
-                <c:out value="${basket}" />
+                <c:out value="${orders}" />
             </h1>
         </div>
         <div class="col-md-1" style="padding-top:10px;">
@@ -164,12 +155,12 @@
                 <c:out value="${main}"/>
             </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="FrontController?command=selectAllReserved&page_num=1">
                 <c:out value="${basket}"/>
             </a>
         </li>
-        <li role="presentation">
+        <li role="presentation" class="active">
             <a href="FrontController?command=showAllMyOrders&page_num=1">
                 <c:out value="${orders}"/>
             </a>
@@ -178,33 +169,31 @@
 </div>
 
 <!-- MAIN -->
-<div class="col-md-10">
-
-</div>
 <div class="col-md-12">
     <div class="panel panel-default" style="margin-top:15px">
         <div class="panel-heading">
             <form action="FrontController" method="post">
                 <div class="form-inline">
-                    <input class="form-control" type="hidden" name="command" value="createOrder"/>
-                    <input class="form-control" type="text" name="user_address" value="" placeholder="${address}" style="width:500px" required>
-                    <input class="form-control" type="text" name="user_phone" value="" placeholder="${phone}" required/>
-                    <input class="btn btn-default" type="submit" name="buy" value="${buy}"/>
+                    <input class="form-control" type="hidden" name="command" value="findSuitable"/>
+                    <input class="form-control" type="hidden" name="page_num" value="1"/>
+                    <input class="form-control" type="text" name="company" value="" placeholder="company"/>
+                    <input class="form-control" type="text" name="name" value="" placeholder="name"/>
+                    <input class="form-control" type="text" name="type" value="" placeholder="type"/>
+                    <input class="form-control" type="text" name="price" value="" placeholder="price"/>
+                    <input class="btn btn-default" type="submit" name="get_products" value="Find it!"/>
                 </div>
             </form>
         </div>
         <div class="panel-body">
             <c:if test="${current_page != null}">
-                <H1><c:out value="${prods_in_ur_basket}"/></H1>
-                <hr/>
                 <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
                     <tr>
-                        <td><c:out value="${info}"/></td>
-                        <td><c:out value="${company}"/></td>
-                        <td><c:out value="${name}"/></td>
-                        <td><c:out value="${type}"/></td>
-                        <td><c:out value="${price}"/></td>
-                        <td><c:out value="${remove}"/></td>
+                        <td>INFO</td>
+                        <td>COMPANY</td>
+                        <td>NAME</td>
+                        <td>TYPE</td>
+                        <td>PRICE</td>
+                        <td>BUY</td>
                     </tr>
                     <c:forEach items="${requestScope.productArray}" var="product">
                         <tr>
@@ -212,7 +201,7 @@
                                 <form action="FrontController" method="post">
                                     <input type="hidden" name="command" value="productInfo" />
                                     <input type="hidden" name="productId" value="${product.id}" />
-                                    <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+                                    <input type="submit" name="info" value="INFO" class="btn btn-default"/><br/>
                                 </form>
                             </td>
                             <td>${product.company}</td>
@@ -221,9 +210,9 @@
                             <td>${product.price}</td>
                             <td>
                                 <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="deleteReserved" />
-                                    <input type="hidden" name="reserveId" value="${product.reserveId}" />
-                                    <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
+                                    <input type="hidden" name="command" value="addToBasket" />
+                                    <input type="hidden" name="productId" value="${product.id}" />
+                                    <input type="submit" name="buy" value="BUY" class="btn btn-default"/><br/>
                                 </form>
                             </td>
                         </tr>
@@ -232,28 +221,18 @@
 
                 <ul class="pagination pull-right">
                     <c:forEach begin="1" end="${max_page}" var="i">
-                        <c:if test="${i == current_page}">
-                            <li class="active">
-                                <a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                        <c:if test="${i != current_page}">
-                            <li>
-                        		<a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                    </c:forEach>
+                                    <c:if test="${i == current_page}">
+                                        <li class="active">
+                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                        </li>
+                    </c:if>
+                                    <c:if test="${i != current_page}">
+                        <li>
+                                    		<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                        </li>
+                    </c:if>
+                            </c:forEach>
                 </ul>
-                <%--<div width="100%" style="background-color: deepskyblue; font-size: 1em">--%>
-                    <%--<c:forEach begin="1" end="${max_page}" var="i">--%>
-                        <%--<c:if test="${i != current_page}">--%>
-                            <%--<a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>--%>
-                        <%--</c:if>--%>
-                        <%--<c:if test="${i == current_page}">--%>
-                            <%--<c:out value="${i}"/>--%>
-                        <%--</c:if>--%>
-                    <%--</c:forEach>--%>
-                <%--</div>--%>
             </c:if>
         </div>
     </div>
