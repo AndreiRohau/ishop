@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `shop`.`orders` (
   `address` varchar(1000) NOT NULL,
   `phone` varchar(30) NOT NULL,
   `status` varchar(30) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `table_name_id_uindex` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;

@@ -7,14 +7,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <%--<!-- Latest compiled and minified CSS -->--%>
-        <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"--%>
-        <%--<!-- Optional theme -->--%>
-        <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"--%>
-              <%--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>--%>
         <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
               integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
@@ -63,8 +57,8 @@
         <fmt:message bundle="${loc}" key="local.profile" var="profile" />
 
 
-        <c:set var="current_page" value="${requestScope.get('currentPage')}"/>
-        <c:set var="max_page" value="${requestScope.get('maxPage')}"/>
+        <c:set var="current_page" value="${requestScope.currentPage}"/>
+        <c:set var="max_page" value="${requestScope.maxPage}"/>
 
         <title>
             <c:out value="${profile}"/>
@@ -191,7 +185,7 @@
                     <form action="FrontController" method="post">
                         <input type="hidden" name="command" value="change_password"/><br/>
                         <div class="form-group">
-                            <label for="login" value="${login}">
+                            <label for="login">
                                 <c:out value="${login}" />:
                             </label>
                             <input type="text" class="form-control" id="login" placeholder="${login}" name="login"/>
@@ -214,16 +208,20 @@
 
                     <c:if test="${requestScope.errorMessage == 'change_password_error'}">
                         <div class="alert alert-danger" role="alert">
-                            <span>
-                                <p><c:out value="${change_password_error}"/></p>
-                            </span>
+                            <p>
+                                <span>
+                                    <c:out value="${change_password_error}"/>
+                                </span>
+                            </p>
                         </div>
                     </c:if>
                     <c:if test="${requestScope.isChanged != null}">
                         <div class="alert alert-info" role="alert">
-                            <span>
-                                <p>New password is [<c:out value="${requestScope.isChanged}"/>].</p>
-                            </span>
+                            <p>
+                                <span>
+                                    New password is [<c:out value="${requestScope.isChanged}"/>].
+                                </span>
+                            </p>
                         </div>
                     </c:if>
                 </div>
@@ -241,7 +239,7 @@
                     <form action="FrontController" method="post">
                         <input type="hidden" name="command" value="delete_user"/><br/>
                         <div class="form-group">
-                            <label for="username" value="${login}">
+                            <label for="username">
                                 <c:out value="${login}" />:
                             </label>
                             <input type="text" class="form-control" id="username" placeholder="${login}" name="login" value=""/>

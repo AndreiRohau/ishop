@@ -7,11 +7,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
-			  integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
 		<link rel="stylesheet" type="text/css" href="my.css"/>
 
 		<fmt:setLocale value="${sessionScope.local}" />
@@ -181,37 +181,41 @@
 				</div>
 				<div class="panel-body">
 					<c:if test="${current_page != null}">
-						<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
-							<tr>
-								<td><c:out value="${info}"/></td>
-								<td><c:out value="${company}"/></td>
-								<td><c:out value="${name}"/></td>
-								<td><c:out value="${type}"/></td>
-								<td><c:out value="${price}"/></td>
-								<td><c:out value="${buy}"/></td>
-							</tr>
-							<c:forEach items="${requestScope.productArray}" var="product">
-								<tr>
-									<td>
-										<form action="FrontController" method="post">
-											<input type="hidden" name="command" value="productInfo" />
-											<input type="hidden" name="productId" value="${product.id}" />
-											<input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
-										</form>
-									</td>
-									<td>${product.company}</td>
-									<td>${product.name}</td>
-									<td>${product.type}</td>
-									<td>${product.price}</td>
-									<td>
-										<form action="FrontController" method="post">
-											<input type="hidden" name="command" value="addToBasket" />
-											<input type="hidden" name="productId" value="${product.id}" />
-											<input type="submit" name="buy" value="${buy}" class="btn btn-default"/><br/>
-										</form>
-									</td>
+						<table class="table table-hover" >
+							<thead style="color: #464a4c;background-color: #eceeef;">
+								<tr style="text-align: center;">
+									<td><h4><c:out value="${info}"/></h4></td>
+									<td><h4><c:out value="${company}"/></h4></td>
+									<td><h4><c:out value="${name}"/></h4></td>
+									<td><h4><c:out value="${type}"/></h4></td>
+									<td><h4><c:out value="${price}"/></h4></td>
+									<td><h4><c:out value="${buy}"/></h4></td>
 								</tr>
-							</c:forEach>
+							</thead>
+							<tbody>
+								<c:forEach items="${requestScope.productArray}" var="product">
+									<tr style="text-align: center">
+										<td>
+											<form action="FrontController" method="post">
+												<input type="hidden" name="command" value="productInfo" />
+												<input type="hidden" name="productId" value="${product.id}" />
+												<input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+											</form>
+										</td>
+										<td>${product.company}</td>
+										<td>${product.name}</td>
+										<td>${product.type}</td>
+										<td>${product.price}</td>
+										<td>
+											<form action="FrontController" method="post">
+												<input type="hidden" name="command" value="addToBasket" />
+												<input type="hidden" name="productId" value="${product.id}" />
+												<input type="submit" name="buy" value="${buy}" class="btn btn-default"/><br/>
+											</form>
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
 						</table>
 
 						<ul class="pagination pull-right">

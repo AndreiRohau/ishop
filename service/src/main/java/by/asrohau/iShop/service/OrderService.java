@@ -40,5 +40,5 @@ public interface OrderService {
 
     int countClientOrders(int userId) throws ServiceException;
 
-    List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException; // ArrayList
+    List<Order> getAllClientsOrders(int row, int userId) throws ServiceException; // ArrayList
 }

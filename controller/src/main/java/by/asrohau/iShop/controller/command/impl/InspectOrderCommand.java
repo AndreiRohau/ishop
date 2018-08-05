@@ -12,6 +12,7 @@ import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,10 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class InspectOrderCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(InspectOrderCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to InspectOrderCommand");
+        logger.info("We got to InspectOrderCommand");
 
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         OrderService orderService = serviceFactory.getOrderService();
@@ -104,18 +110,9 @@ public class InspectOrderCommand implements Command {
                             + "&from=" + request.getParameter("from")
                             + "&page_num=");
 
-            //what if not null??
-            request.setAttribute("msg", request.getParameter("msg"));
-            // what if not null ??
-            String goToPage;
-            if(request.getParameter("from").equals("manageOrders")) {
-                goToPage = "/jsp/admin/inspectOrder.jsp";
-            }else {
-                goToPage = "/jsp/admin/showProducts.jsp";
-            }
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
 
+            String goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orderInfo.jsp";
+            request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

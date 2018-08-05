@@ -9,6 +9,8 @@ import by.asrohau.iShop.dao.OrderDAO;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static by.asrohau.iShop.service.util.ServiceValidator.validation;
@@ -35,6 +37,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public boolean saveNewOrder(Order order) throws ServiceException {
         try {
+            order.setDateCreated(new Date(System.currentTimeMillis()));
             return orderDAO.save(order);
         } catch(DAOException e){
             throw new ServiceException(e);
@@ -178,9 +181,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getAllClientsOrders(int row, int user_id) throws ServiceException { // ArrayList
+    public List<Order> getAllClientsOrders(int row, int userId) throws ServiceException { // ArrayList
         try {
-            return orderDAO.findAllClientsOrders(row, user_id);
+            return orderDAO.findAllClientsOrders(row, userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

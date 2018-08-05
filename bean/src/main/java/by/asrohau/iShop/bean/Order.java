@@ -1,5 +1,7 @@
 package by.asrohau.iShop.bean;
 
+import java.sql.Date;
+
 public class Order extends Base {
 
     private int userId;
@@ -7,6 +9,7 @@ public class Order extends Base {
     private String userAddress;
     private String userPhone;
     private String status;
+    private Date dateCreated;
 
     public Order() {}
 
@@ -32,6 +35,25 @@ public class Order extends Base {
         this.userAddress = userAddress;
         this.userPhone = userPhone;
         this.status = status;
+    }
+
+    public Order(int userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
+        this.userId = userId;
+        this.productIds = productIds;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
+        this.status = status;
+        this.dateCreated = dateCreated;
+    }
+
+    public Order(int id, int userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
+        super(id);
+        this.userId = userId;
+        this.productIds = productIds;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
+        this.status = status;
+        this.dateCreated = dateCreated;
     }
 
     public int getUserId() {
@@ -74,6 +96,14 @@ public class Order extends Base {
         this.status = status;
     }
 
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,7 +116,8 @@ public class Order extends Base {
         if (productIds != null ? !productIds.equals(order.productIds) : order.productIds != null) return false;
         if (userAddress != null ? !userAddress.equals(order.userAddress) : order.userAddress != null) return false;
         if (userPhone != null ? !userPhone.equals(order.userPhone) : order.userPhone != null) return false;
-        return status != null ? status.equals(order.status) : order.status == null;
+        if (status != null ? !status.equals(order.status) : order.status != null) return false;
+        return dateCreated != null ? dateCreated.equals(order.dateCreated) : order.dateCreated == null;
     }
 
     @Override
@@ -97,18 +128,20 @@ public class Order extends Base {
         result = 31 * result + (userAddress != null ? userAddress.hashCode() : 0);
         result = 31 * result + (userPhone != null ? userPhone.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                 super.toString() +
+                "id=" + super.getId() +
                 "userId=" + userId +
                 ", productIds='" + productIds + '\'' +
                 ", userAddress='" + userAddress + '\'' +
                 ", userPhone='" + userPhone + '\'' +
                 ", status='" + status + '\'' +
+                ", dateCreated=" + dateCreated +
                 '}';
     }
 }

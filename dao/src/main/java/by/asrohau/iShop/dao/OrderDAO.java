@@ -12,12 +12,12 @@ public interface OrderDAO extends AbstractDAO<Order> {
     boolean save(Reserve reserve) throws DAOException;
 
     List<Product> findAllReserved(int userId, int row) throws DAOException; //arraylist
-    List<Integer> findAllReservedIds(int user_id) throws DAOException; //linkedlist
+    List<Integer> findAllReservedIds(int userId) throws DAOException; //linkedlist
     List<Order> findAllOrders(int row, String status) throws DAOException; //arraylist
 
     List<Order> findAllActiveOrders(int row) throws DAOException; //arraylist
     List<Order> findAllSuccessOrders(int row) throws DAOException; //arraylist
-    List<Order> findAllClientsOrders(int row, int user_id) throws DAOException; //arraylist
+    List<Order> findAllClientsOrders(int row, int userId) throws DAOException; //arraylist
 
     boolean update(Order order, String status) throws DAOException;
 

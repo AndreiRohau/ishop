@@ -7,7 +7,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
@@ -24,7 +24,7 @@
     <fmt:message bundle="${loc}" key="local.hello" var="hello" />
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
-    <fmt:message bundle="${loc}" key="local.basket" var="basket"/>
+    <fmt:message bundle="${loc}" key="local.basket" var="basket" />
     <fmt:message bundle="${loc}" key="local.orders" var="orders" />
     <fmt:message bundle="${loc}" key="local.info" var="info" />
     <fmt:message bundle="${loc}" key="local.reg_form" var="reg_form" />
@@ -48,17 +48,36 @@
     <fmt:message bundle="${loc}" key="local.logout" var="logout" />
     <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
     <fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
-    <fmt:message bundle="${loc}" key="local.all_your_orders" var="all_your_orders" />
-    <fmt:message bundle="${loc}" key="local.dateCreated" var="dateCreated" />
+    <fmt:message bundle="${loc}" key="local.newPassword" var="newPassword" />
+    <fmt:message bundle="${loc}" key="local.changePasswordButton" var="changePasswordButton" />
+    <fmt:message bundle="${loc}" key="local.deleteAccountButton" var="deleteAccountButton" />
+    <fmt:message bundle="${loc}" key="local.changePasswordText" var="changePasswordText" />
+    <fmt:message bundle="${loc}" key="local.deleteAccountText" var="deleteAccountText" />
+    <fmt:message bundle="${loc}" key="local.change_password_error" var="change_password_error" />
+    <fmt:message bundle="${loc}" key="local.delete_user_error" var="delete_user_error" />
+    <fmt:message bundle="${loc}" key="local.profile" var="profile" />
+    <fmt:message bundle="${loc}" key="local.company" var="company" />
+    <fmt:message bundle="${loc}" key="local.name" var="name" />
+    <fmt:message bundle="${loc}" key="local.type" var="type" />
+    <fmt:message bundle="${loc}" key="local.price" var="price" />
+    <fmt:message bundle="${loc}" key="local.find" var="find" />
+    <fmt:message bundle="${loc}" key="local.buy" var="buy" />
     <fmt:message bundle="${loc}" key="local.order" var="order" />
+    <fmt:message bundle="${loc}" key="local.address" var="address" />
+    <fmt:message bundle="${loc}" key="local.phone" var="phone" />
     <fmt:message bundle="${loc}" key="local.status" var="status" />
-    <fmt:message bundle="${loc}" key="local.no_orders_found" var="no_orders_found" />
+    <fmt:message bundle="${loc}" key="local.company" var="company" />
+    <fmt:message bundle="${loc}" key="local.name" var="name" />
+    <fmt:message bundle="${loc}" key="local.type" var="type" />
+    <fmt:message bundle="${loc}" key="local.price" var="price" />
 
     <c:set var="current_page" value="${requestScope.currentPage}"/>
     <c:set var="max_page" value="${requestScope.maxPage}"/>
+    <c:set var="productIDsString" value="${requestScope.productIDsString}"/>
+    <c:set var="orderId" value="${requestScope.orderId}"/>
 
     <title>
-        <c:out value="${orders}"/>
+        <c:out value="${order} ${requestScope.orderId}"/>
     </title>
 </head>
 <body>
@@ -88,24 +107,24 @@
         </div>
         <div class="col-md-1" style="text-align:center">
             <c:if test="${sessionScope.role == 'admin'}">
-                <span>
-                    <c:out value="${admin}"/>
-                </span>
+                                <span>
+                                    <c:out value="${admin}"/>
+                                </span>
             </c:if>
             <c:if test="${sessionScope.role == 'user'}">
-                <span>
-                    <c:out value="${client}"/>
-                </span>
+                                <span>
+                                    <c:out value="${client}"/>
+                                </span>
             </c:if>
             <c:if test="${sessionScope.role == null}">
-                <span>
-                    <c:out value="${anonymous}"/>
-                </span>
+                                <span>
+                                    <c:out value="${anonymous}"/>
+                                </span>
             </c:if>
         </div>
         <div class="col-md-7" style="text-align:center">
             <h1>
-                <c:out value="${orders}" />
+                <c:out value="${order} ${requestScope.orderId}" />
             </h1>
         </div>
         <div class="col-md-1" style="padding-top:10px;">
@@ -165,7 +184,7 @@
                 <c:out value="${basket}"/>
             </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="FrontController?command=showAllMyOrders&page_num=1">
                 <c:out value="${orders}"/>
             </a>
@@ -174,75 +193,79 @@
 </div>
 
 <!-- MAIN -->
-<c:if test="${requestScope.allOrders == '[]'}">
-    <div class="panel-body">
-        <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${no_orders_found}"/></h3>
+<div class="col-md-12">
+    <!-- ORDER -->
+    <div class="col-md-4">
+        <div class="panel panel-default" style="margin-top:15px">
+            <div class="panel-body">
+                <p>${order} ${requestScope.orderId}</p>
+                <p>${status} ${requestScope.status}</p>
+                <p>${address} : ${requestScope.address}</p>
+                <p>${phone} : ${requestScope.phone}</p>
+            </div>
         </div>
     </div>
-</c:if>
-
-<c:if test="${requestScope.allOrders != '[]'}">
-    <div class="col-md-12">
+    <!-- INFO -->
+    <div class="col-md-8 ">
         <div class="panel panel-default" style="margin-top:15px">
             <div class="panel-heading">
-                <h3><c:out value="${all_your_orders}"/></h3>
+                <h3 class="panel-title">
+                    <c:out value="${info}"/>
+                </h3>
             </div>
             <div class="panel-body">
-                <table class="table table-hover" >
-                    <thead style="color: #464a4c;background-color: #eceeef;">
+                <c:if test="${current_page != null}">
+                    <table class="table table-hover" >
+                        <thead style="color: #464a4c;background-color: #eceeef;">
                         <tr style="text-align: center;">
-                            <td><h4><c:out value="${dateCreated}"/></h4></td>
-                            <td><h4><c:out value="${order}"/></h4></td>
-                            <td><h4><c:out value="${status}"/></h4></td>
+                            <td><h4><c:out value="${info}"/></h4></td>
+                            <td><h4><c:out value="${company}"/></h4></td>
+                            <td><h4><c:out value="${name}"/></h4></td>
+                            <td><h4><c:out value="${type}"/></h4></td>
+                            <td><h4><c:out value="${price}"/></h4></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${requestScope.allOrders}" var="order">
-                            <tr style="text-align: center">
-                                    <%--new: Client ID - edit client --%>
-                                <td>
-                                    <p>
-                                        ${order.dateCreated}
-                                    </p>
-                                </td>
-                                    <%--order id - open order--%>
-                                <td>
-                                    <form title="Observe the order" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="inspectOrder" />
-                                        <input type="hidden" name="from" value="allClientsOrders" />
-                                        <input type="hidden" name="page_num" value="1"/>
-                                        <input type="hidden" name="orderId" value="${order.id}" />
-                                        <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
-                                    </form>
-                                </td>
-                                    <%--set-active--%>
-                                <td>
-                                    <p>
-                                        ${order.status}
-                                    </p>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-                <ul class="pagination pull-right">
-                    <c:forEach begin="1" end="${max_page}" var="i">
-                        <c:if test="${i == current_page}">
-                            <li class="active">
-                                <a href="FrontController?command=showAllMyOrders&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                        <c:if test="${i != current_page}">
-                            <li>
-                        		<a href="FrontController?command=showAllMyOrders&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
+                        </thead>
+                        <tbody>
+                            <c:set value="1" var="indexRemovingProduct"/>
+                            <c:forEach items="${requestScope.productArray}" var="product">
+                                <tr style="text-align: center">
+                                    <td>
+                                        <form action="FrontController" method="post">
+                                            <input type="hidden" name="command" value="productInfo" />
+                                            <input type="hidden" name="productId" value="${product.id}" />
+                                            <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+                                        </form>
+                                    </td>
+                                    <td>${product.company}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.type}</td>
+                                    <td>${product.price}</td>
+
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${max_page}" var="i">
+                            <c:if test="${i == current_page}">
+                                <li class="active">
+                                    <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${i != current_page}">
+                                <li>
+                            		<a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </c:if>
             </div>
         </div>
     </div>
-</c:if>
+
+</div>
+
 </body>
 </html>

@@ -57,6 +57,7 @@
     <fmt:message bundle="${loc}" key="local.type" var="type" />
     <fmt:message bundle="${loc}" key="local.price" var="price" />
     <fmt:message bundle="${loc}" key="local.remove" var="remove" />
+    <fmt:message bundle="${loc}" key="local.basket_is_empty" var="basket_is_empty" />
 
     <c:set var="current_page" value="${requestScope.currentPage}"/>
     <c:set var="max_page" value="${requestScope.maxPage}"/>
@@ -178,86 +179,85 @@
 </div>
 
 <!-- MAIN -->
-<div class="col-md-10">
-
-</div>
-<div class="col-md-12">
-    <div class="panel panel-default" style="margin-top:15px">
-        <div class="panel-heading">
-            <form action="FrontController" method="post">
-                <div class="form-inline">
-                    <input class="form-control" type="hidden" name="command" value="createOrder"/>
-                    <input class="form-control" type="text" name="user_address" value="" placeholder="${address}" style="width:500px" required>
-                    <input class="form-control" type="text" name="user_phone" value="" placeholder="${phone}" required/>
-                    <input class="btn btn-default" type="submit" name="buy" value="${buy}"/>
-                </div>
-            </form>
-        </div>
-        <div class="panel-body">
-            <c:if test="${current_page != null}">
-                <H1><c:out value="${prods_in_ur_basket}"/></H1>
-                <hr/>
-                <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
-                    <tr>
-                        <td><c:out value="${info}"/></td>
-                        <td><c:out value="${company}"/></td>
-                        <td><c:out value="${name}"/></td>
-                        <td><c:out value="${type}"/></td>
-                        <td><c:out value="${price}"/></td>
-                        <td><c:out value="${remove}"/></td>
-                    </tr>
-                    <c:forEach items="${requestScope.productArray}" var="product">
-                        <tr>
-                            <td>
-                                <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="productInfo" />
-                                    <input type="hidden" name="productId" value="${product.id}" />
-                                    <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
-                                </form>
-                            </td>
-                            <td>${product.company}</td>
-                            <td>${product.name}</td>
-                            <td>${product.type}</td>
-                            <td>${product.price}</td>
-                            <td>
-                                <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="deleteReserved" />
-                                    <input type="hidden" name="reserveId" value="${product.reserveId}" />
-                                    <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
-                                </form>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </table>
-
-                <ul class="pagination pull-right">
-                    <c:forEach begin="1" end="${max_page}" var="i">
-                        <c:if test="${i == current_page}">
-                            <li class="active">
-                                <a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                        <c:if test="${i != current_page}">
-                            <li>
-                        		<a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
-                            </li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-                <%--<div width="100%" style="background-color: deepskyblue; font-size: 1em">--%>
-                    <%--<c:forEach begin="1" end="${max_page}" var="i">--%>
-                        <%--<c:if test="${i != current_page}">--%>
-                            <%--<a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>--%>
-                        <%--</c:if>--%>
-                        <%--<c:if test="${i == current_page}">--%>
-                            <%--<c:out value="${i}"/>--%>
-                        <%--</c:if>--%>
-                    <%--</c:forEach>--%>
-                <%--</div>--%>
-            </c:if>
+<c:if test="${requestScope.productArray == '[]'}">
+    <div class="panel-body">
+        <div class="alert alert-info" role="alert" style="padding:15px">
+            <h3><c:out value="${basket_is_empty}"/></h3>
         </div>
     </div>
-</div>
+</c:if>
 
+<c:if test="${requestScope.productArray != '[]'}">
+    <div class="col-md-12">
+        <div class="panel panel-default" style="margin-top:15px">
+            <div class="panel-heading">
+                <form action="FrontController" method="post">
+                    <div class="form-inline">
+                        <input class="form-control" type="hidden" name="command" value="createOrder"/>
+                        <input class="form-control" type="text" name="user_address" value="" placeholder="${address}" style="width:500px" required>
+                        <input class="form-control" type="text" name="user_phone" value="" placeholder="${phone}" required/>
+                        <input class="btn btn-default" type="submit" name="buy" value="${buy}"/>
+                    </div>
+                </form>
+            </div>
+            <div class="panel-body">
+                    <h3><c:out value="${prods_in_ur_basket}"/></h3>
+                    <hr/>
+                    <table class="table table-hover" >
+                        <thead style="color: #464a4c;background-color: #eceeef;">
+                            <tr style="text-align: center;">
+                                <td><h4><c:out value="${info}"/></h4></td>
+                                <td><h4><c:out value="${company}"/></h4></td>
+                                <td><h4><c:out value="${name}"/></h4></td>
+                                <td><h4><c:out value="${type}"/></h4></td>
+                                <td><h4><c:out value="${price}"/></h4></td>
+                                <td><h4><c:out value="${remove}"/></h4></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${requestScope.productArray}" var="product">
+                                <tr style="text-align: center">
+                                    <td>
+                                        <form action="FrontController" method="post">
+                                            <input type="hidden" name="command" value="productInfo" />
+                                            <input type="hidden" name="productId" value="${product.id}" />
+                                            <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+                                        </form>
+                                    </td>
+                                    <td>${product.company}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.type}</td>
+                                    <td>${product.price}</td>
+                                    <td>
+                                        <form action="FrontController" method="post">
+                                            <input type="hidden" name="command" value="deleteReserved" />
+                                            <input type="hidden" name="reserveId" value="${product.reserveId}" />
+                                            <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${max_page}" var="i">
+                            <c:if test="${i == current_page}">
+                                <li class="active">
+                                    <a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${i != current_page}">
+                                <li>
+                            		<a href="FrontController?command=selectAllReserved&page_num=${i}">${i}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+
+            </div>
+        </div>
+    </div>
+</c:if>
 </body>
 </html>

@@ -60,7 +60,7 @@ public enum DAOFinals {
     SELECT_ALL_RESERVED_IDS_QUERY("SELECT * FROM shop.reserve WHERE user_id = ?"),
     DELETE_ALL_RESERVED_QUERY("DELETE FROM shop.reserve WHERE user_id = ?"),
     DELETE_ALL_ORDERS_WITH_USER_ID_QUERY("DELETE FROM shop.orders WHERE user = ?"),
-    SAVE_NEW_ORDER_QUERY("INSERT INTO shop.orders (user, products, address, phone, status) VALUES (?,?,?,?,?)"),
+    SAVE_NEW_ORDER_QUERY("INSERT INTO shop.orders (user, products, address, phone, status, dateCreated) VALUES (?,?,?,?,?,?)"),
     COUNT_All_ORDERS_QUERY("SELECT COUNT(*) FROM shop.orders WHERE status = ?"),
     SELECT_ALL_ORDERS_QUERY("SELECT * FROM shop.orders WHERE status = ? LIMIT ?, ?"),
     DELETE_NEW_ORDER_QUERY("DELETE FROM shop.orders WHERE id = ?"),

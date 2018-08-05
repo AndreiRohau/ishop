@@ -6,6 +6,7 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,36 +14,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class ProductInfoCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(ProductInfoCommand.class);
+    ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    ProductService productService = serviceFactory.getProductService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to ProductInfoCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        ProductService productService = serviceFactory.getProductService();
-        String lastCMD;
-        String goToPage;
-        Product product  = new Product();
-        product.setId(Integer.parseInt(request.getParameter("productId")));
+        logger.info("We got to ProductInfoCommand");
         try {
+            String goToPage;
+
+            Product product  = new Product();
+            product.setId(Integer.parseInt(request.getParameter("productId")));
             product = productService.findProductWithId(product);
+
             if(product != null){
-                request.setAttribute("productToEdit", product);
-                goToPage = "/jsp/user/productInfo.jsp";
-                lastCMD = "FrontController?command=productInfo&productId=" + request.getParameter("productId");
-
+                request.setAttribute("product", product);
+                goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/productInfo.jsp";
+                request.getSession().setAttribute(LAST_COMMAND.inString,
+                        "FrontController?command=productInfo&productId=" + request.getParameter("productId"));
             } else {
-                goToPage = "error.jsp";
-                lastCMD = "FrontController?command=goToPage&address=main.jsp";
+                goToPage = String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString));
+                request.setAttribute("cant_find_product", true);
             }
-
-            //what if not null??
-            request.setAttribute("msg", request.getParameter("msg"));
-            // what if not null ??
-            request.getSession().setAttribute("lastCMD", lastCMD);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
-
+            request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

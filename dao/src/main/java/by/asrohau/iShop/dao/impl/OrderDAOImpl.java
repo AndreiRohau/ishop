@@ -8,10 +8,7 @@ import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.OrderDAO;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +37,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             preparedStatement.setString(3, order.getUserAddress());
             preparedStatement.setString(4, order.getUserPhone());
             preparedStatement.setString(5, order.getStatus());
+            preparedStatement.setDate(6, order.getDateCreated());
             int result = preparedStatement.executeUpdate();
             return (result > 0);
         } catch (SQLException e) {
@@ -69,6 +67,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 foundOrder.setUserAddress(resultSet.getString(4));
                 foundOrder.setUserPhone(resultSet.getString(5));
                 foundOrder.setStatus(resultSet.getString(6));
+                foundOrder.setDateCreated(resultSet.getDate(7));
             }
 
             if (foundOrder.getStatus() != null) {
@@ -358,6 +357,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             String userAddress;
             String userPhone;
             String foundStatus;
+            Date dateCreated;
             Order order;
             while (resultSet.next()) {
 
@@ -367,7 +367,8 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 userAddress =  resultSet.getString(4);
                 userPhone =  resultSet.getString(5);
                 foundStatus =  resultSet.getString(6);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus);
+                dateCreated =  resultSet.getDate(7);
+                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
                 productList.add(order);
             }
             return productList;
@@ -416,6 +417,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             String userAddress;
             String userPhone;
             String status;
+            Date dateCreated;
             Order order;
             while (resultSet.next()) {
                 orderId = resultSet.getInt(1);
@@ -424,7 +426,8 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 userAddress =  resultSet.getString(4);
                 userPhone =  resultSet.getString(5);
                 status =  resultSet.getString(6);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, status);
+                dateCreated =  resultSet.getDate(7);
+                order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
                 orderList.add(order);
             }
             return orderList;
@@ -453,6 +456,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             String userAddress;
             String userPhone;
             String foundStatus;
+            Date dateCreated;
             Order order;
             while (resultSet.next()) {
 
@@ -462,7 +466,8 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 userAddress =  resultSet.getString(4);
                 userPhone =  resultSet.getString(5);
                 foundStatus =  resultSet.getString(6);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus);
+                dateCreated =  resultSet.getDate(7);
+                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
                 orderList.add(order);
             }
             return orderList;
@@ -511,6 +516,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             String userAddress;
             String userPhone;
             String status;
+            Date dateCreated;
             Order order;
             while (resultSet.next()) {
                 orderId = resultSet.getInt(1);
@@ -519,7 +525,8 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 userAddress =  resultSet.getString(4);
                 userPhone =  resultSet.getString(5);
                 status =  resultSet.getString(6);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, status);
+                dateCreated = resultSet.getDate(7);
+                order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
                 orderList.add(order);
             }
             return orderList;

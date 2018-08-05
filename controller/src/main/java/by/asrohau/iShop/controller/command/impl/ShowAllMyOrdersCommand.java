@@ -40,8 +40,8 @@ public class ShowAllMyOrdersCommand implements Command {
             //count amount of all NEW orders
             maxPage = (int) Math.ceil(((double) orderService.countClientOrders(userId)) / 15);
 
-            List<Order> allOrdersList = orderService.getAllClientsOrders(row, userId); // ArrayList
-            request.setAttribute("array", allOrdersList);
+            List<Order> allOrders = orderService.getAllClientsOrders(row, userId); // ArrayList
+            request.setAttribute("allOrders", allOrders);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.setAttribute("for_user", "for_user");
@@ -50,7 +50,7 @@ public class ShowAllMyOrdersCommand implements Command {
             request.setAttribute("command_3", "orderSetActive");
             request.setAttribute("command_4", "deleteOrder");
             request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=showAllClientsOrders&page_num=" + currentPage +
+                    "FrontController?command=showAllMyOrders&page_num=" + currentPage +
                             "&userId=" + userId);
 
             String goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orders.jsp";
