@@ -195,7 +195,7 @@
                     <div class="form-inline">
                         <input class="form-control" type="hidden" name="command" value="createOrder"/>
                         <input class="form-control" type="text" name="user_address" value="" placeholder="${address}" style="width:500px" required>
-                        <input class="form-control" type="text" name="user_phone" value="" placeholder="${phone}" required/>
+                        <input class="form-control" type="text" pattern="[0-9]{7-12}" name="user_phone" value="" placeholder="${phone}" required/>
                         <input class="btn btn-default" type="submit" name="buy" value="${buy}"/>
                     </div>
                 </form>

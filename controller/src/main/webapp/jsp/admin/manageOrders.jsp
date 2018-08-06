@@ -86,7 +86,7 @@
                 <form action="FrontController" method="post">
                     <%--returns successed orders: userId + orderId + link for detailed list of sold proDs + benifit--%>
                     <p><b>Get SUCCESSFUL orders</b>
-                        <input type="hidden" name="command" value="selectAllSuccessfulOrders"/>
+                        <input type="hidden" name="command" value="selectAllSuccessOrders"/>
                         <input type="hidden" name="page_num" value="1"/>
                         <input type="submit" name="get_users" value="Show Successed Orders!"/>
                     </p>

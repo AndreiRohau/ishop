@@ -17,7 +17,6 @@
         <fmt:setLocale value="${sessionScope.local}" />
         <fmt:setBundle basename="localization.local" var="loc" />
         <fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
-        <fmt:message bundle="${loc}" key="local.basket" var="basket" />
         <fmt:message bundle="${loc}" key="local.shop" var="shop" />
         <fmt:message bundle="${loc}" key="local.admin" var="admin" />
         <fmt:message bundle="${loc}" key="local.client" var="client" />
@@ -25,6 +24,8 @@
         <fmt:message bundle="${loc}" key="local.hello" var="hello" />
         <fmt:message bundle="${loc}" key="local.home" var="home" />
         <fmt:message bundle="${loc}" key="local.main" var="main" />
+        <fmt:message bundle="${loc}" key="local.basket" var="basket" />
+        <fmt:message bundle="${loc}" key="local.orders" var="orders" />
         <fmt:message bundle="${loc}" key="local.info" var="info" />
         <fmt:message bundle="${loc}" key="local.reg_form" var="reg_form" />
         <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
@@ -163,9 +164,14 @@
                     <c:out value="${main}"/>
                 </a>
             </li>
-            <li role="presentation" class="active">
-                <a href="FrontController?command=goToPage&address=profile.jsp">
-                    <c:out value="${profile}"/>
+            <li role="presentation">
+                <a href="FrontController?command=selectAllReserved&page_num=1">
+                    <c:out value="${basket}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=showAllMyOrders&page_num=1">
+                    <c:out value="${orders}"/>
                 </a>
             </li>
         </ul>

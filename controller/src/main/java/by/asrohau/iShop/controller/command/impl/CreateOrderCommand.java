@@ -38,8 +38,11 @@ public class CreateOrderCommand implements Command {
                 productIds.append(String.valueOf(id)).append(",");
             }
 
-            Order order = new Order(user.getId(), productIds.toString(), request.getParameter("user_address"),
-                    request.getParameter("user_phone"), NEW.inString);
+            Order order = new Order(user.getId(),
+                    productIds.toString(),
+                    request.getParameter("user_address"),
+                    request.getParameter("user_phone"),
+                    NEW.inString);
 
             if (orderService.saveNewOrder(order)) {
                 orderService.deleteAllReserved(user.getId());
@@ -48,7 +51,7 @@ public class CreateOrderCommand implements Command {
                 request.setAttribute(ERROR_MESSAGE.inString, "order_creation_error");
             }
 
-            request.setAttribute(LAST_COMMAND.inString, "FrontController?command=goToPage&address=basket.jsp");
+            request.setAttribute(LAST_COMMAND.inString, "FrontController?command=selectAllReserved&page_num=1");
             request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
