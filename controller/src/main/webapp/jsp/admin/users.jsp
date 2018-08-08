@@ -190,6 +190,8 @@
                                 <form action="FrontController" method="post">
                                     <input type="hidden" name="command" value="showAllMyOrders" />
                                     <input type="hidden" name="id" value="${user.id}" />
+                                    <input type="hidden" name="login" value="${user.login}" />
+                                    <input type="hidden" name="page" value="1" />
                                     <input type="submit" name="edit" value="${orders}" class="btn btn-default"/><br/>
                                 </form>
                             </td>

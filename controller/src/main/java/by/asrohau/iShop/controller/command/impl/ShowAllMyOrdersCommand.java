@@ -30,8 +30,14 @@ public class ShowAllMyOrdersCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowAllMyOrdersCommand");
         try {
-            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
-            int userId = userService.findUserDTOWithLogin(user).getId();
+            int userId;
+
+            if (!request.getSession().getAttribute(ROLE.inString).equals("admin")) {
+                User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+                userId = userService.findUserDTOWithLogin(user).getId();
+            } else {
+                userId = Integer.parseInt(request.getParameter(ID.inString));
+            }
 
             int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
             int maxPage = (int) Math.ceil(((double) orderService.countClientOrders(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));

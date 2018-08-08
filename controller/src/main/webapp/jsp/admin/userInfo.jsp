@@ -182,14 +182,15 @@
                     <form id="showOrdersForm" action="FrontController" method="post">
                         <input form="showOrdersForm"  type="hidden" name="command" value="showAllMyOrders" />
                         <input form="showOrdersForm"  type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input form="showOrdersForm"  type="hidden" name="id" value="${requestScope.user.id}" />
                         <input form="showOrdersForm"  type="hidden" name="page" value="1" />
-                        <input form="showOrdersForm" class="btn btn-default" type="submit" name="delete" value="${orders}" /><br/>
+                        <input form="showOrdersForm" class="btn btn-default" type="submit" name="showOrders" value="${orders}" /><br/>
                     </form>
                     <br/>
                     <form id="deleteOrdersForm" action="FrontController" method="post">
                         <input form="deleteOrdersForm"  type="hidden" name="command" value="deleteAllOrders" />
                         <input form="deleteOrdersForm"  type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input form="deleteOrdersForm" class="btn btn-default" type="submit" name="delete" value="${delete} ${orders}" /><br/>
+                        <input form="deleteOrdersForm" class="btn btn-default" type="submit" name="deleteOrders" value="${delete} ${orders}" /><br/>
                     </form>
                     <br/>
                     <form id="deleteForm" action="FrontController" method="post">
