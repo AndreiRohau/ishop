@@ -20,9 +20,9 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class SelectAllReservedCommand implements Command {
+public class ShowReservedCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(SelectAllReservedCommand.class);
+    private static final Logger logger = Logger.getLogger(ShowReservedCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
     private UserService userService = serviceFactory.getUserService();
@@ -30,7 +30,7 @@ public class SelectAllReservedCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to FindReservedProductsCommand");
+        logger.info("We got to ShowReservedCommand");
         try {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
             int userId = userService.findUserDTOWithLogin(user).getId();
@@ -53,15 +53,14 @@ public class SelectAllReservedCommand implements Command {
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute(LAST_COMMAND.inString,
-                    "FrontController?command=selectAllReserved&page=" + currentPage);
+                    "FrontController?command=showReserved&page=" + currentPage);
             request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
-                    "FrontController?command=selectAllReserved&page=");
+                    "FrontController?command=showReserved&page=");
 
             request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);
 
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }
-
     }
 }

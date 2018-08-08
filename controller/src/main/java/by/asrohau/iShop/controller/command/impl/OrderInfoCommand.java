@@ -23,9 +23,9 @@ import java.util.ArrayList;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class InspectOrderCommand implements Command {
+public class OrderInfoCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(InspectOrderCommand.class);
+    private static final Logger logger = Logger.getLogger(OrderInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
     private UserService userService = serviceFactory.getUserService();
@@ -33,7 +33,7 @@ public class InspectOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to InspectOrderCommand");
+        logger.info("We got to OrderInfoCommand");
         try {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
             Product product = new Product();
@@ -71,7 +71,7 @@ public class InspectOrderCommand implements Command {
                 product = new Product();
             }
 
-            String for_user = user.getLogin().equals(ADMIN.inString) ? "admin" : "for_user";
+            String forUser = user.getLogin().equals(ADMIN.inString) ? "admin" : "for_user";
 
             request.setAttribute("productArray", productArray);
             request.setAttribute("productIDsString", productIdsString);
@@ -79,14 +79,14 @@ public class InspectOrderCommand implements Command {
             request.setAttribute("status", order.getStatus());
             request.setAttribute("id", order.getId());
             request.setAttribute("userId", order.getUserId());
-            request.setAttribute("for_user", for_user);
+            request.setAttribute("for_user", forUser);
             request.setAttribute("address", order.getUserAddress());
             request.setAttribute("phone", order.getUserPhone());
             request.setAttribute("status", order.getStatus());
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=inspectOrder&page=" + currentPage
+                    "FrontController?command=orderInfo&page=" + currentPage
                             + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
@@ -95,7 +95,7 @@ public class InspectOrderCommand implements Command {
                             + "&from=" + request.getParameter("from"));
 
             request.setAttribute("lastCMDneedPage",
-                    "FrontController?command=inspectOrder"
+                    "FrontController?command=orderInfo"
                             + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()

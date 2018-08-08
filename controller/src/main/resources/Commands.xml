@@ -59,8 +59,8 @@
         <classname>FindSuitableCommand</classname>
     </command>
     <command>
-        <webname>selectAllReserved</webname>
-        <classname>SelectAllReservedCommand</classname>
+        <webname>showReserved</webname>
+        <classname>ShowReservedCommand</classname>
     </command>
     <command>
         <webname>editClient</webname>
@@ -115,8 +115,8 @@
         <classname>EditNewOrderCommand</classname>
     </command>
     <command>
-        <webname>inspectOrder</webname>
-        <classname>InspectOrderCommand</classname>
+        <webname>orderInfo</webname>
+        <classname>OrderInfoCommand</classname>
     </command>
     <command>
         <webname>orderSetStatus</webname>

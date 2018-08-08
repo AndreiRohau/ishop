@@ -93,7 +93,7 @@
             </div>
             <div class="col-md-1" style="padding-top:10px;">
                 <form method="get" action="FrontController">
-                    <input type="hidden" name="command" value="selectAllReserved"/>
+                    <input type="hidden" name="command" value="showReserved"/>
                     <input type="hidden" name="page" value="1"/>
                     <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
                         <c:out value="${basket}"/>
@@ -144,7 +144,7 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="FrontController?command=selectAllReserved&page=1">
+                <a href="FrontController?command=showReserved&page=1">
                     <c:out value="${basket}"/>
                 </a>
             </li>
@@ -192,7 +192,7 @@
                                         <%--order id - open order--%>
                                     <td>
                                         <form title="Observe the order" action="FrontController" method="post">
-                                            <input type="hidden" name="command" value="inspectOrder" />
+                                            <input type="hidden" name="command" value="orderInfo" />
                                             <input type="hidden" name="from" value="allUsersOrders" />
                                             <input type="hidden" name="page" value="1"/>
                                             <input type="hidden" name="id" value="${order.id}" />

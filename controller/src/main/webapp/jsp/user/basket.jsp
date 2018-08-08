@@ -99,7 +99,7 @@
             </div>
             <div class="col-md-1" style="padding-top:10px;">
                 <form method="get" action="FrontController">
-                    <input type="hidden" name="command" value="selectAllReserved"/>
+                    <input type="hidden" name="command" value="showReserved"/>
                     <input type="hidden" name="page" value="1"/>
                     <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
                         <c:out value="${basket}"/>
@@ -150,7 +150,7 @@
                 </a>
             </li>
             <li role="presentation" class="active">
-                <a href="FrontController?command=selectAllReserved&page=1">
+                <a href="FrontController?command=showReserved&page=1">
                     <c:out value="${basket}"/>
                 </a>
             </li>
