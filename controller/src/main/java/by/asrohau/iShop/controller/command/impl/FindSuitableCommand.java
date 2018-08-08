@@ -1,7 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
@@ -9,12 +8,10 @@ import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
@@ -22,44 +19,36 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class FindSuitableCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(FindSuitableCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private ProductService productService = serviceFactory.getProductService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to FindSuitableCommand");
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        ProductService productService = serviceFactory.getProductService();
 
-        String goToPage;
-        int currentPage;
-        int maxPage;
-        int row;
-
-        currentPage = Integer.parseInt(request.getParameter("page_num"));
-        row = (currentPage - 1)* Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
-
-        String check = "";
         String company = request.getParameter("company").trim();
         String name = request.getParameter("name").trim();
         String type = request.getParameter("type").trim();
         String price = request.getParameter("price").trim();
 
         Product product = new Product();
-        if (!company.equals(check)) {
+        if (!"".equals(company)) {
             product.setCompany(company);
         }
-        if (!name.equals(check)) {
+        if (!"".equals(name)) {
             product.setName(name);
         }
-        if (!type.equals(check)) {
+        if (!"".equals(type)) {
             product.setType(type);
         }
-        if (!price.equals(check)) {
+        if (!"".equals(price)) {
             product.setPrice(price);
         }
 
         try {
-            //count amount of all products
-            maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / 15);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
+            int maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
 
             List<Product> productArrayList = productService.findProductsComprehensive(product, row); //ArrayList
             request.setAttribute("productArray", productArrayList);
@@ -71,18 +60,12 @@ public class FindSuitableCommand implements Command {
                     + "&name=" + name
                     + "&type=" + type
                     + "&price=" + price
-                    + "&page_num=";
-            request.getSession().setAttribute("lastCMDneedPage", path);
-            request.getSession().setAttribute("lastCMD", path + currentPage);
+                    + "&page=";
+            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString, path);
+            request.getSession().setAttribute(LAST_COMMAND.inString, path + currentPage);
 
-            if(!request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString)){
-                goToPage = "/jsp/user/main.jsp";
-            } else {
-                goToPage = "/jsp/admin/manageProducts.jsp";
-            }
-
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/main.jsp")
+                    .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

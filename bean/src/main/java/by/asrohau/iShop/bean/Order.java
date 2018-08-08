@@ -13,6 +13,10 @@ public class Order extends Base {
 
     public Order() {}
 
+    public Order(int id) {
+        super(id);
+    }
+
     public Order(int userId, String productIds, String userAddress, String userPhone) {
         this.userId = userId;
         this.productIds = productIds;

@@ -25,7 +25,7 @@ public enum ControllerFinals {
     COMMANDS_XML("Commands.xml"),
     NEW("new"),
     NULL("null"),
-
+    PAGE("page"),
     ID("id"),
     LOGIN("login"),
     PASSWORD("password"),
@@ -33,8 +33,9 @@ public enum ControllerFinals {
     ROLE("role"),
     ADMIN("admin"),
     USER("user"),
-    USER_NAME("userName"),
+//    USER_NAME("userName"),
     LAST_COMMAND("lastCMD"),
+    LAST_COMMAND_PAGE("lastCMDneedPage"),
     LOCAL("local"),
     ADDRESS("address"),
     ERROR_MESSAGE("errorMessage"),
@@ -64,7 +65,7 @@ public enum ControllerFinals {
     CHANGE_PASSWORD_COMMAND("ChangePasswordCommand command"),
     DELETE_USER_COMMAND("DeleteUserCommand command");
 
-    public String inString;
+    public final String inString;
     ControllerFinals(String inString){
         this.inString = inString;
     }

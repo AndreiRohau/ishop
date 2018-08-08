@@ -19,24 +19,22 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class ChangePasswordCommand implements Command {
 
 	private static final Logger logger = Logger.getLogger(ChangePasswordCommand.class);
+	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(CHANGE_PASSWORD_COMMAND.inString);
 		try {
-			ServiceFactory serviceFactory = ServiceFactory.getInstance();
-			UserService userService = serviceFactory.getUserService();
-
-			User user = new User(request.getParameter(LOGIN.inString).trim(),
-					request.getParameter(PASSWORD.inString).trim());
+			User user = new User(request.getParameter(LOGIN.inString).trim(), request.getParameter(PASSWORD.inString).trim());
 			String newPassword = request.getParameter(NEW_PASSWORD.inString).trim();
 
-			boolean isChanged = request.getSession().getAttribute(USER_NAME.inString).equals(user.getLogin())
+			boolean isChanged = request.getSession().getAttribute(LOGIN.inString).equals(user.getLogin())
 					&& userService.changePassword(user, newPassword);
 			if (isChanged) {
 				request.setAttribute(IS_CHANGED.inString, newPassword);
 			} else {
-				request.setAttribute(ERROR_MESSAGE.inString, "change_password_error");
+				request.setAttribute(ERROR_MESSAGE.inString, "changePasswordError");
 			}
 
 			request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=goToPage&address=profile.jsp");

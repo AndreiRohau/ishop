@@ -18,13 +18,11 @@
 	<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
 	<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
 	<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
-	<fmt:message bundle="${loc}" key="local.loginationText" var="loginationText" />
-	<fmt:message bundle="${loc}" key="local.registrationText" var="registrationText" />
 	<fmt:message bundle="${loc}" key="local.successRegistration" var="successRegistration" />
 	<fmt:message bundle="${loc}" key="local.login" var="login" />
 	<fmt:message bundle="${loc}" key="local.password" var="password" />
-	<fmt:message bundle="${loc}" key="local.logbutton" var="log_button" />
-	<fmt:message bundle="${loc}" key="local.regbutton" var="reg_button" />
+	<fmt:message bundle="${loc}" key="local.signIn" var="log_button" />
+	<fmt:message bundle="${loc}" key="local.signUp" var="reg_button" />
 
 </head>
 

@@ -7,7 +7,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
@@ -23,25 +23,23 @@
     <fmt:message bundle="${loc}" key="local.admin" var="admin" />
     <fmt:message bundle="${loc}" key="local.user" var="user" />
     <fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
-    <fmt:message bundle="${loc}" key="local.hello" var="hello" />
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
-    <fmt:message bundle="${loc}" key="local.basket" var="basket"/>
-    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
-    <fmt:message bundle="${loc}" key="local.info" var="info" />
-    <fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
-    <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
-    <fmt:message bundle="${loc}" key="local.dateCreated" var="dateCreated" />
-    <fmt:message bundle="${loc}" key="local.order" var="order" />
-    <fmt:message bundle="${loc}" key="local.status" var="status" />
-    <fmt:message bundle="${loc}" key="local.noOrdersFound" var="noOrdersFound" />
-    <fmt:message bundle="${loc}" key="local.allYourOrders" var="allYourOrders" />
+    <fmt:message bundle="${loc}" key="local.company" var="company" />
+    <fmt:message bundle="${loc}" key="local.name" var="name" />
+    <fmt:message bundle="${loc}" key="local.type" var="type" />
+    <fmt:message bundle="${loc}" key="local.price" var="price" />
+    <fmt:message bundle="${loc}" key="local.addProduct" var="addProduct" />
+    <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
+    <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
+    <fmt:message bundle="${loc}" key="local.addProductFailed" var="addProductFailed" />
+    <fmt:message bundle="${loc}" key="local.success" var="success" />
 
     <c:set var="currentPage" value="${requestScope.currentPage}"/>
     <c:set var="maxPage" value="${requestScope.maxPage}"/>
 
     <title>
-        <c:out value="${orders}"/>
+        <c:out value="${addProduct}"/>
     </title>
 </head>
 <body>
@@ -71,41 +69,50 @@
             </div>
             <div class="col-md-1" style="text-align:center">
                 <c:if test="${sessionScope.role == 'admin'}">
-                    <span>
-                        <c:out value="${admin}"/>
-                    </span>
+                            <span>
+                                <c:out value="${admin}"/>
+                            </span>
                 </c:if>
                 <c:if test="${sessionScope.role == 'user'}">
-                    <span>
-                        <c:out value="${user}"/>
-                    </span>
+                            <span>
+                                <c:out value="${user}"/>
+                            </span>
                 </c:if>
                 <c:if test="${sessionScope.role == null}">
-                    <span>
-                        <c:out value="${anonymous}"/>
-                    </span>
+                            <span>
+                                <c:out value="${anonymous}"/>
+                            </span>
                 </c:if>
             </div>
-            <div class="col-md-7" style="text-align:center">
+            <div class="col-md-6" style="text-align:center">
                 <h1>
-                    <c:out value="${orders}" />
+                    <c:out value="${addProduct}" />
                 </h1>
             </div>
             <div class="col-md-1" style="padding-top:10px;">
                 <form method="get" action="FrontController">
-                    <input type="hidden" name="command" value="selectAllReserved"/>
-                    <input type="hidden" name="page" value="1"/>
-                    <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
-                        <c:out value="${basket}"/>
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="addProduct.jsp"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${addProduct}"/>
                     </button>
                 </form>
             </div>
             <div class="col-md-1" style="padding-top:10px;">
                 <form method="get" action="FrontController">
                     <input type="hidden" name="command" value="goToPage"/>
-                    <input type="hidden" name="address" value="profile.jsp"/>
+                    <input type="hidden" name="address" value="users.jsp"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${manageUsers}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="orders.jsp"/>
                     <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
-                        <c:out  value="${updateProfile}"/>
+                        <c:out  value="${manageOrders}"/>
                     </button>
                 </form>
             </div>
@@ -143,89 +150,81 @@
                     <c:out value="${main}"/>
                 </a>
             </li>
-            <li role="presentation">
-                <a href="FrontController?command=selectAllReserved&page=1">
-                    <c:out value="${basket}"/>
-                </a>
-            </li>
-            <li role="presentation" class="active">
-                <a href="FrontController?command=showAllMyOrders&page=1">
-                    <c:out value="${orders}"/>
-                </a>
-            </li>
         </ul>
     </div>
 
     <!-- MAIN -->
-    <c:if test="${requestScope.allOrders == '[]'}">
+    <c:if test="${requestScope.isAdded == true}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
-                <h3><c:out value="${noOrdersFound}"/></h3>
+                <h3><c:out value="${success}"/></h3>
             </div>
         </div>
     </c:if>
 
-    <c:if test="${requestScope.allOrders != '[]'}">
-        <div class="col-md-12">
+    <c:if test="${requestScope.isAdded == false}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${addProductFailed}"/></h3>
+            </div>
+        </div>
+    </c:if>
+
+    <div class="col-md-12">
+        <!-- PICTURE -->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-body">
+                        <%--product-picture todo--%>
+                </div>
+            </div>
+        </div>
+        <!-- INFO -->
+        <div class="col-md-8 ">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">
-                    <h3><c:out value="${allYourOrders}"/></h3>
+                    <h3 class="panel-title">
+                        <c:out value="${addProduct}"/>
+                    </h3>
                 </div>
                 <div class="panel-body">
                     <table class="table table-hover" >
                         <thead style="color: #464a4c;background-color: #eceeef;">
-                            <tr style="text-align: center;">
-                                <td><h4><c:out value="${dateCreated}"/></h4></td>
-                                <td><h4><c:out value="${order}"/></h4></td>
-                                <td><h4><c:out value="${status}"/></h4></td>
-                            </tr>
+                        <tr style="text-align: center;">
+                            <td><c:out value="${company}"/></td>
+                            <td><c:out value="${name}"/></td>
+                            <td><c:out value="${type}"/></td>
+                            <td><c:out value="${price}"/></td>
+                        </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${requestScope.allOrders}" var="order">
+                        <form id="addNewProduct" action="FrontController" method="post">
+                            <input type="hidden" name="command" value="addNewProduct"/>
+                            <div class="form-group">
                                 <tr style="text-align: center">
-                                        <%--new: user ID - edit user --%>
-                                    <td>
-                                        <p>
-                                            ${order.dateCreated}
-                                        </p>
-                                    </td>
-                                        <%--order id - open order--%>
-                                    <td>
-                                        <form title="Observe the order" action="FrontController" method="post">
-                                            <input type="hidden" name="command" value="inspectOrder" />
-                                            <input type="hidden" name="from" value="allUsersOrders" />
-                                            <input type="hidden" name="page" value="1"/>
-                                            <input type="hidden" name="id" value="${order.id}" />
-                                            <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
-                                        </form>
-                                    </td>
-                                        <%--set-active--%>
-                                    <td>
-                                        <p>
-                                            ${order.status}
-                                        </p>
+                                    <td><input class="form-control" type="text" name="company" value="" title="" required/></td>
+                                    <td><input class="form-control" type="text" name="name" value="" title="" required/></td>
+                                    <td><input class="form-control" type="text" name="type" value="" title="" required/></td>
+                                    <td><input class="form-control" type="text" name="price" value="" title="" required/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <textarea class="form-control" rows="10" cols="45" name="description" title="" required></textarea>
                                     </td>
                                 </tr>
-                            </c:forEach>
+                                <tr>
+                                    <td>
+                                        <input type="submit" form="addNewProduct" name="edit" value="${addProduct}" class="btn btn-default"/>
+                                    </td>
+                                </tr>
+                            </div>
+                        </form>
                         </tbody>
                     </table>
-                    <ul class="pagination pull-right">
-                        <c:forEach begin="1" end="${maxPage}" var="i">
-                            <c:if test="${i == currentPage}">
-                                <li class="active">
-                                    <a href="FrontController?command=showAllMyOrders&page=${i}">${i}</a>
-                                </li>
-                            </c:if>
-                            <c:if test="${i != currentPage}">
-                                <li>
-                            		<a href="FrontController?command=showAllMyOrders&page=${i}">${i}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </ul>
                 </div>
             </div>
         </div>
-    </c:if>
+    </div>
+
 </body>
 </html>

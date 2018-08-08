@@ -22,17 +22,16 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class CreateOrderCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(CreateOrderCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private OrderService orderService = serviceFactory.getOrderService();
+    private UserService userService = serviceFactory.getUserService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info(CREATE_ORDER_COMMAND.inString);
         try{
-            ServiceFactory serviceFactory = ServiceFactory.getInstance();
-            OrderService orderService = serviceFactory.getOrderService();
-            UserService userService = serviceFactory.getUserService();
-
-            User user = new User((String) request.getSession().getAttribute(USER_NAME.inString));
-            user.setId(userService.findIdWithLogin(user).getId());
+            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            user.setId(userService.findUserDTOWithLogin(user).getId());
             StringBuilder productIds = new StringBuilder();
             for(int id : orderService.getAllReservedIds(user.getId())){
                 productIds.append(String.valueOf(id)).append(",");
@@ -40,18 +39,18 @@ public class CreateOrderCommand implements Command {
 
             Order order = new Order(user.getId(),
                     productIds.toString(),
-                    request.getParameter("user_address"),
-                    request.getParameter("user_phone"),
+                    request.getParameter("userAddress"),
+                    request.getParameter("userPhone"),
                     NEW.inString);
 
             if (orderService.saveNewOrder(order)) {
                 orderService.deleteAllReserved(user.getId());
-                request.setAttribute(MESSAGE.inString, "order_created");
+                request.setAttribute(MESSAGE.inString, true);
             } else {
-                request.setAttribute(ERROR_MESSAGE.inString, "order_creation_error");
+                request.setAttribute(ERROR_MESSAGE.inString, false);
             }
 
-            request.setAttribute(LAST_COMMAND.inString, "FrontController?command=selectAllReserved&page_num=1");
+            request.setAttribute(LAST_COMMAND.inString, "FrontController?command=selectAllReserved&page=1");
             request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

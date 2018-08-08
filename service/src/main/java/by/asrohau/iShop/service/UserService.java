@@ -17,5 +17,5 @@ public interface UserService {
 	User findUserWithId(User user) throws ServiceException;
 	boolean updateUser(User user) throws ServiceException;
 	long countUsers() throws ServiceException;
-	UserDTO findIdWithLogin(User user) throws ServiceException;
+	UserDTO findUserDTOWithLogin(User user) throws ServiceException;
 }

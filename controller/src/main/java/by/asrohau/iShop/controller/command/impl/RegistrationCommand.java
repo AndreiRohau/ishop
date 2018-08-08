@@ -20,14 +20,13 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class RegistrationCommand implements Command {
 
 	private final static Logger logger = Logger.getLogger(RegistrationCommand.class);
+	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(REGISTRATION_COMMAND);
 		try {
-			ServiceFactory serviceFactory = ServiceFactory.getInstance();
-			UserService userService = serviceFactory.getUserService();
-
 			User user = new User(request.getParameter(LOGIN.inString).trim(),
 					request.getParameter(PASSWORD.inString).trim(),
 					USER.inString);
@@ -42,12 +41,11 @@ public class RegistrationCommand implements Command {
 				request.setAttribute("isRegistered", true);
 			} else {
 				String errorMessage = passwordEquals ? "exists" : "passwordsUnequal";
-				errorMessage = request.getSession().getAttribute(ROLE.inString) == null ? errorMessage : "logout";
+				errorMessage = request.getSession().getAttribute(ROLE.inString) == null ? errorMessage : "logOutFirst";
 				request.setAttribute(ERROR_MESSAGE.inString, errorMessage);
 			}
 			request.getSession().setAttribute(LAST_COMMAND.inString, INDEX.inString);
 			request.getRequestDispatcher(INDEX.inString).forward(request, response);
-			
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);
 		}

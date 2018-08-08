@@ -21,7 +21,7 @@ public class AuthentificationFilter implements Filter {
         if (request.getParameter(COMMAND.inString).matches("logout") ||
                 request.getParameter(COMMAND.inString).matches("logination") ||
                 request.getParameter(COMMAND.inString).matches("registration") ||
-                request.getParameter(COMMAND.inString).matches("change_language") ||
+                request.getParameter(COMMAND.inString).matches("changeLanguage") ||
                 request.getSession().getAttribute(ROLE.inString) != null) {
 
             chain.doFilter(req, res);

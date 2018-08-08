@@ -130,7 +130,7 @@
                                         <input type="submit" name="orderId" value="${element.id}" /><br/>
                                     </form>
                                 </td>
-                                    <%--set-active--%>
+                                    <%--set-active [FrontController?command=orderSetStatus&new_status=orderSetASSHOLE&from=manageOrders&orderId=108&status=new]--%>
                                 <td>
                                     <form title="Set status = ${requestScope.get('command_3')}" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="orderSetStatus" />

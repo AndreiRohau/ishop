@@ -26,41 +26,39 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class InspectOrderCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(InspectOrderCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private OrderService orderService = serviceFactory.getOrderService();
+    private UserService userService = serviceFactory.getUserService();
+    private ProductService productService = serviceFactory.getProductService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to InspectOrderCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        OrderService orderService = serviceFactory.getOrderService();
-        UserService userService = serviceFactory.getUserService();
-        ProductService productService = serviceFactory.getProductService();
-        User user = new User();
-        user.setLogin((String) request.getSession().getAttribute("userName"));
-        Product product = new Product();
-
-        int currentPage= Integer.parseInt(request.getParameter("page_num"));
-        int maxPage;
-        int row = (currentPage - 1)*15;
-
         try {
-            int orderId = Integer.parseInt(request.getParameter("orderId"));
-            Order order = new Order();
-            order.setId(orderId);
-            order = orderService.findOrderWithID(order);
+            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            Product product = new Product();
+
+            //int orderId = Integer.parseInt(request.getParameter("orderId"));
+            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter(ID.inString))));
 
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
-            String productIDsString = order.getProductIds();
-            String[] productIDsArray = productIDsString.split(",");
+            String productIdsString = order.getProductIds();
+            String[] productIdsArray = productIdsString.split(",");
 
             //finding maxPage
-            maxPage = (int) Math.ceil(((double) productIDsArray.length) / 15);
+            int currentPage= Integer.parseInt(request.getParameter(PAGE.inString));
+            int maxPage  = (int) Math.ceil(((double) productIdsArray.length) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
 
             //due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45]......
-            int finArrlength = currentPage < maxPage ? 15 : (productIDsArray.length % 15 == 0 ? 15 : productIDsArray.length % 15);
+            int finArrlength = currentPage < maxPage ?
+                    Integer.parseInt(MAX_ROWS_AT_PAGE.inString) :
+                    (productIdsArray.length % Integer.parseInt(MAX_ROWS_AT_PAGE.inString) == 0 ?
+                            Integer.parseInt(MAX_ROWS_AT_PAGE.inString) :
+                            productIdsArray.length % Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             int[] productIDs = new int[finArrlength];
             for(int i = 0; i < finArrlength; i++){
-                productIDs[i] = Integer.parseInt(productIDsArray[i+row]);
+                productIDs[i] = Integer.parseInt(productIdsArray[i+row]);
             }
 
             //find each product. create an arraylist
@@ -68,22 +66,18 @@ public class InspectOrderCommand implements Command {
             for(int id : productIDs){
                 product.setId(id);
                 product = productService.findProductWithId(product);
-                product.setOrderId(orderId);
+                product.setOrderId(order.getId());
                 productArray.add(product);
                 product = new Product();
             }
 
-            String for_user;
-            if(user.getLogin().equals("Admin")){
-                for_user = "Admin";
-            }else {
-                for_user = "for_user";
-            }
+            String for_user = user.getLogin().equals(ADMIN.inString) ? "admin" : "for_user";
+
             request.setAttribute("productArray", productArray);
-            request.setAttribute("productIDsString", productIDsString);
+            request.setAttribute("productIDsString", productIdsString);
             request.setAttribute("new_status", request.getParameter("new_status"));
             request.setAttribute("status", order.getStatus());
-            request.setAttribute("orderId", order.getId());
+            request.setAttribute("id", order.getId());
             request.setAttribute("userId", order.getUserId());
             request.setAttribute("for_user", for_user);
             request.setAttribute("address", order.getUserAddress());
@@ -92,8 +86,8 @@ public class InspectOrderCommand implements Command {
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=inspectOrder&page_num=" + currentPage
-                            + "&orderId=" + orderId
+                    "FrontController?command=inspectOrder&page=" + currentPage
+                            + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
                             + "&phone=" + order.getUserPhone()
@@ -102,17 +96,16 @@ public class InspectOrderCommand implements Command {
 
             request.setAttribute("lastCMDneedPage",
                     "FrontController?command=inspectOrder"
-                            + "&orderId=" + orderId
+                            + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
                             + "&phone=" + order.getUserPhone()
                             + "&new_status=" + String.valueOf(request.getParameter("new_status"))
                             + "&from=" + request.getParameter("from")
-                            + "&page_num=");
+                            + "&page=");
 
-
-            String goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orderInfo.jsp";
-            request.getRequestDispatcher(goToPage).forward(request, response);
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orderInfo.jsp")
+                    .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

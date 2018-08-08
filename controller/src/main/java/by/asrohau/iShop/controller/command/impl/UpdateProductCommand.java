@@ -6,42 +6,40 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class UpdateProductCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(UpdateProductCommand.class);
+    ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    ProductService productService = serviceFactory.getProductService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to EditProductCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        ProductService productService = serviceFactory.getProductService();
-        String lastCMD;
-        String goToPage;
-        Product product = new Product(Integer.parseInt(request.getParameter("id")),
-                request.getParameter("company"),
-                request.getParameter("inString"),
-                request.getParameter("type"),
-                request.getParameter("price"),
-                request.getParameter("description"));
-
+        logger.info("We got to EditProductCommand");
         try {
+            Product product = new Product(Integer.parseInt(request.getParameter("id")),
+                    request.getParameter("company"),
+                    request.getParameter("name"),
+                    request.getParameter("type"),
+                    request.getParameter("price"),
+                    request.getParameter("description"));
+
             if(!productService.updateProduct(product)){
-                request.setAttribute("updateFailed", "Update failed");
+                request.setAttribute("updateFailed", true);
                 product = productService.findProductWithId(product);
             }
-            request.setAttribute("productToEdit", product);
-            lastCMD = "FrontController?command=editProduct&productId=" + request.getParameter("id");
-            goToPage = "/jsp/admin/editProduct.jsp";
 
-            request.getSession().setAttribute("lastCMD", lastCMD);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
-
+            request.setAttribute("product", product);
+            request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=productInfo&productId=" + request.getParameter(ID.inString));
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/productInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

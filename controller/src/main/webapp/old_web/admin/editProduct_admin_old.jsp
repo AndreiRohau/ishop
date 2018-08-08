@@ -18,7 +18,7 @@
         <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
         <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
         <fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
-        <fmt:message bundle="${loc}" key="local.deleteAccountButton" var="deleteAccountButton" />
+        <fmt:message bundle="${loc}" key="local.delete" var="deleteAccountButton" />
         <c:set var="rProductId" value="${requestScope.get('productToEdit').id}"/>
         <c:set var="product_name" value="${requestScope.get('productToEdit').name}"/>
         <c:set var="product_company" value="${requestScope.get('productToEdit').company}"/>

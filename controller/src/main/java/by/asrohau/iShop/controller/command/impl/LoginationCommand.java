@@ -20,13 +20,13 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class LoginationCommand implements Command {
 
 	private final static Logger logger = Logger.getLogger(LoginationCommand.class);
+	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(LOGINATION_COMMAND.inString);
 		try {
-			ServiceFactory serviceFactory = ServiceFactory.getInstance();
-			UserService userService = serviceFactory.getUserService();
 			User user = new User(request.getParameter(LOGIN.inString).trim(),
 					request.getParameter(PASSWORD.inString).trim());
 			UserDTO userDTO = userService.logination(user);
@@ -42,7 +42,7 @@ public class LoginationCommand implements Command {
 				goToPage = "/jsp/" + userDTO.getRole() + "/main.jsp";
 				lastCMD = GO_TO_PAGE_MAIN.inString;
 				request.getSession(true).setAttribute(ROLE.inString, userDTO.getRole());
-				request.getSession().setAttribute(USER_NAME.inString, userDTO.getLogin());
+				request.getSession().setAttribute(LOGIN.inString, userDTO.getLogin());
 			}
 
 			request.getSession(true).setAttribute(LAST_COMMAND.inString, lastCMD);

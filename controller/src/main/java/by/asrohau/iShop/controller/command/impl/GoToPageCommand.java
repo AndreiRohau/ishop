@@ -19,30 +19,14 @@ public class GoToPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info(GO_TO_PAGE_COMMAND.inString);
-
+        logger.info("Acting as: " + request.getSession().getAttribute(ROLE.inString));
         try {
-            String goToPage;
-
-            if (request.getSession().getAttribute(ROLE.inString) != null &&
-
-                    !request.getParameter(ADDRESS.inString).matches("index.jsp") &&
-
-                    !request.getParameter(ADDRESS.inString).matches("error.jsp")) {
-
-                if(request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString)) {
-                    goToPage = "/jsp/admin/" + request.getParameter(ADDRESS.inString);
-                } else {
-                    goToPage = "/jsp/user/" + request.getParameter(ADDRESS.inString);
-                }
-                logger.info("Acting as: " + request.getSession().getAttribute(ROLE.inString));
-            } else {
-                goToPage = "index.jsp";
-            }
+            String goToPage = INDEX.inString.equals(request.getParameter(ADDRESS.inString)) ? INDEX.inString :
+                    "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/" + request.getParameter(ADDRESS.inString);
 
             request.getSession().setAttribute(LAST_COMMAND.inString,
                     GO_TO_PAGE_.inString + request.getParameter(ADDRESS.inString));
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);
         }

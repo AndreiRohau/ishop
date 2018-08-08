@@ -18,7 +18,7 @@ import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
 public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 
-	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
+	private final static Logger logger = Logger.getLogger(ProductDAOImpl.class);
 
 	private PreparedStatement preparedStatement = null;
 	private Connection connection = null;
@@ -134,9 +134,6 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 	 */
 	@Override
 	public boolean delete(Product product) throws DAOException {
-		if(find(product) == null){
-			return false;
-		}
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
@@ -156,7 +153,6 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} finally {
 			close(preparedStatement, connection);
 		}
-
 	}
 
 	/*

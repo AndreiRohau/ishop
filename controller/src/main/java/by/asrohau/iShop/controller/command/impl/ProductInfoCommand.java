@@ -26,22 +26,20 @@ public class ProductInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ProductInfoCommand");
         try {
-            String goToPage;
-
             Product product  = new Product();
-            product.setId(Integer.parseInt(request.getParameter("productId")));
+            product.setId(Integer.parseInt(request.getParameter(ID.inString)));
             product = productService.findProductWithId(product);
 
             if(product != null){
                 request.setAttribute("product", product);
-                goToPage = "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/productInfo.jsp";
                 request.getSession().setAttribute(LAST_COMMAND.inString,
-                        "FrontController?command=productInfo&productId=" + request.getParameter("productId"));
+                        "FrontController?command=productInfo&id=" + request.getParameter(ID.inString));
             } else {
-                goToPage = String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString));
-                request.setAttribute("cant_find_product", true);
+                request.setAttribute("cannotFindProduct", true);
             }
-            request.getRequestDispatcher(goToPage).forward(request, response);
+
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/productInfo.jsp")
+                    .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

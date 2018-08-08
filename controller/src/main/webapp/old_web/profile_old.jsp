@@ -22,8 +22,8 @@
         <fmt:message bundle="${loc}" key="local.login" var="login" />
         <fmt:message bundle="${loc}" key="local.password" var="password" />
         <fmt:message bundle="${loc}" key="local.newPassword" var="newPassword" />
-        <fmt:message bundle="${loc}" key="local.changePasswordButton" var="changePasswordButton" />
-        <fmt:message bundle="${loc}" key="local.deleteAccountButton" var="deleteAccountButton" />
+        <fmt:message bundle="${loc}" key="local.change" var="changePasswordButton" />
+        <fmt:message bundle="${loc}" key="local.delete" var="deleteAccountButton" />
 
     </head>
     <body>

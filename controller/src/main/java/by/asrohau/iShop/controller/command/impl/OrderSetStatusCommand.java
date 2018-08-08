@@ -22,6 +22,7 @@ public class OrderSetStatusCommand implements Command {
         OrderService orderService = serviceFactory.getOrderService();
 
         String status = request.getParameter("new_status").split("Set")[1].toLowerCase();
+        status.intern();
         try {
             String message;
             Order order = new Order();

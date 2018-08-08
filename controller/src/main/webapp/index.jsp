@@ -16,36 +16,29 @@
 
 		<fmt:setLocale value="${sessionScope.local}" />
 		<fmt:setBundle basename="localization.local" var="loc" />
-		<fmt:message bundle="${loc}" key="local.shop" var="shop" />
+		<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
+		<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
+		<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
 		<fmt:message bundle="${loc}" key="local.admin" var="admin" />
-		<fmt:message bundle="${loc}" key="local.client" var="client" />
+		<fmt:message bundle="${loc}" key="local.user" var="user" />
 		<fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
 		<fmt:message bundle="${loc}" key="local.hello" var="hello" />
 		<fmt:message bundle="${loc}" key="local.home" var="home" />
 		<fmt:message bundle="${loc}" key="local.main" var="main" />
 		<fmt:message bundle="${loc}" key="local.info" var="info" />
-		<fmt:message bundle="${loc}" key="local.reg_form" var="reg_form" />
-		<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
-		<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
-		<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
-		<fmt:message bundle="${loc}" key="local.loginationText" var="loginationText" />
-		<fmt:message bundle="${loc}" key="local.registrationText" var="registrationText" />
+		<fmt:message bundle="${loc}" key="local.registrationForm" var="registrationForm" />
 		<fmt:message bundle="${loc}" key="local.successRegistration" var="successRegistration" />
 		<fmt:message bundle="${loc}" key="local.login" var="login" />
 		<fmt:message bundle="${loc}" key="local.password" var="password" />
-		<fmt:message bundle="${loc}" key="local.logbutton" var="log_button" />
-		<fmt:message bundle="${loc}" key="local.log_out_button" var="log_out_button" />
-		<fmt:message bundle="${loc}" key="local.regbutton" var="reg_button" />
-		<fmt:message bundle="${loc}" key="local.success_log_out" var="success_log_out" />
-		<fmt:message bundle="${loc}" key="local.invalid_log_or_password" var="invalid_log_or_password" />
-		<fmt:message bundle="${loc}" key="local.plz_log_out" var="plz_log_out" />
-		<fmt:message bundle="${loc}" key="local.login_exists" var="login_exists" />
-		<fmt:message bundle="${loc}" key="local.login_to_start" var="login_to_start" />
+		<fmt:message bundle="${loc}" key="local.signIn" var="signIn" />
+		<fmt:message bundle="${loc}" key="local.logOut" var="logOut" />
+		<fmt:message bundle="${loc}" key="local.signUp" var="signUp" />
+		<fmt:message bundle="${loc}" key="local.logOutFirst" var="logOutFirst" />
 		<fmt:message bundle="${loc}" key="local.loginExists" var="loginExists" />
-		<fmt:message bundle="${loc}" key="local.logout" var="logout" />
+		<fmt:message bundle="${loc}" key="local.loginToStart" var="loginToStart" />
 		<fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
 		<fmt:message bundle="${loc}" key="local.unequalPasswords" var="unequalPasswords" />
-		<fmt:message bundle="${loc}" key="local.goToProfile" var="goToProfile_button" />
+		<fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
 		<fmt:message bundle="${loc}" key="local.basket" var="basket" />
 
 		<title>
@@ -60,7 +53,7 @@
 				<div class="col-md-1">
 					<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
 						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="change_language"/>
+							<input type="hidden" name="command" value="changeLanguage"/>
 							<input type="hidden" name="local" value="en"/>
 							<button class="btn btn-default" type="submit" name="lang" value="en_EN">
 								EN
@@ -69,7 +62,7 @@
 					</div>
 					<div class="col-md-12">
 						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="change_language"/>
+							<input type="hidden" name="command" value="changeLanguage"/>
 							<input type="hidden" name="local" value="ru"/>
 							<button class="btn btn-default" type="submit" name="lang" value="ru_RU">
 								РУ
@@ -86,7 +79,7 @@
 					</c:if>
 					<c:if test="${sessionScope.role == 'user'}">
 						<span>
-							<c:out value="${client}"/>
+							<c:out value="${user}"/>
 						</span>
 					</c:if>
 				</div>
@@ -108,7 +101,7 @@
 					</div>
 					<div class="col-md-2">
 						<div style="padding-top:5px">
-							<form action="FrontController" id="login_form" method="post">
+							<form action="FrontController" id="loginForm" method="post">
 								<input type="hidden" name="command" value="logination" />
 								<div class="form-group">
 									<input type="text" class="form-control" id="login" placeholder="${login}" name="login" value="" />
@@ -121,15 +114,15 @@
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-							<button form="login_form" class="btn btn-default" type="submit" name="log_in" value="log_in">
-								<c:out value="${log_button}"/>
+							<button form="loginForm" class="btn btn-default" type="submit" name="logIn" value="logIn">
+								<c:out value="${signIn}"/>
 							</button>
 						</div>
 						<div class="col-md-12">
 							<form action="FrontController" method="post">
 								<input type="hidden" name="command" value="logout"/>
-								<button class="btn btn-default" type="submit" value="log_out">
-									<c:out value="${log_out_button}"/>
+								<button class="btn btn-default" type="submit" value="logOut">
+									<c:out value="${logOut}"/>
 								</button>
 							</form>
 						</div>
@@ -142,7 +135,7 @@
 					<div class="col-md-1" style="padding-top:10px;">
 						<form method="get" action="FrontController">
 							<input type="hidden" name="command" value="selectAllReserved"/>
-							<input type="hidden" name="page_num" value="1"/>
+							<input type="hidden" name="page" value="1"/>
 							<button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
 								<c:out value="${basket}"/>
 							</button>
@@ -153,21 +146,21 @@
 							<input type="hidden" name="command" value="goToPage"/>
 							<input type="hidden" name="address" value="profile.jsp"/>
 							<button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
-								<c:out  value="${goToProfile_button}"/>
+								<c:out  value="${updateProfile}"/>
 							</button>
 						</form>
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12">
 							<h4>
-								<c:out value="${sessionScope.userName}"/>
+								<c:out value="${sessionScope.login}"/>
 							</h4>
 						</div>
 						<div class="col-md-12">
 							<form action="FrontController" method="post">
 								<input type="hidden" name="command" value="logout"/>
-								<button class="btn btn-default" type="submit" value="log_out">
-									<c:out value="${log_out_button}"/>
+								<button class="btn btn-default" type="submit" value="logOut">
+									<c:out value="${logOut}"/>
 								</button>
 							</form>
 						</div>
@@ -183,14 +176,14 @@
 					<div class="col-md-1">
 						<div class="col-md-12">
 							<h4>
-								<c:out value="${sessionScope.userName}"/>
+								<c:out value="${sessionScope.login}"/>
 							</h4>
 						</div>
 						<div class="col-md-12">
 							<form action="FrontController" method="post">
 								<input type="hidden" name="command" value="logout"/>
-								<button class="btn btn-default" type="submit" value="log_out">
-									<c:out value="${log_out_button}"/>
+								<button class="btn btn-default" type="submit" value="logOut">
+									<c:out value="${logOut}"/>
 								</button>
 							</form>
 						</div>
@@ -202,7 +195,7 @@
 		</div>
 
 	<!-- NAVIGATION -->
-		<div class="well well-sm" style="padding:30px; padding-bottom:0px;  background:0; border:1px; margin:0%;">
+		<div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
 			<ul class="nav nav-pills" >
 				<li role="presentation" class="active">
 					<a href="FrontController?command=goToPage&address=index.jsp">
@@ -234,7 +227,7 @@
 								<div class="alert alert-info" role="alert">
 									<p>
 										<span>
-											<c:out value="${login_to_start}"/>
+											<c:out value="${loginToStart}"/>
 										</span>
 									</p>
 								</div>
@@ -257,11 +250,11 @@
 									</p>
 								</div>
 							</c:if>
-							<c:if test="${requestScope.errorMessage == 'logout'}">
+							<c:if test="${requestScope.errorMessage == 'logOutFirst'}">
 								<div class="alert alert-info" role="alert">
 									<p>
 										<span>
-											<c:out value="${logout}"/>
+											<c:out value="${logOutFirst}"/>
 										</span>
 									</p>
 								</div>
@@ -294,7 +287,7 @@
 					<div class="panel panel-default" style="margin-top:15px">
 						<div class="panel-heading">
 							<h3 class="panel-title">
-								<c:out value="${reg_form}"/>
+								<c:out value="${registrationForm}"/>
 							</h3>
 						</div>
 						<div class="panel-body">
@@ -318,7 +311,7 @@
 									</label>
 									<input type="password" class="form-control" id="password2" placeholder="${password}" name="password2"/>
 								</div>
-								<input type="submit" class="btn btn-default"  name="sign up" value="${reg_button}" /><br/>
+								<input type="submit" class="btn btn-default"  name="sign up" value="${signUp}" /><br/>
 							</form><br/>
 
 						</div>

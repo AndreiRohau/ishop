@@ -11,25 +11,25 @@
     </command>
 
     <command>
-        <webname>change_password</webname>
+        <webname>changePassword</webname>
         <classname>ChangePasswordCommand</classname>
     </command>
 
     <command>
-        <webname>delete_user</webname>
+        <webname>deleteUser</webname>
         <classname>DeleteUserCommand</classname>
     </command>
     <command>
-        <webname>delete_product</webname>
+        <webname>deleteProduct</webname>
         <classname>DeleteProductCommand</classname>
     </command>
     <command>
-        <webname>deleteReserved</webname>
-        <classname>DeleteReservedCommand</classname>
+        <webname>deleteReserve</webname>
+        <classname>DeleteReserveCommand</classname>
     </command>
 
     <command>
-        <webname>change_language</webname>
+        <webname>changeLanguage</webname>
         <classname>ChangeLanguageCommand</classname>
     </command>
 
@@ -103,8 +103,8 @@
         <classname>SelectAllSuccessOrdersCommand</classname>
     </command>
     <command>
-        <webname>showAllClientsOrders</webname>
-        <classname>ShowAllClientsOrdersCommand</classname>
+        <webname>showAllUsersOrders</webname>
+        <classname>ShowAllUsersOrdersCommand</classname>
     </command>
     <command>
         <webname>showAllMyOrders</webname>

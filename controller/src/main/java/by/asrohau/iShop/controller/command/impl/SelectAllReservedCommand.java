@@ -9,8 +9,8 @@ import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,41 +18,32 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.asrohau.iShop.controller.ControllerFinals.*;
+
 public class SelectAllReservedCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(SelectAllReservedCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private OrderService orderService = serviceFactory.getOrderService();
+    private UserService userService = serviceFactory.getUserService();
+    private ProductService productService = serviceFactory.getProductService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to FindReservedProductsCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        OrderService orderService = serviceFactory.getOrderService();
-        UserService userService = serviceFactory.getUserService();
-        ProductService productService = serviceFactory.getProductService();
-
-        User user = new User();
-        Product product = new Product();
-
-        String goToPage;
-        int currentPage;
-        int maxPage;
-        int row;
-
-        currentPage = Integer.parseInt(request.getParameter("page_num"));
-        row = (currentPage - 1)*15;
-
+        logger.info("We got to FindReservedProductsCommand");
         try {
-            user.setLogin((String) request.getSession().getAttribute("userName"));
-            int userId = userService.findIdWithLogin(user).getId();
+            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            int userId = userService.findUserDTOWithLogin(user).getId();
 
-            //count amount of all products
-            maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / 15);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));;
+            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 
-            List<Product> reservedWithIdsList = orderService.getAllReserved(userId, row); //product_id & reserve_id // ArrayList
-
-            ArrayList<Product> productArray = new ArrayList<>();
-
-            for(Product prod : reservedWithIdsList){
-                product = productService.findProductWithId(prod);
-                product.setReserveId(prod.getReserveId());
+            List<Product> reservedIds = orderService.getAllReserved(userId, row);
+            List<Product> productArray = new ArrayList<>();
+            for(Product p : reservedIds){
+                Product product = productService.findProductWithId(p);
+                product.setReserveId(p.getReserveId());
                 productArray.add(product);
                 product = new Product();
             }
@@ -61,16 +52,12 @@ public class SelectAllReservedCommand implements Command {
 
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=selectAllReserved&page_num=" + currentPage);
+            request.getSession().setAttribute(LAST_COMMAND.inString,
+                    "FrontController?command=selectAllReserved&page=" + currentPage);
+            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+                    "FrontController?command=selectAllReserved&page=");
 
-            goToPage = "/jsp/user/basket.jsp";
-
-            //what if not null??
-            request.setAttribute("msg", request.getParameter("msg"));
-            // what if not null ??
-            RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);
 
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
