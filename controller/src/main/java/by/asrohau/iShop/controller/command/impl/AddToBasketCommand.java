@@ -9,47 +9,36 @@ import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+
+import static by.asrohau.iShop.controller.ControllerFinals.ID;
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
+import static by.asrohau.iShop.controller.ControllerFinals.LOGIN;
 
 public class AddToBasketCommand implements Command {
 
+    private static final Logger logger = Logger.getLogger(AddToBasketCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private OrderService orderService = serviceFactory.getOrderService();
+    private UserService userService = serviceFactory.getUserService();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to AddToBasketCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        OrderService orderService = serviceFactory.getOrderService();
-        UserService userService = serviceFactory.getUserService();
-
-        Reserve reserve;
-        User user = new User();
-
+        logger.info("We got to AddToBasketCommand");
         try {
-            user.setLogin((String) request.getSession().getAttribute(USER_NAME.inString));
-            UserDTO userDTO = userService.findIdWithLogin(user);
-            int uid = userDTO.getId();
-            reserve = new Reserve(uid,
-                    Integer.parseInt(request.getParameter("productId")));
+            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            UserDTO userDTO = userService.findUserDTOWithLogin(user);
 
-            /*
-            boolean isAdded = orderService.saveReserve(reserve);
-            response.sendRedirect(String.valueOf(request.getSession(true).getAttribute(LAST_COMMAND.inString))
-                    + "&msg=" + isAdded);
-             */
+            Reserve reserve = new Reserve(userDTO.getId(), Integer.parseInt(request.getParameter(ID.inString)));
 
-            String message;
-            if (orderService.saveReserve(reserve)) {
-                message = "You have added new product successfully";
-            } else {
-                message = "Can NOT add this product, try again!";
-            }
-            response.sendRedirect(String.valueOf(request.getSession(true).getAttribute(LAST_COMMAND.inString))
-                    + "&msg=" + message);
+            boolean success = orderService.saveReserve(reserve);
 
+            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
+                    + "&success=" + success);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }
