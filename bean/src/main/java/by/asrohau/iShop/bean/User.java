@@ -8,6 +8,10 @@ public class User extends Base {
 
 	public User(){}
 
+	public User(int id) {
+		super(id);
+	}
+
 	public User(String login) {
 		this.login = login;
 	}

@@ -1,155 +1,251 @@
+<!--
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-
+         pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <title>All Clients Orders</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="my.css"/>
 
-        <fmt:setLocale value="${sessionScope.local}" />
-        <fmt:setBundle basename="localization.local" var="loc" />
-        <fmt:message bundle="${loc}" key="local.shop" var="shop" />
-        <fmt:message bundle="${loc}" key="local.hello" var="hello" />
-        <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
-        <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
-        <fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
+    <fmt:setLocale value="${sessionScope.local}" />
+    <fmt:setBundle basename="localization.local" var="loc" />
+    <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
+    <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
+    <fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
+    <fmt:message bundle="${loc}" key="local.logOut" var="logOut" />
+    <fmt:message bundle="${loc}" key="local.admin" var="admin" />
+    <fmt:message bundle="${loc}" key="local.user" var="user" />
+    <fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
+    <fmt:message bundle="${loc}" key="local.hello" var="hello" />
+    <fmt:message bundle="${loc}" key="local.home" var="home" />
+    <fmt:message bundle="${loc}" key="local.main" var="main" />
+    <fmt:message bundle="${loc}" key="local.basket" var="basket"/>
+    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
+    <fmt:message bundle="${loc}" key="local.info" var="info" />
+    <fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
+    <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
+    <fmt:message bundle="${loc}" key="local.dateCreated" var="dateCreated" />
+    <fmt:message bundle="${loc}" key="local.order" var="order" />
+    <fmt:message bundle="${loc}" key="local.status" var="status" />
+    <fmt:message bundle="${loc}" key="local.noOrdersFound" var="noOrdersFound" />
+    <fmt:message bundle="${loc}" key="local.allYourOrders" var="allYourOrders" />
+    <fmt:message bundle="${loc}" key="local.new" var="new" />
+    <fmt:message bundle="${loc}" key="local.active" var="active" />
+    <fmt:message bundle="${loc}" key="local.success" var="success" />
 
-        <c:set var="current_page" value="${requestScope.get('currentPage')}"/>
-        <c:set var="max_page" value="${requestScope.get('maxPage')}"/>
-        <c:set var="userId" value="${requestScope.get('userId')}"/>
+    <c:set var="currentPage" value="${requestScope.currentPage}"/>
+    <c:set var="maxPage" value="${requestScope.maxPage}"/>
 
-    </head>
-    <body>
-        <div class="header">
-            <div id="header1">
-                <p><c:out value="${shop}"/></p>
-                <p><c:out value="${hello}"/> <c:out value="${sessionScope.userName}"/> !!!</p>
-            </div>
-
-            <div id="header2" style="display:flex; flex-flow: row wrap; justify-content:space-between">
-                <div>
+    <title>
+        <c:out value="${requestScope.userId}"/>
+    </title>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="headerAnim" >
+        <div class="row">
+            <div class="col-md-1">
+                <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
                     <form action="FrontController" method="post">
-                        <input type="hidden" name="command" value="change_language"/>
+                        <input type="hidden" name="command" value="changeLanguage"/>
                         <input type="hidden" name="local" value="en"/>
-                        <input type="submit" value="ENG"/>
-                    </form>
-                    <form action="FrontController" method="post">
-                        <input type="hidden" name="command" value="change_language"/>
-                        <input type="hidden" name="local" value="ru"/>
-                        <input type="submit" value="РУС"/>
-                    </form>
-                    <form action="FrontController" method="post">
-                        <input type="hidden" name="command" value="change_language"/>
-                        <input type="hidden" name="local" value="ch"/>
-                        <input type="submit" value="汉语"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="en_EN">
+                            EN
+                        </button>
                     </form>
                 </div>
-                <div>
-                    <form action="FrontController" method="post" style="height:100%">
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="ru"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
+                            РУ
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-md-1" style="text-align:center">
+                <c:if test="${sessionScope.role == 'admin'}">
+                        <span>
+                            <c:out value="${admin}"/>
+                        </span>
+                </c:if>
+                <c:if test="${sessionScope.role == 'user'}">
+                        <span>
+                            <c:out value="${user}"/>
+                        </span>
+                </c:if>
+                <c:if test="${sessionScope.role == null}">
+                        <span>
+                            <c:out value="${anonymous}"/>
+                        </span>
+                </c:if>
+            </div>
+            <div class="col-md-7" style="text-align:center">
+                <h1>
+                    <c:out value="${requestScope.userId}" />
+                </h1>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showReserved"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
+                        <c:out value="${basket}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="profile.jsp"/>
+                    <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+                        <c:out  value="${updateProfile}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1">
+                <div class="col-md-12">
+                    <h4>
+                        <c:out value="${sessionScope.login}"/>
+                    </h4>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
                         <input type="hidden" name="command" value="logout"/>
-                        <input type="submit" value="Log out" style="height:100%"/>
+                        <button class="btn btn-default" type="submit" value="logOut">
+                            <c:out value="${logOut}"/>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <%--<div class="col-md-1">--%>
+            <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
+            <%--</div>--%>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
+        <ul class="nav nav-pills" >
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=index.jsp">
+                    <c:out value="${home}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=main.jsp">
+                    <c:out value="${main}"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <%--<c:if test="${requestScope.orders == '[]'}">--%>
+        <%--<div class="panel-body">--%>
+            <%--<div class="alert alert-info" role="alert" style="padding:15px">--%>
+                <%--<h3><c:out value="${noOrdersFound}"/></h3>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</c:if>--%>
+
+    <%--<c:if test="${requestScope.orders != '[]'}">--%>
+    <div class="col-md-12">
+        <!-- Control panel -->
+        <div class="col-md-4">
+            <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-body">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="selectAllNewOrders" />
+                        <input type="hidden" name="page" value="1" />
+                        <input class="btn btn-default" type="submit" name="get" value="${new} ${orders}" /><br/>
+                    </form>
+                    <br/>
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="selectAllActiveOrders" />
+                        <input type="hidden" name="page" value="1" />
+                        <input class="btn btn-default" type="submit" name="get" value="${active} ${orders}" /><br/>
+                    </form>
+                    <br/>
+                    <form id="deleteForm" action="FrontController" method="post">
+                        <input type="hidden" name="command" value="selectAllSuccessOrders" />
+                        <input type="hidden" name="page" value="1" />
+                        <input class="btn btn-default" type="submit" name="get" value="${success} ${orders}" /><br/>
                     </form>
                 </div>
             </div>
         </div>
-
-        <div class="middle">
-            <div id="menu">
-                <form action="FrontController" method="post">
-                    <p><b>Get ALL orders</b>
-                        <input type="hidden" name="command" value="showAllClientsOrders"/>
-                        <input type="hidden" name="page_num" value="1"/>
-                        <input type="hidden" name="userId" value="${userId}"/><br/>
-                        <input type="submit" name="get_orders" value="Show ALL Orders!"/>
-                    </p>
-                </form>
-                <br/>
-                <br/>
-                <hr/>
-                <br/>
-                <p><b><c:out value="${requestScope.get('msg')}"/></b></p>
-
-            </div>
-
-            <div id="content">
-
-                <c:if test="${current_page != null}">
-                    <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bgcolor="#ffebcd">
-                        <tr>
-                            <td>USER</td>
-                            <td>ORDER</td>
-                            <td>STATUS</td>
+        <!-- INFO -->
+        <div class="col-md-8 ">
+            <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-heading">
+                    <h3><c:out value="${allYourOrders}"/></h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-hover" >
+                        <thead style="color: #464a4c;background-color: #eceeef;">
+                        <tr style="text-align: center;">
+                            <td><h4><c:out value="${user}"/></h4></td>
+                            <td><h4><c:out value="${dateCreated}"/></h4></td>
+                            <td><h4><c:out value="${status}"/></h4></td>
+                            <td><h4><c:out value="${order}"/></h4></td>
                         </tr>
-                        <c:forEach items="${requestScope.array}" var="element">
-                            <tr>
-                                    <%--new: Client ID - edit client --%>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${requestScope.orders}" var="order">
+                            <tr style="text-align: center">
+                                    <%--new: user ID - edit user --%>
                                 <td>
-                                    <form title="Go to user" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="editClient" />
-                                        <input type="hidden" name="orderId" value="${element.id}" />
-                                        <input type="submit" name="userId" value="${element.userId}" /><br/>
-                                    </form>
+                                    <p>
+                                        ${order.dateCreated}
+                                    </p>
                                 </td>
                                     <%--order id - open order--%>
                                 <td>
                                     <form title="Observe the order" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="inspectOrder" />
-                                        <input type="hidden" name="from" value="allClientsOrders" />
-                                        <input type="hidden" name="page_num" value="1"/>
-                                        <input type="hidden" name="orderId" value="${element.id}" />
-                                        <input type="submit" name="button_ok" value="${element.id}" /><br/>
+                                        <input type="hidden" name="command" value="orderInfo" />
+                                        <input type="hidden" name="from" value="allUsersOrders" />
+                                        <input type="hidden" name="page" value="1"/>
+                                        <input type="hidden" name="id" value="${order.id}" />
+                                        <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
                                     </form>
                                 </td>
                                     <%--set-active--%>
                                 <td>
                                     <p>
-                                        ${element.status}
+                                            ${order.status}
                                     </p>
                                 </td>
                             </tr>
                         </c:forEach>
+                        </tbody>
                     </table>
-
-
-                    <div width="100%" style="background-color: deepskyblue; font-size: 1em">    
-                        <c:forEach begin="1" end="${max_page}" var="i">
-                            <c:if test="${i != current_page}">
-                                <a href="FrontController?command=showAllClientsOrders&userId=${userId}&page_num=${i}">${i}</a>
-                            </c:if>
-                            <c:if test="${i == current_page}">
-                                <c:out value="${i}"/>
-                            </c:if>
-                        </c:forEach>
-                    </div>
-                </c:if>
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${maxPage}" var="i">
+                                        <c:if test="${i == currentPage}">
+                                            <li class="active">
+                            <a href="FrontController?command=showAllMyOrders&page=${i}">${i}</a>
+                            </li>
+                        </c:if>
+                                                <c:if test="${i != currentPage}">
+                            <li>
+                                        		<a href="FrontController?command=showAllMyOrders&page=${i}">${i}</a>
+                                            </li>
+                        </c:if>
+                                    </c:forEach>
+                    </ul>
+                </div>
             </div>
         </div>
-
-        <div class="footer" >
-            <div id="footer" >
-                <h1>footer</h1>
-                <p>
-                    <a href="FrontController?command=goToPage&address=index.jsp">INDEX</a>
-                    -->
-                    <c:if test="${requestScope.get('for_user') != 'for_user'}">
-                        <a href="FrontController?command=goToPage&address=main.jsp">ADMINISTRATION</a>
-                        -->
-                        <a href="FrontController?command=goToPage&address=manageOrders.jsp">ORDERS</a>
-                    </c:if>
-                    <c:if test="${requestScope.get('for_user') == 'for_user'}">
-                        <a href="FrontController?command=goToPage&address=main.jsp">MAIN</a>
-                        -->
-                        <a href="FrontController?command=goToPage&address=basket.jsp">BASKET</a>
-                    </c:if>
-                    -->
-                    <a href="FrontController?command=showAllClientsOrders&userId=${userId}&page_num=${current_page}">Page: ${current_page}</a>
-                </p>
-            </div>
-        </div>
-    </body>
+    <%--</c:if>--%>
+</body>
 </html>

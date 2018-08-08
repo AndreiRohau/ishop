@@ -35,6 +35,9 @@
     <fmt:message bundle="${loc}" key="local.addProduct" var="addProduct" />
     <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
     <fmt:message bundle="${loc}" key="local.users" var="users" />
+    <fmt:message bundle="${loc}" key="local.login" var="login" />
+    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
+    <fmt:message bundle="${loc}" key="local.edit" var="edit" />
     <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
 
     <c:set var="currentPage" value="${requestScope.currentPage}"/>
@@ -102,8 +105,8 @@
         </div>
         <div class="col-md-1" style="padding-top:10px;">
             <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="users.jsp"/>
+                <input type="hidden" name="command" value="showAllUsers"/>
+                <input type="hidden" name="page" value="1"/>
                 <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
                     <c:out value="${manageUsers}"/>
                 </button>
@@ -153,7 +156,7 @@
             </a>
         </li>
         <li role="presentation" class="active">
-            <a href="FrontController?command=goToPage&address=main.jsp">
+            <a href="FrontController?command=showAllUsers&page=1">
                 <c:out value="${users}"/>
             </a>
         </li>
@@ -165,17 +168,7 @@
 <div class="col-md-12">
     <div class="panel panel-default" style="margin-top:15px">
         <div class="panel-heading">
-            <form action="FrontController" method="post">
-                <div class="form-inline">
-                    <input class="form-control" type="hidden" name="command" value="findSuitable"/>
-                    <input class="form-control" type="hidden" name="page" value="1"/>
-                    <input class="form-control" type="text" name="company" value="" placeholder="${company}"/>
-                    <input class="form-control" type="text" name="name" value="" placeholder="${name}"/>
-                    <input class="form-control" type="text" name="type" value="" placeholder="${type}"/>
-                    <input class="form-control" type="text" name="price" value="" placeholder="${price}"/>
-                    <input class="btn btn-default" type="submit" name="getProducts" value="${find}!"/>
-                </div>
-            </form>
+            <c:out value="${users}"/>
         </div>
         <div class="panel-body">
             <c:if test="${currentPage != null}">
@@ -183,26 +176,28 @@
                     <thead style="color: #464a4c;background-color: #eceeef;">
                     <tr style="text-align: center;">
                         <td><h4><c:out value="${id}"/></h4></td>
-                        <td><h4><c:out value="${company}"/></h4></td>
-                        <td><h4><c:out value="${name}"/></h4></td>
-                        <td><h4><c:out value="${type}"/></h4></td>
-                        <td><h4><c:out value="${price}"/></h4></td>
+                        <td><h4><c:out value="${login}"/></h4></td>
+                        <td><h4><c:out value="${orders}"/></h4></td>
                         <td><h4><c:out value="${edit}"/></h4></td>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${requestScope.productArray}" var="product">
+                    <c:forEach items="${requestScope.users}" var="user">
                         <tr style="text-align: center">
-                            <td>${product.id}</td>
-                            <td>${product.company}</td>
-                            <td>${product.name}</td>
-                            <td>${product.type}</td>
-                            <td>${product.price}</td>
+                            <td>${user.id}</td>
+                            <td>${user.login}</td>
                             <td>
                                 <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="productInfo" />
-                                    <input type="hidden" name="id" value="${product.id}" />
-                                    <input type="submit" name="buy" value="${edit}" class="btn btn-default"/><br/>
+                                    <input type="hidden" name="command" value="showAllMyOrders" />
+                                    <input type="hidden" name="id" value="${user.id}" />
+                                    <input type="submit" name="edit" value="${orders}" class="btn btn-default"/><br/>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="FrontController" method="post">
+                                    <input type="hidden" name="command" value="userInfo" />
+                                    <input type="hidden" name="id" value="${user.id}" />
+                                    <input type="submit" name="edit" value="${edit}" class="btn btn-default"/><br/>
                                 </form>
                             </td>
                         </tr>

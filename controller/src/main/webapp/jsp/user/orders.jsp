@@ -157,7 +157,7 @@
     </div>
 
     <!-- MAIN -->
-    <c:if test="${requestScope.allOrders == '[]'}">
+    <c:if test="${requestScope.orders == '[]'}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${noOrdersFound}"/></h3>
@@ -165,7 +165,7 @@
         </div>
     </c:if>
 
-    <c:if test="${requestScope.allOrders != '[]'}">
+    <c:if test="${requestScope.orders != '[]'}">
         <div class="col-md-12">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">
@@ -181,7 +181,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${requestScope.allOrders}" var="order">
+                            <c:forEach items="${requestScope.orders}" var="order">
                                 <tr style="text-align: center">
                                         <%--new: user ID - edit user --%>
                                     <td>

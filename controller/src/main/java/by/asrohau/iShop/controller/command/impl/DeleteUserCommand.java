@@ -1,6 +1,7 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
@@ -30,7 +31,7 @@ public class DeleteUserCommand implements Command {
 		try {
 			User user = new User(request.getParameter(LOGIN.inString).trim(),
 								request.getParameter(PASSWORD.inString).trim());
-			User userDTO = new User();
+			UserDTO userDTO = userService.findUserDTOWithLogin(user);
 			String goToPage;
 			String lastCMD;
 			boolean isDeleted = false;
@@ -45,8 +46,9 @@ public class DeleteUserCommand implements Command {
 				lastCMD = GO_TO_PAGE_PROFILE.inString;
 				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
 			} else {
-				goToPage = "/jsp/admin/users.jsp";
-				lastCMD = "FrontController?command=goToPage&address=users.jsp";
+				goToPage = "FrontController?command=userInfo&id=" + userDTO.getId();
+				lastCMD = "FrontController?command=userInfo&id=" + userDTO.getId();
+				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
 			}
 
 			if (actualUser) {
@@ -65,11 +67,10 @@ public class DeleteUserCommand implements Command {
 			if (isAdmin) {
 				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
 				isDeleted = userService.deleteUser(user);
-				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
-				goToPage = "/jsp/admin/users.jsp";
-				lastCMD = "FrontController?command=goToPage&address=users.jsp";
 			}
 			if (isDeleted && isAdmin) {
+				goToPage = "FrontController?command=showAllUsers&page=1";
+				lastCMD = "FrontController?command=showAllUsers&page=1";
 				orderService.deleteAllReserved(userDTO.getId());
 				request.removeAttribute(ERROR_MESSAGE.inString);
 			}

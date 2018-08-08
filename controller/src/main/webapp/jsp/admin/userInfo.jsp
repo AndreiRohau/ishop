@@ -25,26 +25,24 @@
     <fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
+    <fmt:message bundle="${loc}" key="local.basket" var="basket" />
     <fmt:message bundle="${loc}" key="local.orders" var="orders" />
     <fmt:message bundle="${loc}" key="local.id" var="id" />
-    <fmt:message bundle="${loc}" key="local.company" var="company" />
-    <fmt:message bundle="${loc}" key="local.name" var="name" />
-    <fmt:message bundle="${loc}" key="local.type" var="type" />
-    <fmt:message bundle="${loc}" key="local.price" var="price" />
-    <fmt:message bundle="${loc}" key="local.find" var="find" />
+    <fmt:message bundle="${loc}" key="local.login" var="login" />
+    <fmt:message bundle="${loc}" key="local.password" var="password" />
     <fmt:message bundle="${loc}" key="local.edit" var="edit" />
     <fmt:message bundle="${loc}" key="local.delete" var="delete" />
     <fmt:message bundle="${loc}" key="local.addProduct" var="addProduct" />
     <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
     <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
-    <fmt:message bundle="${loc}" key="local.cannotFindProduct" var="cannotFindProduct" />
     <fmt:message bundle="${loc}" key="local.nothingHappened" var="nothingHappened" />
+    <fmt:message bundle="${loc}" key="local.cannotFindUser" var="cannotFindUser" />
 
     <c:set var="currentPage" value="${requestScope.currentPage}"/>
     <c:set var="maxPage" value="${requestScope.maxPage}"/>
 
     <title>
-        <c:out value="${requestScope.product.name}"/>
+        <c:out value="${requestScope.user.login}"/>
     </title>
 </head>
 <body>
@@ -91,7 +89,7 @@
         </div>
         <div class="col-md-6" style="text-align:center">
             <h1>
-                <c:out value="${requestScope.product.name}" />
+                <c:out value="${requestScope.user.login}" />
             </h1>
         </div>
         <div class="col-md-1" style="padding-top:10px;">
@@ -159,10 +157,10 @@
 </div>
 
 <!-- MAIN -->
-<c:if test="${requestScope.product == null}">
+<c:if test="${requestScope.user == null}">
     <div class="panel-body">
         <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${cannotFindProduct}"/></h3>
+            <h3><c:out value="${cannotFindUser}"/></h3>
         </div>
     </div>
 </c:if>
@@ -175,13 +173,32 @@
     </div>
 </c:if>
 
-<c:if test="${requestScope.product != null}">
+<c:if test="${requestScope.user != null}">
     <div class="col-md-12">
-        <!-- PICTURE -->
+        <!-- Control panel -->
         <div class="col-md-4">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-body">
-                    <%--product-picture todo--%>
+                    <form id="showOrdersForm" action="FrontController" method="post">
+                        <input form="showOrdersForm"  type="hidden" name="command" value="showAllMyOrders" />
+                        <input form="showOrdersForm"  type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input form="showOrdersForm"  type="hidden" name="page" value="1" />
+                        <input form="showOrdersForm" class="btn btn-default" type="submit" name="delete" value="${orders}" /><br/>
+                    </form>
+                    <br/>
+                    <form id="deleteOrdersForm" action="FrontController" method="post">
+                        <input form="deleteOrdersForm"  type="hidden" name="command" value="deleteAllOrders" />
+                        <input form="deleteOrdersForm"  type="hidden" name="id" value="${requestScope.user.id}" />
+                        <input form="deleteOrdersForm" class="btn btn-default" type="submit" name="delete" value="${delete} ${orders}" /><br/>
+                    </form>
+                    <br/>
+                    <form id="deleteForm" action="FrontController" method="post">
+                        <input form="deleteForm"  type="hidden" name="command" value="deleteUser" />
+                        <input form="deleteForm"  type="hidden" name="id" value="${requestScope.user.id}" />
+                        <input form="deleteForm"  type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input form="deleteForm"  type="hidden" name="password" value="${requestScope.user.password}" />
+                        <input form="deleteForm" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                    </form>
                 </div>
             </div>
         </div>
@@ -198,47 +215,30 @@
                         <thead style="color: #464a4c;background-color: #eceeef;">
                         <tr style="text-align: center;">
                             <td><c:out value="${id}"/></td>
-                            <td><c:out value="${company}"/></td>
-                            <td><c:out value="${name}"/></td>
-                            <td><c:out value="${type}"/></td>
-                            <td><c:out value="${price}"/></td>
-                            <td>
-                                <form id="deleteForm" action="FrontController" method="post">
-                                    <input form="deleteForm"  type="hidden" name="command" value="deleteProduct" />
-                                    <input form="deleteForm"  type="hidden" name="id" value="${requestScope.product.id}" />
-                                    <input form="deleteForm" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
-                                </form>
-                            </td>
+                            <td><c:out value="${login}"/></td>
+                            <td><c:out value="${password}"/></td>
                         </tr>
                         </thead>
 
                         <tbody>
-                            <form id="editProduct" action="FrontController" method="post">
-                                <div class="form-group">
+                            <div class="form-group">
+                                <form id="editUser" action="FrontController" method="post">
                                     <tr style="text-align: center">
                                         <td>
-                                            <input type="hidden" name="command" value="updateProduct" />
-                                            <input type="hidden" name="id" value="${requestScope.product.id}" title=""/>
-                                            ${requestScope.product.id}
+                                            <input form="editUser" type="hidden" name="command" value="updateUser" />
+                                            <input form="editUser" type="hidden" name="id" value="${requestScope.user.id}" title=""/>
+                                                ${requestScope.user.id}
                                         </td>
-                                        <td><input class="form-control" type="text" name="company" value="${requestScope.product.company}" title=""/></td>
-                                        <td><input class="form-control" type="text" name="name" value="${requestScope.product.name}" title=""/></td>
-                                        <td><input class="form-control" type="text" name="type" value="${requestScope.product.type}" title=""/></td>
-                                        <td><input class="form-control" type="text" name="price" value="${requestScope.product.price}" title=""/></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5">
-                                            <textarea form="editProduct" class="form-control" rows="10" cols="45" name="description">${requestScope.product.description}</textarea>
-                                        </td>
+                                        <td><input form="editUser" class="form-control" type="text" name="login" value="${requestScope.user.login}" title=""/></td>
+                                        <td><input form="editUser" class="form-control" type="password" name="password" value="${requestScope.user.password}" title=""/></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <input type="submit" form="editProduct" name="edit" value="${edit}" class="btn btn-default"/>
+                                            <input type="submit" form="editUser" name="edit" value="${edit}" class="btn btn-default"/>
                                         </td>
                                     </tr>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </tbody>
                     </table>
                 </div>

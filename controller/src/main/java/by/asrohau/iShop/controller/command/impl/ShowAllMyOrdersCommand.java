@@ -37,8 +37,8 @@ public class ShowAllMyOrdersCommand implements Command {
             int maxPage = (int) Math.ceil(((double) orderService.countClientOrders(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
 
-            List<Order> allOrders = orderService.getAllClientsOrders(row, userId);
-            request.setAttribute("allOrders", allOrders);
+            List<Order> orders = orderService.getAllClientsOrders(row, userId);
+            request.setAttribute("orders", orders);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.setAttribute("userId", userId);

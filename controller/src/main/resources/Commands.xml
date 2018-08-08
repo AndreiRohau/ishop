@@ -47,13 +47,13 @@
         <classname>AddNewProductCommand</classname>
     </command>
     <command>
-        <webname>selectAllUsers</webname>
-        <classname>SelectAllUsersCommand</classname>
+        <webname>showAllUsers</webname>
+        <classname>ShowAllUsersCommand</classname>
     </command>
-    <command>
-        <webname>selectAllProducts</webname>
-        <classname>SelectAllProductsCommand</classname>
-    </command>
+    <!--<command>-->
+        <!--<webname>selectAllProducts</webname>-->
+        <!--<classname>SelectAllProductsCommand</classname>-->
+    <!--</command>-->
     <command>
         <webname>findSuitable</webname>
         <classname>FindSuitableCommand</classname>
@@ -63,16 +63,16 @@
         <classname>ShowReservedCommand</classname>
     </command>
     <command>
-        <webname>editClient</webname>
-        <classname>EditClientCommand</classname>
+        <webname>userInfo</webname>
+        <classname>UserInfoCommand</classname>
     </command>
+    <!--<command>-->
+        <!--<webname>editProduct</webname>-->
+        <!--<classname>EditProductCommand</classname>-->
+    <!--</command>-->
     <command>
-        <webname>editProduct</webname>
-        <classname>EditProductCommand</classname>
-    </command>
-    <command>
-        <webname>updateClient</webname>
-        <classname>UpdateClientCommand</classname>
+        <webname>updateUser</webname>
+        <classname>UpdateUserCommand</classname>
     </command>
     <command>
         <webname>updateProduct</webname>

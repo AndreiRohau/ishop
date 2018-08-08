@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
-import static by.asrohau.iShop.controller.ControllerFinals.MAX_ROWS_AT_PAGE;
-import static by.asrohau.iShop.controller.ControllerFinals.PAGE;
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class ShowAllUsersCommand implements Command {
 
@@ -38,6 +36,8 @@ public class ShowAllUsersCommand implements Command {
             request.setAttribute("users", users);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
+            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+                    "FrontController?command=showAllUsers&page=");
             request.getSession().setAttribute(LAST_COMMAND.inString,
                     "FrontController?command=showAllUsers&page=" + currentPage);
 

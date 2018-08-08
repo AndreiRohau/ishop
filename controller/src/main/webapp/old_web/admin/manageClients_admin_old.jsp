@@ -80,15 +80,15 @@
                             <td>PASSWORD</td>
                             <td>LINK</td>
                         </tr>
-                        <c:forEach items="${requestScope.usersArray}" var="userToEdit">
+                        <c:forEach items="${requestScope.users}" var="user">
                             <tr>
-                                <td>${userToEdit.id}</td>
-                                <td>${userToEdit.login}</td>
-                                <td>${userToEdit.password}</td>
+                                <td>${user.id}</td>
+                                <td>${user.login}</td>
+                                <td>${user.password}</td>
                                 <td>
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="editClient" />
-                                        <input type="hidden" name="userId" value="${userToEdit.id}" />
+                                        <input type="hidden" name="userId" value="${user.id}" />
                                         <input type="submit" name="edit" value="Edit" /><br/>
                                     </form>
                                 </td>
