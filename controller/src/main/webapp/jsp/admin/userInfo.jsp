@@ -30,6 +30,7 @@
     <fmt:message bundle="${loc}" key="local.id" var="id" />
     <fmt:message bundle="${loc}" key="local.login" var="login" />
     <fmt:message bundle="${loc}" key="local.password" var="password" />
+    <fmt:message bundle="${loc}" key="local.info" var="info" />
     <fmt:message bundle="${loc}" key="local.edit" var="edit" />
     <fmt:message bundle="${loc}" key="local.delete" var="delete" />
     <fmt:message bundle="${loc}" key="local.addProduct" var="addProduct" />
@@ -178,27 +179,30 @@
         <!-- Control panel -->
         <div class="col-md-4">
             <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <c:out value="${info}"/>
+                    </h3>
+                </div>
                 <div class="panel-body">
                     <form id="showOrdersForm" action="FrontController" method="post">
-                        <input form="showOrdersForm"  type="hidden" name="command" value="showAllMyOrders" />
-                        <input form="showOrdersForm"  type="hidden" name="login" value="${requestScope.user.login}" />
-                        <input form="showOrdersForm"  type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input form="showOrdersForm"  type="hidden" name="page" value="1" />
-                        <input form="showOrdersForm" class="btn btn-default" type="submit" name="showOrders" value="${orders}" /><br/>
+                        <input type="hidden" name="command" value="showAllMyOrders" />
+                        <input type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input type="hidden" name="id" value="${requestScope.user.id}" />
+                        <input type="hidden" name="page" value="1" />
+                        <input class="btn btn-default" type="submit" name="showOrders" value="${orders} ${requestScope.user.login}" /><br/>
                     </form>
                     <br/>
-                    <form id="deleteOrdersForm" action="FrontController" method="post">
-                        <input form="deleteOrdersForm"  type="hidden" name="command" value="deleteAllOrders" />
-                        <input form="deleteOrdersForm"  type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input form="deleteOrdersForm" class="btn btn-default" type="submit" name="deleteOrders" value="${delete} ${orders}" /><br/>
-                    </form>
+                    <br/>
+                    <br/>
+                    <br/>
                     <br/>
                     <form id="deleteForm" action="FrontController" method="post">
-                        <input form="deleteForm"  type="hidden" name="command" value="deleteUser" />
-                        <input form="deleteForm"  type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input form="deleteForm"  type="hidden" name="login" value="${requestScope.user.login}" />
-                        <input form="deleteForm"  type="hidden" name="password" value="${requestScope.user.password}" />
-                        <input form="deleteForm" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                        <input type="hidden" name="command" value="deleteUser" />
+                        <input type="hidden" name="id" value="${requestScope.user.id}" />
+                        <input type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input type="hidden" name="password" value="${requestScope.user.password}" />
+                        <input title="${delete} ${requestScope.user.login}" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
                     </form>
                 </div>
             </div>

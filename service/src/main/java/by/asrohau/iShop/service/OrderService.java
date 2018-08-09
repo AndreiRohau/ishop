@@ -22,9 +22,13 @@ public interface OrderService {
 
     boolean saveNewOrder(Order order) throws ServiceException;
 
+    int countAll() throws ServiceException;
+
     int countOrders(String status) throws ServiceException;
 
-    List<Order> getAllOrders(int row, String status) throws ServiceException; // ArrayList
+    List<Order> getAllOrders(int row) throws ServiceException; // ArrayList
+
+    List<Order> getAllOrdersByStatus(int row, String status) throws ServiceException; // ArrayList
 
     boolean deleteOrder(Order order) throws ServiceException;
 

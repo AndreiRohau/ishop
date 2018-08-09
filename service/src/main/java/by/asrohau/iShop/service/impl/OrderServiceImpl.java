@@ -10,7 +10,6 @@ import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static by.asrohau.iShop.service.util.ServiceValidator.validation;
@@ -98,6 +97,15 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    public int countAll() throws ServiceException {
+        try {
+            return (int) orderDAO.countAll();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public int countOrders(String status) throws ServiceException {
         try {
             return orderDAO.countOrders(status);
@@ -107,13 +115,21 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getAllOrders(int row, String status)  throws ServiceException{ // ArrayList
+    public List<Order> getAllOrders(int row)  throws ServiceException{ // ArrayList
+        try {
+            return orderDAO.findAll(row);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
         try {
             return orderDAO.findAllOrders(row, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-
     }
 
     @Override
@@ -165,7 +181,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Order> getAllSuccessOrders(int row) throws ServiceException { // ArrayList
         try {
-            return orderDAO.findAllSuccessOrders(row);
+            return orderDAO.findAllClosedOrders(row);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

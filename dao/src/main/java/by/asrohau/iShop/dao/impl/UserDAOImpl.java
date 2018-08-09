@@ -201,7 +201,6 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 		} finally {
 			close(resultSet, preparedStatement, connection);
 		}
-
 	}
 
 	@Override

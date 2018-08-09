@@ -38,6 +38,7 @@
     <fmt:message bundle="${loc}" key="local.newOrders" var="newOrders" />
     <fmt:message bundle="${loc}" key="local.active" var="active" />
     <fmt:message bundle="${loc}" key="local.success" var="success" />
+    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
     <fmt:message bundle="${loc}" key="local.info" var="info" />
     <fmt:message bundle="${loc}" key="local.change" var="change" />
     <fmt:message bundle="${loc}" key="local.edit" var="edit" />
@@ -173,8 +174,13 @@
     <c:if test="${requestScope.orders != '[]'}">
     <div class="col-md-12">
         <!-- Control panel -->
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="panel panel-default" style="margin-top:15px">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <c:out value="${orders}"/>
+                    </h3>
+                </div>
                 <div class="panel-body">
                     <form action="FrontController" method="post">
                         <input type="hidden" name="command" value="selectAllNewOrders" />
@@ -197,7 +203,7 @@
             </div>
         </div>
         <!-- INFO -->
-        <div class="col-md-8 ">
+        <div class="col-md-10">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">
                     <h3><c:out value="${allYourOrders}"/></h3>
@@ -231,7 +237,7 @@
                                     <form title="${change}" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="orderSetStatus" />
                                         <input type="hidden" name="id" value="${order.id}" />
-                                        <input class="btn btn-default" type="submit" name="ok" value="${order.status}" /><br/>
+                                        <input class="btn btn-default" type="submit" name="status" value="${order.status}" /><br/>
                                     </form>
                                 </td>
                                 <td>

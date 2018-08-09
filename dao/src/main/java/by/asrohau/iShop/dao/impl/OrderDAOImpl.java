@@ -131,19 +131,60 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     }
 
     /*
-    unfortunately never used
+    find all Orders in schema:shop table:orders
      */
     @Override
     public List<Order> findAll(int row) throws DAOException {
-        return null;
+            try {
+                connection = getConnection();
+                preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_QUERY.inString);
+                preparedStatement.setInt(1, row);
+                preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+                List<Order> productList = new ArrayList<>();
+                resultSet = preparedStatement.executeQuery();
+                int orderId;
+                int userId;
+                String productIds;
+                String userAddress;
+                String userPhone;
+                String foundStatus;
+                Date dateCreated;
+                Order order;
+                while (resultSet.next()) {
+                    orderId = resultSet.getInt(1);
+                    userId = resultSet.getInt(2);
+                    productIds = resultSet.getString(3);
+                    userAddress =  resultSet.getString(4);
+                    userPhone =  resultSet.getString(5);
+                    foundStatus =  resultSet.getString(6);
+                    dateCreated =  resultSet.getDate(7);
+                    order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
+                    productList.add(order);
+                }
+                return productList;
+            } catch (SQLException e) {
+                throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+            } finally {
+                close(resultSet, preparedStatement, connection);
+            }
     }
 
     /*
-    unfortunately never used
+    count All Orders in schema:shop table:orders
      */
     @Override
     public long countAll() throws DAOException {
-        return 0;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(COUNT_All_ORDERS_QUERY.inString);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+        } finally {
+            close(resultSet, preparedStatement, connection);
+        }
     }
 
     /*
@@ -326,7 +367,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     public int countOrders(String status) throws DAOException {
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(COUNT_All_ORDERS_QUERY.inString);
+            preparedStatement = connection.prepareStatement(COUNT_All_ORDERS_STATUS_QUERY.inString);
             preparedStatement.setString(1, status);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -345,7 +386,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     public List<Order> findAllOrders(int row, String status) throws DAOException {
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_QUERY.inString);
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
@@ -406,7 +447,8 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     public List<Order> findAllActiveOrders(int row) throws DAOException {
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_ACTIVE_ORDERS_QUERY.inString);
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
+            preparedStatement.setString(1, "active");
             preparedStatement.setInt(1, row);
             preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             List<Order> orderList = new ArrayList<>();
@@ -442,12 +484,13 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     finds all successful Orders for a certain page
      */
     @Override
-    public List<Order> findAllSuccessOrders(int row) throws DAOException {
+    public List<Order> findAllClosedOrders(int row) throws DAOException {
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_SUCCESS_ORDERS_QUERY.inString);
-            preparedStatement.setInt(1, row);
-            preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
+            preparedStatement.setString(1, "closed");
+            preparedStatement.setInt(2, row);
+            preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             List<Order> orderList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
             int orderId;

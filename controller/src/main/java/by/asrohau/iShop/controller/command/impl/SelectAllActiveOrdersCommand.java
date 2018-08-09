@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectAllActiveOrdersCommand implements Command {
@@ -34,7 +33,7 @@ public class SelectAllActiveOrdersCommand implements Command {
             //count amount of all NEW orders
             maxPage = (int) Math.ceil(((double) orderService.countOrders(status)) / 15);
 
-            List<Order> newOrdersList = orderService.getAllOrders(row, status); // ArrayList
+            List<Order> newOrdersList = orderService.getAllOrdersByStatus(row, status); // ArrayList
             request.setAttribute("array", newOrdersList);
 
             request.setAttribute("maxPage", maxPage);

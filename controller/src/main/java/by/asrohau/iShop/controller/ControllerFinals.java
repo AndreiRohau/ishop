@@ -23,9 +23,12 @@ public enum ControllerFinals {
     path of the command.xml
     */
     COMMANDS_XML("Commands.xml"),
-    NEW("new"),
     NULL("null"),
     PAGE("page"),
+    STATUS("status"),
+    NEW("new"),
+    ACTIVE("active"),
+    CLOSED("closed"),
     ID("id"),
     LOGIN("login"),
     PASSWORD("password"),

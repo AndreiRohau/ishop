@@ -16,7 +16,7 @@ public interface OrderDAO extends AbstractDAO<Order> {
     List<Order> findAllOrders(int row, String status) throws DAOException; //arraylist
 
     List<Order> findAllActiveOrders(int row) throws DAOException; //arraylist
-    List<Order> findAllSuccessOrders(int row) throws DAOException; //arraylist
+    List<Order> findAllClosedOrders(int row) throws DAOException; //arraylist
     List<Order> findAllClientsOrders(int row, int userId) throws DAOException; //arraylist
 
     boolean update(Order order, String status) throws DAOException;

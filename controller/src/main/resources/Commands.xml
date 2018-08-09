@@ -130,4 +130,8 @@
         <webname>deleteFromOrder</webname>
         <classname>DeleteFromOrderCommand</classname>
     </command>
+    <command>
+        <webname>showAllOrders</webname>
+        <classname>ShowAllOrdersCommand</classname>
+    </command>
 </commands>
