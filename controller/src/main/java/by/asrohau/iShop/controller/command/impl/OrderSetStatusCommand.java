@@ -6,42 +6,32 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
+import static by.asrohau.iShop.controller.ControllerFinals.MESSAGE;
+
 public class OrderSetStatusCommand implements Command {
+
+    private static final Logger logger = Logger.getLogger(OrderSetStatusCommand.class);
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private OrderService orderService = serviceFactory.getOrderService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        System.out.println("We got to OrderSetStatusCommand");
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        OrderService orderService = serviceFactory.getOrderService();
-
-        String status = request.getParameter("new_status").split("Set")[1].toLowerCase();
-        status.intern();
+        logger.info("We got to OrderSetStatusCommand");
         try {
-            String message;
-            Order order = new Order();
-            order.setId(Integer.parseInt(request.getParameter("orderId")));
-            if (orderService.orderSetStatus(order, status)) {
-                message = "You have Setted ORDER as " + status + " successfully";
-            } else {
-                message = "Can NOT SET this order as " + status + ", try again!";
-            }
+            String status = request.getParameter("new_status").split("Set")[1].toLowerCase();
+            Order order = new Order(Integer.parseInt(request.getParameter("orderId")));
 
-            if(request.getParameter("from").matches("manageOrders")){
-                response.sendRedirect(String.valueOf(request.getSession(true).getAttribute("lastCMD"))
-                        + "&msg=" + message);
-            }else{
-                request.getSession().setAttribute("lastCMD",
-                        "FrontController?command=goToPage&address=manageOrders.jsp");
-                request.getRequestDispatcher("/jsp/admin/manageOrders.jsp").forward(request, response);
-            }
-
+            request.setAttribute(MESSAGE.inString, orderService.orderSetStatus(order, status));
+            request.getRequestDispatcher((String) request.getSession().getAttribute(LAST_COMMAND.inString))
+                    .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

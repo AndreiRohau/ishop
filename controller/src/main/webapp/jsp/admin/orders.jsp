@@ -24,14 +24,9 @@
     <fmt:message bundle="${loc}" key="local.user" var="user" />
     <fmt:message bundle="${loc}" key="local.users" var="users" />
     <fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
-    <fmt:message bundle="${loc}" key="local.hello" var="hello" />
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
     <fmt:message bundle="${loc}" key="local.basket" var="basket"/>
-    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
-    <fmt:message bundle="${loc}" key="local.info" var="info" />
-    <fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
-    <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
     <fmt:message bundle="${loc}" key="local.dateCreated" var="dateCreated" />
     <fmt:message bundle="${loc}" key="local.order" var="order" />
     <fmt:message bundle="${loc}" key="local.status" var="status" />
@@ -43,12 +38,16 @@
     <fmt:message bundle="${loc}" key="local.newOrders" var="newOrders" />
     <fmt:message bundle="${loc}" key="local.active" var="active" />
     <fmt:message bundle="${loc}" key="local.success" var="success" />
+    <fmt:message bundle="${loc}" key="local.info" var="info" />
+    <fmt:message bundle="${loc}" key="local.change" var="change" />
+    <fmt:message bundle="${loc}" key="local.edit" var="edit" />
+    <fmt:message bundle="${loc}" key="local.id" var="id" />
 
     <c:set var="currentPage" value="${requestScope.currentPage}"/>
     <c:set var="maxPage" value="${requestScope.maxPage}"/>
 
     <title>
-        <c:out value="${requestScope.userId}"/>
+        <c:out value="${requestScope.user.login}"/>
     </title>
 </head>
 <body>
@@ -95,7 +94,7 @@
             </div>
             <div class="col-md-6" style="text-align:center">
                 <h1>
-                    <c:out value="${requestScope.userId}" />
+                    <c:out value="${requestScope.user.login}" />
                 </h1>
             </div>
             <div class="col-md-1" style="padding-top:10px;">
@@ -163,15 +162,15 @@
     </div>
 
     <!-- MAIN -->
-    <%--<c:if test="${requestScope.orders == '[]'}">--%>
-        <%--<div class="panel-body">--%>
-            <%--<div class="alert alert-info" role="alert" style="padding:15px">--%>
-                <%--<h3><c:out value="${noOrdersFound}"/></h3>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</c:if>--%>
+    <c:if test="${requestScope.orders == '[]'}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${noOrdersFound}"/></h3>
+            </div>
+        </div>
+    </c:if>
 
-    <%--<c:if test="${requestScope.orders != '[]'}">--%>
+    <c:if test="${requestScope.orders != '[]'}">
     <div class="col-md-12">
         <!-- Control panel -->
         <div class="col-md-4">
@@ -207,7 +206,7 @@
                     <table class="table table-hover" >
                         <thead style="color: #464a4c;background-color: #eceeef;">
                         <tr style="text-align: center;">
-                            <td><h4><c:out value="${user}"/></h4></td>
+                            <td><h4><c:out value="${user} ${id}"/></h4></td>
                             <td><h4><c:out value="${dateCreated}"/></h4></td>
                             <td><h4><c:out value="${status}"/></h4></td>
                             <td><h4><c:out value="${order}"/></h4></td>
@@ -217,10 +216,10 @@
                         <c:forEach items="${requestScope.orders}" var="order">
                             <tr style="text-align: center">
                                 <td>
-                                    <form title="Observe the order" action="FrontController" method="post">
+                                    <form title="${info}" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="userInfo" />
                                         <input type="hidden" name="id" value="${order.userId}" />
-                                        <input class="btn btn-default" type="submit" name="button_ok" value="${user}" /><br/>
+                                        <input class="btn btn-default" type="submit" name="ok" value="${user} ${order.userId}" /><br/>
                                     </form>
                                 </td>
                                 <td>
@@ -229,19 +228,19 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <form title="Observe the order" action="FrontController" method="post">
+                                    <form title="${change}" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="orderSetStatus" />
                                         <input type="hidden" name="id" value="${order.id}" />
-                                        <input class="btn btn-default" type="submit" name="button_ok" value="${order.status}" /><br/>
+                                        <input class="btn btn-default" type="submit" name="ok" value="${order.status}" /><br/>
                                     </form>
                                 </td>
                                 <td>
-                                    <form title="Observe the order" action="FrontController" method="post">
+                                    <form title="${edit}" action="FrontController" method="post">
                                         <input type="hidden" name="command" value="orderInfo" />
                                         <input type="hidden" name="from" value="allUsersOrders" />
                                         <input type="hidden" name="page" value="1"/>
                                         <input type="hidden" name="id" value="${order.id}" />
-                                        <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
+                                        <input class="btn btn-default" type="submit" name="ok" value="${order.id}" /><br/>
                                     </form>
                                 </td>
                             </tr>
@@ -265,6 +264,6 @@
                 </div>
             </div>
         </div>
-    <%--</c:if>--%>
+    </c:if>
 </body>
 </html>

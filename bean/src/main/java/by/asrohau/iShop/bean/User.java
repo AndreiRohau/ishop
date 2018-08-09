@@ -16,6 +16,11 @@ public class User extends Base {
 		this.login = login;
 	}
 
+	public User(int id, String login) {
+		super(id);
+		this.login = login;
+	}
+
 	public User(String login, String password) {
 		this.login = login;
 		this.password = password;
