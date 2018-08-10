@@ -25,20 +25,26 @@
     <fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
-    <fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
     <fmt:message bundle="${loc}" key="local.basket" var="basket" />
     <fmt:message bundle="${loc}" key="local.orders" var="orders" />
     <fmt:message bundle="${loc}" key="local.info" var="info" />
+    <fmt:message bundle="${loc}" key="local.updateProfile" var="updateProfile" />
+    <fmt:message bundle="${loc}" key="local.order" var="order" />
+    <fmt:message bundle="${loc}" key="local.address" var="address" />
+    <fmt:message bundle="${loc}" key="local.phone" var="phone" />
+    <fmt:message bundle="${loc}" key="local.status" var="status" />
     <fmt:message bundle="${loc}" key="local.company" var="company" />
     <fmt:message bundle="${loc}" key="local.name" var="name" />
     <fmt:message bundle="${loc}" key="local.type" var="type" />
     <fmt:message bundle="${loc}" key="local.price" var="price" />
-    <fmt:message bundle="${loc}" key="local.find" var="find" />
-    <fmt:message bundle="${loc}" key="local.buy" var="buy" />
-    <fmt:message bundle="${loc}" key="local.cannotFindProduct" var="cannotFindProduct" />
+
+    <c:set var="currentPage" value="${requestScope.currentPage}"/>
+    <c:set var="maxPage" value="${requestScope.maxPage}"/>
+    <c:set var="productIDsString" value="${requestScope.productIDsString}"/>
+    <c:set var="orderId" value="${requestScope.orderId}"/>
 
     <title>
-        <c:out value="${requestScope.product.name}"/>
+        <c:out value="${order} ${requestScope.orderId}"/>
     </title>
 </head>
 <body>
@@ -85,7 +91,8 @@
         </div>
         <div class="col-md-7" style="text-align:center">
             <h1>
-                <c:out value="${requestScope.product.name}" />
+                <c:out value="${order} ${requestScope.orderId}" />
+                TODO!!!!!!!!!!!!!!!!!!!!!!!!!
             </h1>
         </div>
         <div class="col-md-1" style="padding-top:10px;">
@@ -154,71 +161,79 @@
 </div>
 
 <!-- MAIN -->
-
-<c:if test="${requestScope.product == ''}">
-    <div class="panel-body">
-        <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${cannotFindProduct}"/></h3>
-        </div>
-    </div>
-</c:if>
-
-<c:if test="${requestScope.product != ''}">
-    <div class="col-md-12">
-        <!-- PICTURE -->
-        <div class="col-md-4">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-body">
-                    <%--product-picture todo--%>
-                </div>
+<div class="col-md-12">
+    <!-- ORDER -->
+    <div class="col-md-4">
+        <div class="panel panel-default" style="margin-top:15px">
+            <div class="panel-body">
+                <p>${order} ${requestScope.orderId}</p>
+                <p>${status} ${requestScope.status}</p>
+                <p>${address} : ${requestScope.address}</p>
+                <p>${phone} : ${requestScope.phone}</p>
             </div>
         </div>
-        <!-- INFO -->
-        <div class="col-md-8 ">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <c:out value="${info}"/>
-                    </h3>
-                </div>
-                <div class="panel-body">
+    </div>
+    <!-- INFO -->
+    <div class="col-md-8 ">
+        <div class="panel panel-default" style="margin-top:15px">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <c:out value="${info}"/>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <c:if test="${currentPage != null}">
                     <table class="table table-hover" >
                         <thead style="color: #464a4c;background-color: #eceeef;">
-                            <tr style="text-align: center;">
-                                <td><c:out value="${company}"/></td>
-                                <td><c:out value="${name}"/></td>
-                                <td><c:out value="${type}"/></td>
-                                <td><c:out value="${price}"/></td>
-                                <td><c:out value="${buy}"/></td>
-                            </tr>
+                        <tr style="text-align: center;">
+                            <td><h4><c:out value="${info}"/></h4></td>
+                            <td><h4><c:out value="${company}"/></h4></td>
+                            <td><h4><c:out value="${name}"/></h4></td>
+                            <td><h4><c:out value="${type}"/></h4></td>
+                            <td><h4><c:out value="${price}"/></h4></td>
+                        </tr>
                         </thead>
                         <tbody>
+                        <c:set value="1" var="indexRemovingProduct"/>
+                        <c:forEach items="${requestScope.productArray}" var="product">
                             <tr style="text-align: center">
-                                <td>${requestScope.product.company}</td>
-                                <td>${requestScope.product.name}</td>
-                                <td>${requestScope.product.type}</td>
-                                <td>${requestScope.product.price}</td>
                                 <td>
                                     <form action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="addToBasket" />
-                                        <input type="hidden" name="id" value="${requestScope.product.id}" />
-                                        <input class="btn btn-default" type="submit" name="buy" value="${buy}" /><br/>
+                                        <input type="hidden" name="command" value="productInfo" />
+                                        <input type="hidden" name="id" value="${product.id}" />
+                                        <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
                                     </form>
                                 </td>
+                                <td>${product.company}</td>
+                                <td>${product.name}</td>
+                                <td>${product.type}</td>
+                                <td>${product.price}</td>
+
                             </tr>
+                        </c:forEach>
                         </tbody>
-                        <tr>
-                            <td colspan="5">
-                                ${requestScope.product.description}
-                            </td>
-                        </tr>
                     </table>
-                </div>
+
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${maxPage}" var="i">
+                                        <c:if test="${i == currentPage}">
+                                            <li class="active">
+                            <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                            </li>
+                        </c:if>
+                                        <c:if test="${i != currentPage}">
+                            <li>
+                                        		<a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                            </li>
+                        </c:if>
+                                </c:forEach>
+                    </ul>
+                </c:if>
             </div>
         </div>
-
     </div>
-</c:if>
+
+</div>
 
 </body>
 </html>

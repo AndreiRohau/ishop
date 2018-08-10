@@ -149,7 +149,7 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="FrontController?command=showAllMyOrders&page=1">
+                <a href="FrontController?command=showUserOrders&page=1">
                     <c:out value="${orders}"/>
                 </a>
             </li>

@@ -114,8 +114,8 @@
         </div>
         <div class="col-md-1" style="padding-top:10px;">
             <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="orders.jsp"/>
+                <input type="hidden" name="command" value="showOrders"/>
+                <input type="hidden" name="page" value="1"/>
                 <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
                     <c:out  value="${manageOrders}"/>
                 </button>
@@ -188,7 +188,7 @@
                             <td>${user.login}</td>
                             <td>
                                 <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="showAllMyOrders" />
+                                    <input type="hidden" name="command" value="showUserOrders" />
                                     <input type="hidden" name="id" value="${user.id}" />
                                     <input type="hidden" name="login" value="${user.login}" />
                                     <input type="hidden" name="page" value="1" />

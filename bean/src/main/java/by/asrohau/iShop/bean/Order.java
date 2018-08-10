@@ -17,6 +17,11 @@ public class Order extends Base {
         super(id);
     }
 
+    public Order(int userId, String status) {
+        this.userId = userId;
+        this.status = status;
+    }
+
     public Order(int userId, String productIds, String userAddress, String userPhone) {
         this.userId = userId;
         this.productIds = productIds;

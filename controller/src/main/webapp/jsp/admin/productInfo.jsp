@@ -114,8 +114,8 @@
         </div>
         <div class="col-md-1" style="padding-top:10px;">
             <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="orders.jsp"/>
+                <input type="hidden" name="command" value="showOrders"/>
+                <input type="hidden" name="page" value="1"/>
                 <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
                     <c:out  value="${manageOrders}"/>
                 </button>
@@ -150,9 +150,14 @@
                 <c:out value="${home}"/>
             </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="FrontController?command=goToPage&address=main.jsp">
                 <c:out value="${main}"/>
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a href="${sessionScope.lastCMD}">
+                <c:out value="${requestScope.product.name}"/>
             </a>
         </li>
     </ul>

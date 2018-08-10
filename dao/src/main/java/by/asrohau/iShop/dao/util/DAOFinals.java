@@ -66,11 +66,13 @@ public enum DAOFinals {
     DELETE_RESERVED_QUERY("DELETE FROM shop.reserve WHERE id = ?"),
     DELETE_ALL_RESERVED_QUERY("DELETE FROM shop.reserve WHERE user_id = ?"),
     DELETE_ALL_ORDERS_WITH_USER_ID_QUERY("DELETE FROM shop.orders WHERE user = ?"),
-    DELETE_NEW_ORDER_QUERY("DELETE FROM shop.orders WHERE id = ?"),
+    DELETE_ORDER_BY_ID_QUERY("DELETE FROM shop.orders WHERE id = ?"),
     SELECT_ALL_ORDERS_QUERY("SELECT * FROM shop.orders LIMIT ?, ?"),
     SELECT_ALL_ORDERS_STATUS_QUERY("SELECT * FROM shop.orders WHERE status = ? LIMIT ?, ?"),
-    COUNT_All_CLIENTS_ORDERS_QUERY("SELECT COUNT(*) FROM shop.orders WHERE user = ?"),
-    SELECT_ALL_CLIENTS_ORDERS_QUERY("SELECT * FROM shop.orders WHERE user = ? LIMIT ?, ?"),
+    COUNT_USER_ORDERS_QUERY("SELECT COUNT(*) FROM shop.orders WHERE user = ?"),
+    COUNT_USER_ORDERS_BY_STATUS_QUERY("SELECT COUNT(*) FROM shop.orders WHERE user = ? AND status = ?"),
+    SELECT_USER_ORDERS_QUERY("SELECT * FROM shop.orders WHERE user = ? LIMIT ?, ?"),
+    SELECT_USER_ORDERS_BY_STATUS_QUERY("SELECT * FROM shop.orders WHERE user = ? AND status = ? LIMIT ?, ?"),
 
     /*
     ProductDAO queries

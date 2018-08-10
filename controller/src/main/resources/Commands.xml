@@ -90,26 +90,34 @@
         <webname>createOrder</webname>
         <classname>CreateOrderCommand</classname>
     </command>
+    <!--<command>-->
+        <!--<webname>selectAllNewOrders</webname>-->
+        <!--<classname>SelectAllNewOrdersCommand</classname>-->
+    <!--</command>-->
+    <!--<command>-->
+        <!--<webname>selectAllActiveOrders</webname>-->
+        <!--<classname>SelectAllActiveOrdersCommand</classname>-->
+    <!--</command>-->
+    <!--<command>-->
+        <!--<webname>selectAllSuccessOrders</webname>-->
+        <!--<classname>SelectAllSuccessOrdersCommand</classname>-->
+    <!--</command>-->
     <command>
-        <webname>selectAllNewOrders</webname>
-        <classname>SelectAllNewOrdersCommand</classname>
+        <webname>showUserOrders</webname>
+        <classname>ShowUserOrdersCommand</classname>
     </command>
     <command>
-        <webname>selectAllActiveOrders</webname>
-        <classname>SelectAllActiveOrdersCommand</classname>
+        <webname>showUserOrdersByStatus</webname>
+        <classname>ShowUserOrdersByStatusCommand</classname>
     </command>
-    <command>
-        <webname>selectAllSuccessOrders</webname>
-        <classname>SelectAllSuccessOrdersCommand</classname>
-    </command>
-    <command>
-        <webname>showAllUsersOrders</webname>
-        <classname>ShowAllUsersOrdersCommand</classname>
-    </command>
-    <command>
-        <webname>showAllMyOrders</webname>
-        <classname>ShowAllMyOrdersCommand</classname>
-    </command>
+    <!--<command>-->
+        <!--<webname>showAllMyOrders</webname>-->
+        <!--<classname>ShowAllMyOrdersCommand</classname>-->
+    <!--</command>-->
+    <!--<command>-->
+        <!--<webname>showAllMyOrdersByStatus</webname>-->
+        <!--<classname>ShowAllMyOrdersByStatusCommand</classname>-->
+    <!--</command>-->
     <command>
         <webname>editNewOrder</webname>
         <classname>EditNewOrderCommand</classname>
@@ -131,7 +139,11 @@
         <classname>DeleteFromOrderCommand</classname>
     </command>
     <command>
-        <webname>showAllOrders</webname>
-        <classname>ShowAllOrdersCommand</classname>
+        <webname>showOrders</webname>
+        <classname>ShowOrdersCommand</classname>
+    </command>
+    <command>
+        <webname>showOrdersByStatus</webname>
+        <classname>ShowOrdersByStatusCommand</classname>
     </command>
 </commands>

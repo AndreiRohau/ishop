@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public int countAll() throws ServiceException {
+    public int countOrders() throws ServiceException {
         try {
             return (int) orderDAO.countAll();
         } catch (DAOException e) {
@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public int countOrders(String status) throws ServiceException {
+    public int countOrdersByStatus(String status) throws ServiceException {
         try {
             return orderDAO.countOrders(status);
         } catch (DAOException e) {
@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getAllOrders(int row)  throws ServiceException{ // ArrayList
+    public List<Order> getOrders(int row)  throws ServiceException{ // ArrayList
         try {
             return orderDAO.findAll(row);
         } catch (DAOException e) {
@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getAllOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
+    public List<Order> getOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
         try {
             return orderDAO.findAllOrders(row, status);
         } catch (DAOException e) {
@@ -170,38 +170,40 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getAllActiveOrders(int row) throws ServiceException { // ArrayList
+    public List<Order> getUserOrders(int row, Order order) throws ServiceException { // ArrayList
         try {
-            return orderDAO.findAllActiveOrders(row);
+            return orderDAO.findUserOrders(row, order.getUserId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Order> getAllSuccessOrders(int row) throws ServiceException { // ArrayList
+    public int countUserOrders(Order order) throws ServiceException {
         try {
-            return orderDAO.findAllClosedOrders(row);
+            return orderDAO.countUserOrders(order.getUserId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public int countClientOrders(int userId) throws ServiceException {
+    public List<Order> getUserOrdersByStatus(int row, Order order) throws ServiceException { // ArrayList
         try {
-            return orderDAO.countClientsOrders(userId);
+            return orderDAO.findUserOrdersByStatus(row, order);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Order> getAllClientsOrders(int row, int userId) throws ServiceException { // ArrayList
+    public int countUserOrdersByStatus(Order order) throws ServiceException {
         try {
-            return orderDAO.findAllClientsOrders(row, userId);
+            return orderDAO.countUserOrdersByStatus(order);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
+
+
 }

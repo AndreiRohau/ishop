@@ -111,7 +111,7 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
             connection = getConnection();
             connection.setAutoCommit(false);
 
-            preparedStatement = connection.prepareStatement(DELETE_NEW_ORDER_QUERY.inString);
+            preparedStatement = connection.prepareStatement(DELETE_ORDER_BY_ID_QUERY.inString);
             preparedStatement.setInt(1, order.getId());
 
             int result = preparedStatement.executeUpdate();
@@ -440,94 +440,94 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
         }
     }
 
-    /*
-    finds all active Orders for a certain page
-     */
-    @Override
-    public List<Order> findAllActiveOrders(int row) throws DAOException {
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
-            preparedStatement.setString(1, "active");
-            preparedStatement.setInt(1, row);
-            preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            List<Order> orderList = new ArrayList<>();
-            resultSet = preparedStatement.executeQuery();
-            int orderId;
-            int userId;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String status;
-            Date dateCreated;
-            Order order;
-            while (resultSet.next()) {
-                orderId = resultSet.getInt(1);
-                userId = resultSet.getInt(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                status =  resultSet.getString(6);
-                dateCreated =  resultSet.getDate(7);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
-                orderList.add(order);
-            }
-            return orderList;
-        } catch (SQLException e) {
-            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
-        } finally {
-            close(resultSet, preparedStatement, connection);
-        }
-    }
-
-    /*
-    finds all successful Orders for a certain page
-     */
-    @Override
-    public List<Order> findAllClosedOrders(int row) throws DAOException {
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
-            preparedStatement.setString(1, "closed");
-            preparedStatement.setInt(2, row);
-            preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            List<Order> orderList = new ArrayList<>();
-            resultSet = preparedStatement.executeQuery();
-            int orderId;
-            int userId;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String foundStatus;
-            Date dateCreated;
-            Order order;
-            while (resultSet.next()) {
-
-                orderId = resultSet.getInt(1);
-                userId = resultSet.getInt(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                foundStatus =  resultSet.getString(6);
-                dateCreated =  resultSet.getDate(7);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
-                orderList.add(order);
-            }
-            return orderList;
-        } catch (SQLException e) {
-            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
-        } finally {
-            close(resultSet, preparedStatement, connection);
-        }
-    }
+//    /*
+//    finds all active Orders for a certain page
+//     */
+//    @Override
+//    public List<Order> findAllActiveOrders(int row) throws DAOException {
+//        try {
+//            connection = getConnection();
+//            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
+//            preparedStatement.setString(1, "active");
+//            preparedStatement.setInt(1, row);
+//            preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+//            List<Order> orderList = new ArrayList<>();
+//            resultSet = preparedStatement.executeQuery();
+//            int orderId;
+//            int userId;
+//            String productIds;
+//            String userAddress;
+//            String userPhone;
+//            String status;
+//            Date dateCreated;
+//            Order order;
+//            while (resultSet.next()) {
+//                orderId = resultSet.getInt(1);
+//                userId = resultSet.getInt(2);
+//                productIds = resultSet.getString(3);
+//                userAddress =  resultSet.getString(4);
+//                userPhone =  resultSet.getString(5);
+//                status =  resultSet.getString(6);
+//                dateCreated =  resultSet.getDate(7);
+//                order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
+//                orderList.add(order);
+//            }
+//            return orderList;
+//        } catch (SQLException e) {
+//            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+//        } finally {
+//            close(resultSet, preparedStatement, connection);
+//        }
+//    }
+//
+//    /*
+//    finds all successful Orders for a certain page
+//     */
+//    @Override
+//    public List<Order> findAllClosedOrders(int row) throws DAOException {
+//        try {
+//            connection = getConnection();
+//            preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS_STATUS_QUERY.inString);
+//            preparedStatement.setString(1, "closed");
+//            preparedStatement.setInt(2, row);
+//            preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+//            List<Order> orderList = new ArrayList<>();
+//            resultSet = preparedStatement.executeQuery();
+//            int orderId;
+//            int userId;
+//            String productIds;
+//            String userAddress;
+//            String userPhone;
+//            String foundStatus;
+//            Date dateCreated;
+//            Order order;
+//            while (resultSet.next()) {
+//
+//                orderId = resultSet.getInt(1);
+//                userId = resultSet.getInt(2);
+//                productIds = resultSet.getString(3);
+//                userAddress =  resultSet.getString(4);
+//                userPhone =  resultSet.getString(5);
+//                foundStatus =  resultSet.getString(6);
+//                dateCreated =  resultSet.getDate(7);
+//                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
+//                orderList.add(order);
+//            }
+//            return orderList;
+//        } catch (SQLException e) {
+//            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+//        } finally {
+//            close(resultSet, preparedStatement, connection);
+//        }
+//    }
 
     /*
     finding out the amount of all Orders of a certain User by userId
      */
     @Override
-    public int countClientsOrders(int userId) throws DAOException {
+    public int countUserOrders(int userId) throws DAOException {
         try {
-            preparedStatement = getConnection().prepareStatement(COUNT_All_CLIENTS_ORDERS_QUERY.inString);
+            preparedStatement = getConnection().prepareStatement(COUNT_USER_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
 
@@ -541,13 +541,32 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
     }
 
     /*
+    finding out the amount of all OrdersByStatus of a certain User by userId
+     */
+    @Override
+    public int countUserOrdersByStatus(Order order) throws DAOException {
+        try {
+            preparedStatement = getConnection().prepareStatement(COUNT_USER_ORDERS_BY_STATUS_QUERY.inString);
+            preparedStatement.setInt(1, order.getUserId());
+            preparedStatement.setString(2, order.getStatus());
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+        } finally {
+            close(resultSet, preparedStatement, connection);
+        }
+    }
+
+    /*
     finds all Orders of a certain User by userId
      */
     @Override
-    public List<Order> findAllClientsOrders(int row, int userId) throws DAOException {
+    public List<Order> findUserOrders(int row, int userId) throws DAOException {
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(SELECT_ALL_CLIENTS_ORDERS_QUERY.inString);
+            preparedStatement = connection.prepareStatement(SELECT_USER_ORDERS_QUERY.inString);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
@@ -571,6 +590,47 @@ public class OrderDAOImpl extends AbstractConnection implements OrderDAO {
                 dateCreated = resultSet.getDate(7);
                 order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
                 orderList.add(order);
+            }
+            return orderList;
+        } catch (SQLException e) {
+            throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+        } finally {
+            close(resultSet, preparedStatement, connection);
+        }
+    }
+
+    /*
+    finds all OrdersByStatus of a certain User by userId
+     */
+    @Override
+    public List<Order> findUserOrdersByStatus(int row, Order order) throws DAOException {
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_USER_ORDERS_BY_STATUS_QUERY.inString);
+            preparedStatement.setInt(1, order.getUserId());
+            preparedStatement.setString(2, order.getStatus());
+            preparedStatement.setInt(3, row);
+            preparedStatement.setInt(4, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            List<Order> orderList = new ArrayList<>();
+            resultSet = preparedStatement.executeQuery();
+            int orderId;
+            int userId = 0;
+            String productIds;
+            String userAddress;
+            String userPhone;
+            String status;
+            Date dateCreated;
+            Order foundOrder;
+            while (resultSet.next()) {
+                orderId = resultSet.getInt(1);
+                userId = resultSet.getInt(2);
+                productIds = resultSet.getString(3);
+                userAddress =  resultSet.getString(4);
+                userPhone =  resultSet.getString(5);
+                status =  resultSet.getString(6);
+                dateCreated = resultSet.getDate(7);
+                foundOrder = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
+                orderList.add(foundOrder);
             }
             return orderList;
         } catch (SQLException e) {

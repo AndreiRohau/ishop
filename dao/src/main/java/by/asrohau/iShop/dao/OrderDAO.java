@@ -13,11 +13,10 @@ public interface OrderDAO extends AbstractDAO<Order> {
 
     List<Product> findAllReserved(int userId, int row) throws DAOException; //arraylist
     List<Integer> findAllReservedIds(int userId) throws DAOException; //linkedlist
-    List<Order> findAllOrders(int row, String status) throws DAOException; //arraylist
 
-    List<Order> findAllActiveOrders(int row) throws DAOException; //arraylist
-    List<Order> findAllClosedOrders(int row) throws DAOException; //arraylist
-    List<Order> findAllClientsOrders(int row, int userId) throws DAOException; //arraylist
+    List<Order> findAllOrders(int row, String status) throws DAOException; //arraylist
+    List<Order> findUserOrders(int row, int userId) throws DAOException; //arraylist
+    List<Order> findUserOrdersByStatus(int row, Order order) throws DAOException; //arraylist
 
     boolean update(Order order, String status) throws DAOException;
 
@@ -27,5 +26,6 @@ public interface OrderDAO extends AbstractDAO<Order> {
 
     int countReserved(int userId) throws DAOException;
     int countOrders(String status) throws DAOException;
-    int countClientsOrders(int userId) throws DAOException;
+    int countUserOrders(int userId) throws DAOException;
+    int countUserOrdersByStatus(Order order) throws DAOException;
 }

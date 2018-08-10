@@ -113,8 +113,8 @@
         </div>
         <div class="col-md-1" style="padding-top:10px;">
             <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="orders.jsp"/>
+                <input type="hidden" name="command" value="showOrders"/>
+                <input type="hidden" name="page" value="1"/>
                 <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
                     <c:out  value="${manageOrders}"/>
                 </button>
@@ -149,9 +149,14 @@
                 <c:out value="${home}"/>
             </a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="FrontController?command=goToPage&address=main.jsp">
                 <c:out value="${main}"/>
+            </a>
+        </li>
+        <li role="presentation" class="active">
+            <a href="FrontController?command=userInfo&id=${requestScope.user.id}">
+                <c:out value="${requestScope.user.id}"/>
             </a>
         </li>
     </ul>
@@ -186,9 +191,9 @@
                 </div>
                 <div class="panel-body">
                     <form id="showOrdersForm" action="FrontController" method="post">
-                        <input type="hidden" name="command" value="showAllMyOrders" />
-                        <input type="hidden" name="login" value="${requestScope.user.login}" />
+                        <input type="hidden" name="command" value="showUserOrders" />
                         <input type="hidden" name="id" value="${requestScope.user.id}" />
+                        <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="page" value="1" />
                         <input class="btn btn-default" type="submit" name="showOrders" value="${orders} ${requestScope.user.login}" /><br/>
                     </form>
@@ -197,6 +202,7 @@
                     <br/>
                     <br/>
                     <br/>
+                    <%--todo delete user total--%>
                     <form id="deleteForm" action="FrontController" method="post">
                         <input type="hidden" name="command" value="deleteUser" />
                         <input type="hidden" name="id" value="${requestScope.user.id}" />

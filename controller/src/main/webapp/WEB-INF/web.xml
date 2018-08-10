@@ -25,15 +25,15 @@
   <!-- Filter           END-->
   <!-- Filter-->
   <filter>
-    <filter-name>AuthentificationFilter</filter-name>
-    <filter-class>by.asrohau.iShop.controller.filter.AuthentificationFilter</filter-class>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>by.asrohau.iShop.controller.filter.AuthenticationFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>
     </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>AuthentificationFilter</filter-name>
+    <filter-name>AuthenticationFilter</filter-name>
     <url-pattern>/FrontController</url-pattern>
   </filter-mapping>
   <!-- Filter           END-->

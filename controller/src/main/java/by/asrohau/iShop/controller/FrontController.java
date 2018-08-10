@@ -17,7 +17,6 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public final class FrontController extends HttpServlet {
 	private final static Logger logger = Logger.getLogger(FrontController.class);
-
 	private static final long serialVersionUID = 1L;
 	private final Map<String, Command> commandMap = CommandFactory.getInstance().getCommandMap();
 
