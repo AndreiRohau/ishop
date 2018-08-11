@@ -18,8 +18,8 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 public class UpdateProductCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(UpdateProductCommand.class);
-    ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    ProductService productService = serviceFactory.getProductService();
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private ProductService productService = serviceFactory.getProductService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {

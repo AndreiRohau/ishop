@@ -37,7 +37,7 @@ public class DeleteProductCommand implements Command {
             }
             request.getSession().setAttribute(LAST_COMMAND.inString, lastCommand);
             response.sendRedirect(lastCommand);
-        } catch (ServiceException | IOException e) { // ServletException |
+        } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }
 

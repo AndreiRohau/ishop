@@ -64,24 +64,23 @@
                             РУ
                         </button>
                     </form>
-
                 </div>
             </div>
             <div class="col-md-1" style="text-align:center">
                 <c:if test="${sessionScope.role == 'admin'}">
-                            <span>
-                                <c:out value="${admin}"/>
-                            </span>
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == 'user'}">
-                            <span>
-                                <c:out value="${user}"/>
-                            </span>
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == null}">
-                            <span>
-                                <c:out value="${anonymous}"/>
-                            </span>
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
                 </c:if>
             </div>
             <div class="col-md-6" style="text-align:center">
@@ -161,7 +160,6 @@
             </div>
         </div>
     </c:if>
-
     <c:if test="${requestScope.isAdded == false}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
@@ -198,33 +196,32 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <form id="addNewProduct" action="FrontController" method="post">
-                            <input type="hidden" name="command" value="addNewProduct"/>
-                            <div class="form-group">
-                                <tr style="text-align: center">
-                                    <td><input class="form-control" type="text" name="company" value="" title="" required/></td>
-                                    <td><input class="form-control" type="text" name="name" value="" title="" required/></td>
-                                    <td><input class="form-control" type="text" name="type" value="" title="" required/></td>
-                                    <td><input class="form-control" type="text" name="price" value="" title="" required/></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5">
-                                        <textarea class="form-control" rows="10" cols="45" name="description" title="" required></textarea>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="submit" form="addNewProduct" name="edit" value="${addProduct}" class="btn btn-default"/>
-                                    </td>
-                                </tr>
-                            </div>
-                        </form>
+                            <form id="addNewProduct" action="FrontController" method="post">
+                                <input type="hidden" name="command" value="addNewProduct"/>
+                                <div class="form-group">
+                                    <tr style="text-align: center">
+                                        <td><input class="form-control" type="text" name="company" value="" title="" required/></td>
+                                        <td><input class="form-control" type="text" name="name" value="" title="" required/></td>
+                                        <td><input class="form-control" type="text" name="type" value="" title="" required/></td>
+                                        <td><input class="form-control" type="text" name="price" value="" title="" required/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <textarea class="form-control" rows="10" cols="45" name="description" title="" required></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <input type="submit" form="addNewProduct" name="edit" value="${addProduct}" class="btn btn-default"/>
+                                        </td>
+                                    </tr>
+                                </div>
+                            </form>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

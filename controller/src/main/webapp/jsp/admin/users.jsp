@@ -48,183 +48,180 @@
     </title>
 </head>
 <body>
-<!-- HEADER -->
-<div class="headerAnim" >
-    <div class="row">
-        <div class="col-md-1">
-            <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="en"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="en_EN">
-                        EN
+    <!-- HEADER -->
+    <div class="headerAnim" >
+        <div class="row">
+            <div class="col-md-1">
+                <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="en"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="en_EN">
+                            EN
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="ru"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
+                            РУ
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-1" style="text-align:center">
+                <c:if test="${sessionScope.role == 'admin'}">
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
+                </c:if>
+                <c:if test="${sessionScope.role == 'user'}">
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
+                </c:if>
+                <c:if test="${sessionScope.role == null}">
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
+                </c:if>
+            </div>
+            <div class="col-md-6" style="text-align:center">
+                <h1>
+                    <c:out value="${users}" />
+                </h1>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="addProduct.jsp"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${addProduct}"/>
                     </button>
                 </form>
             </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="ru"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
-                        РУ
-                    </button>
-                </form>
-
-            </div>
-        </div>
-        <div class="col-md-1" style="text-align:center">
-            <c:if test="${sessionScope.role == 'admin'}">
-                            <span>
-                                <c:out value="${admin}"/>
-                            </span>
-            </c:if>
-            <c:if test="${sessionScope.role == 'user'}">
-                            <span>
-                                <c:out value="${user}"/>
-                            </span>
-            </c:if>
-            <c:if test="${sessionScope.role == null}">
-                            <span>
-                                <c:out value="${anonymous}"/>
-                            </span>
-            </c:if>
-        </div>
-        <div class="col-md-6" style="text-align:center">
-            <h1>
-                <c:out value="${users}" />
-            </h1>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="addProduct.jsp"/>
-                <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
-                    <c:out value="${addProduct}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showUsers"/>
-                <input type="hidden" name="page" value="1"/>
-                <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
-                    <c:out value="${manageUsers}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showOrders"/>
-                <input type="hidden" name="page" value="1"/>
-                <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
-                    <c:out  value="${manageOrders}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1">
-            <div class="col-md-12">
-                <h4>
-                    <c:out value="${sessionScope.login}"/>
-                </h4>
-            </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="logout"/>
-                    <button class="btn btn-default" type="submit" value="logOut">
-                        <c:out value="${logOut}"/>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showUsers"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${manageUsers}"/>
                     </button>
                 </form>
             </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showOrders"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+                        <c:out  value="${manageOrders}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1">
+                <div class="col-md-12">
+                    <h4>
+                        <c:out value="${sessionScope.login}"/>
+                    </h4>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="logout"/>
+                        <button class="btn btn-default" type="submit" value="logOut">
+                            <c:out value="${logOut}"/>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <%--<div class="col-md-1">--%>
+            <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
+            <%--</div>--%>
         </div>
-        <%--<div class="col-md-1">--%>
-        <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
-        <%--</div>--%>
     </div>
-</div>
 
-<!-- NAVIGATION -->
-<div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
-    <ul class="nav nav-pills" >
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=index.jsp">
-                <c:out value="${home}"/>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=main.jsp">
-                <c:out value="${main}"/>
-            </a>
-        </li>
-        <li role="presentation" class="active">
-            <a href="FrontController?command=showUsers&page=1">
+    <!-- NAVIGATION -->
+    <div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
+        <ul class="nav nav-pills" >
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=index.jsp">
+                    <c:out value="${home}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=main.jsp">
+                    <c:out value="${main}"/>
+                </a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="FrontController?command=showUsers&page=1">
+                    <c:out value="${users}"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <div class="col-md-12">
+        <div class="panel panel-default" style="margin-top:15px">
+            <div class="panel-heading">
                 <c:out value="${users}"/>
-            </a>
-        </li>
-    </ul>
-</div>
-
-<!-- MAIN -->
-
-<div class="col-md-12">
-    <div class="panel panel-default" style="margin-top:15px">
-        <div class="panel-heading">
-            <c:out value="${users}"/>
-        </div>
-        <div class="panel-body">
-            <c:if test="${currentPage != null}">
-                <table class="table table-hover" >
-                    <thead style="color: #464a4c;background-color: #eceeef;">
-                    <tr style="text-align: center;">
-                        <td><h4><c:out value="${id}"/></h4></td>
-                        <td><h4><c:out value="${login}"/></h4></td>
-                        <td><h4><c:out value="${orders}"/></h4></td>
-                        <td><h4><c:out value="${edit}"/></h4></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${requestScope.users}" var="user">
-                        <tr style="text-align: center">
-                            <td>${user.id}</td>
-                            <td>${user.login}</td>
-                            <td>
-                                <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="showUserOrders" />
-                                    <input type="hidden" name="id" value="${user.id}" />
-                                    <input type="hidden" name="login" value="${user.login}" />
-                                    <input type="hidden" name="page" value="1" />
-                                    <input type="submit" name="edit" value="${orders}" class="btn btn-default"/><br/>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="FrontController" method="post">
-                                    <input type="hidden" name="command" value="userInfo" />
-                                    <input type="hidden" name="id" value="${user.id}" />
-                                    <input type="submit" name="edit" value="${edit}" class="btn btn-default"/><br/>
-                                </form>
-                            </td>
+            </div>
+            <div class="panel-body">
+                <c:if test="${currentPage != null}">
+                    <table class="table table-hover" >
+                        <thead style="color: #464a4c;background-color: #eceeef;">
+                        <tr style="text-align: center;">
+                            <td><h4><c:out value="${id}"/></h4></td>
+                            <td><h4><c:out value="${login}"/></h4></td>
+                            <td><h4><c:out value="${orders}"/></h4></td>
+                            <td><h4><c:out value="${edit}"/></h4></td>
                         </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${requestScope.users}" var="user">
+                            <tr style="text-align: center">
+                                <td>${user.id}</td>
+                                <td>${user.login}</td>
+                                <td>
+                                    <form action="FrontController" method="post">
+                                        <input type="hidden" name="command" value="showUserOrders" />
+                                        <input type="hidden" name="id" value="${user.id}" />
+                                        <input type="hidden" name="login" value="${user.login}" />
+                                        <input type="hidden" name="page" value="1" />
+                                        <input type="submit" name="edit" value="${orders}" class="btn btn-default"/><br/>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="FrontController" method="post">
+                                        <input type="hidden" name="command" value="userInfo" />
+                                        <input type="hidden" name="id" value="${user.id}" />
+                                        <input type="submit" name="edit" value="${edit}" class="btn btn-default"/><br/>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
 
-                <ul class="pagination pull-right">
-                    <c:forEach begin="1" end="${maxPage}" var="i">
-                                    <c:if test="${i == currentPage}">
-                                        <li class="active">
-                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                        </li>
-                    </c:if>
-                                    <c:if test="${i != currentPage}">
-                        <li>
-                                    		<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                        </li>
-                    </c:if>
-                            </c:forEach>
-                </ul>
-            </c:if>
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${maxPage}" var="i">
+                            <c:if test="${i == currentPage}">
+                                <li class="active">
+                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${i != currentPage}">
+                                <li>
+                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </c:if>
+            </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

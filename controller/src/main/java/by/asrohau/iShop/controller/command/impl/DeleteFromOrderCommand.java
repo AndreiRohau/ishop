@@ -25,30 +25,20 @@ public class DeleteFromOrderCommand implements Command{
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to DeleteFromOrderCommand");
         try {
-            Order order = new Order(Integer.parseInt(request.getParameter("orderId")));
+            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter("orderId"))));
             String[] productIdsArray = order.getProductIds().split(",");
 
             int currentPage = Integer.parseInt(request.getParameter("currentPage"));
-            int indexOfDeletingProduct = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString)
+            int indexRemovingProduct = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString)
                     + Integer.parseInt(request.getParameter("indexRemovingProduct"));
 
             StringBuilder finalIds = new StringBuilder();
-            ///////////////////
-            int indexRemovingProduct = 1;
-            for(String id : productIdsArray){
-                if(indexRemovingProduct != indexOfDeletingProduct && indexRemovingProduct < productIdsArray.length) {
-                    finalIds.append(id).append(",");
+
+            for(int i = 1; i <= productIdsArray.length; i++) {
+                if(i != indexRemovingProduct) {
+                    finalIds.append(productIdsArray[i - 1]).append(",");
                 }
-                indexRemovingProduct++;
             }
-
-            // simplified method!!!!!!!!!!!!!!!
-//            for(int i = 1; i != indexOfDeletingProduct && i < productIdsArray.length; i++) {
-//                if(indexRemovingProduct != indexOfDeletingProduct && indexRemovingProduct < productIdsArray.length) {
-//                    finalIds.append(productIdsArray[i - 1]).append(",");
-//                }
-//            }
-
 
             order.setProductIds(finalIds.toString());
 

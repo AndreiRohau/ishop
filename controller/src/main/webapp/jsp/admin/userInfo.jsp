@@ -47,217 +47,214 @@
     </title>
 </head>
 <body>
-<!-- HEADER -->
-<div class="headerAnim" >
-    <div class="row">
-        <div class="col-md-1">
-            <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="en"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="en_EN">
-                        EN
-                    </button>
-                </form>
-            </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="ru"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
-                        РУ
-                    </button>
-                </form>
-
-            </div>
-        </div>
-        <div class="col-md-1" style="text-align:center">
-            <c:if test="${sessionScope.role == 'admin'}">
-						<span>
-							<c:out value="${admin}"/>
-						</span>
-            </c:if>
-            <c:if test="${sessionScope.role == 'user'}">
-						<span>
-							<c:out value="${user}"/>
-						</span>
-            </c:if>
-            <c:if test="${sessionScope.role == null}">
-						<span>
-							<c:out value="${anonymous}"/>
-						</span>
-            </c:if>
-        </div>
-        <div class="col-md-6" style="text-align:center">
-            <h1>
-                <c:out value="${requestScope.user.login}" />
-            </h1>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="addProduct.jsp"/>
-                <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
-                    <c:out value="${addProduct}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showUsers"/>
-                <input type="hidden" name="page" value="1"/>
-                <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
-                    <c:out value="${manageUsers}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showOrders"/>
-                <input type="hidden" name="page" value="1"/>
-                <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
-                    <c:out  value="${manageOrders}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1">
-            <div class="col-md-12">
-                <h4>
-                    <c:out value="${sessionScope.login}"/>
-                </h4>
-            </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="logout"/>
-                    <button class="btn btn-default" type="submit" value="logOut">
-                        <c:out value="${logOut}"/>
-                    </button>
-                </form>
-            </div>
-        </div>
-        <%--<div class="col-md-1">--%>
-        <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
-        <%--</div>--%>
-    </div>
-</div>
-
-<!-- NAVIGATION -->
-<div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
-    <ul class="nav nav-pills" >
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=index.jsp">
-                <c:out value="${home}"/>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=main.jsp">
-                <c:out value="${main}"/>
-            </a>
-        </li>
-        <li role="presentation" class="active">
-            <a href="FrontController?command=userInfo&id=${requestScope.user.id}">
-                <c:out value="${requestScope.user.id}"/>
-            </a>
-        </li>
-    </ul>
-</div>
-
-<!-- MAIN -->
-<c:if test="${requestScope.user == null}">
-    <div class="panel-body">
-        <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${cannotFindUser}"/></h3>
-        </div>
-    </div>
-</c:if>
-
-<c:if test="${requestScope.updateFailed == true}">
-    <div class="panel-body">
-        <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${nothingHappened}"/></h3>
-        </div>
-    </div>
-</c:if>
-
-<c:if test="${requestScope.user != null}">
-    <div class="col-md-12">
-        <!-- Control panel -->
-        <div class="col-md-4">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <c:out value="${info}"/>
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <form id="showOrdersForm" action="FrontController" method="post">
-                        <input type="hidden" name="command" value="showUserOrders" />
-                        <input type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input type="hidden" name="login" value="${requestScope.user.login}" />
-                        <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="showOrders" value="${orders} ${requestScope.user.login}" /><br/>
+    <!-- HEADER -->
+    <div class="headerAnim" >
+        <div class="row">
+            <div class="col-md-1">
+                <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="en"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="en_EN">
+                            EN
+                        </button>
                     </form>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <%--todo delete user total--%>
-                    <form id="deleteForm" action="FrontController" method="post">
-                        <input type="hidden" name="command" value="deleteUser" />
-                        <input type="hidden" name="id" value="${requestScope.user.id}" />
-                        <input type="hidden" name="login" value="${requestScope.user.login}" />
-                        <input type="hidden" name="password" value="${requestScope.user.password}" />
-                        <input title="${delete} ${requestScope.user.login}" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="ru"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
+                            РУ
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-md-1" style="text-align:center">
+                <c:if test="${sessionScope.role == 'admin'}">
+                            <span>
+                                <c:out value="${admin}"/>
+                            </span>
+                </c:if>
+                <c:if test="${sessionScope.role == 'user'}">
+                            <span>
+                                <c:out value="${user}"/>
+                            </span>
+                </c:if>
+                <c:if test="${sessionScope.role == null}">
+                            <span>
+                                <c:out value="${anonymous}"/>
+                            </span>
+                </c:if>
+            </div>
+            <div class="col-md-6" style="text-align:center">
+                <h1>
+                    <c:out value="${requestScope.user.login}" />
+                </h1>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="addProduct.jsp"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${addProduct}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showUsers"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
+                        <c:out value="${manageUsers}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showOrders"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+                        <c:out  value="${manageOrders}"/>
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-1">
+                <div class="col-md-12">
+                    <h4>
+                        <c:out value="${sessionScope.login}"/>
+                    </h4>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="logout"/>
+                        <button class="btn btn-default" type="submit" value="logOut">
+                            <c:out value="${logOut}"/>
+                        </button>
                     </form>
                 </div>
             </div>
+            <%--<div class="col-md-1">--%>
+            <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
+            <%--</div>--%>
         </div>
-        <!-- INFO -->
-        <div class="col-md-8 ">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <c:out value="${edit}"/>
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover" >
-                        <thead style="color: #464a4c;background-color: #eceeef;">
-                        <tr style="text-align: center;">
-                            <td><c:out value="${id}"/></td>
-                            <td><c:out value="${login}"/></td>
-                            <td><c:out value="${password}"/></td>
-                        </tr>
-                        </thead>
+    </div>
 
-                        <tbody>
-                            <div class="form-group">
-                                <form id="editUser" action="FrontController" method="post">
-                                    <tr style="text-align: center">
-                                        <td>
-                                            <input form="editUser" type="hidden" name="command" value="updateUser" />
-                                            <input form="editUser" type="hidden" name="id" value="${requestScope.user.id}" title=""/>
-                                                ${requestScope.user.id}
-                                        </td>
-                                        <td><input form="editUser" class="form-control" type="text" name="login" value="${requestScope.user.login}" title=""/></td>
-                                        <td><input form="editUser" class="form-control" type="password" name="password" value="${requestScope.user.password}" title=""/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <input type="submit" form="editUser" name="edit" value="${edit}" class="btn btn-default"/>
-                                        </td>
-                                    </tr>
-                                </form>
-                            </div>
-                        </tbody>
-                    </table>
+    <!-- NAVIGATION -->
+    <div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
+        <ul class="nav nav-pills" >
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=index.jsp">
+                    <c:out value="${home}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=main.jsp">
+                    <c:out value="${main}"/>
+                </a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="FrontController?command=userInfo&id=${requestScope.user.id}">
+                    <c:out value="${requestScope.user.id}"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <c:if test="${requestScope.user == null}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${cannotFindUser}"/></h3>
+            </div>
+        </div>
+    </c:if>
+
+    <c:if test="${requestScope.updateFailed == true}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${nothingHappened}"/></h3>
+            </div>
+        </div>
+    </c:if>
+
+    <c:if test="${requestScope.user != null}">
+        <div class="col-md-12">
+            <!-- Control panel -->
+            <div class="col-md-4">
+                <div class="panel panel-default" style="margin-top:15px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <c:out value="${info}"/>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="showOrdersForm" action="FrontController" method="post">
+                            <input type="hidden" name="command" value="showUserOrders" />
+                            <input type="hidden" name="id" value="${requestScope.user.id}" />
+                            <input type="hidden" name="login" value="${requestScope.user.login}" />
+                            <input type="hidden" name="page" value="1" />
+                            <input class="btn btn-default" type="submit" name="showOrders" value="${orders} ${requestScope.user.login}" /><br/>
+                        </form>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <form id="deleteForm" action="FrontController" method="post">
+                            <input type="hidden" name="command" value="deleteUser" />
+                            <input type="hidden" name="id" value="${requestScope.user.id}" />
+                            <input type="hidden" name="login" value="${requestScope.user.login}" />
+                            <input type="hidden" name="password" value="${requestScope.user.password}" />
+                            <input title="${delete} ${requestScope.user.login}" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- INFO -->
+            <div class="col-md-8 ">
+                <div class="panel panel-default" style="margin-top:15px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <c:out value="${edit}"/>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover" >
+                            <thead style="color: #464a4c;background-color: #eceeef;">
+                            <tr style="text-align: center;">
+                                <td><c:out value="${id}"/></td>
+                                <td><c:out value="${login}"/></td>
+                                <td><c:out value="${password}"/></td>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                                <div class="form-group">
+                                    <form id="editUser" action="FrontController" method="post">
+                                        <tr style="text-align: center">
+                                            <td>
+                                                <input form="editUser" type="hidden" name="command" value="updateUser" />
+                                                <input form="editUser" type="hidden" name="id" value="${requestScope.user.id}" title=""/>
+                                                    ${requestScope.user.id}
+                                            </td>
+                                            <td><input form="editUser" class="form-control" type="text" name="login" value="${requestScope.user.login}" title=""/></td>
+                                            <td><input form="editUser" class="form-control" type="password" name="password" value="${requestScope.user.password}" title=""/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="submit" form="editUser" name="edit" value="${edit}" class="btn btn-default"/>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                </div>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-    </div>
-</c:if>
-
+    </c:if>
 </body>
 </html>

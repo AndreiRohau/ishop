@@ -16,15 +16,15 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class FindSuitableCommand implements Command {
+public class FindSuitableProductCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(FindSuitableCommand.class);
+    private static final Logger logger = Logger.getLogger(FindSuitableProductCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private ProductService productService = serviceFactory.getProductService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to FindSuitableCommand");
+        logger.info("We got to FindSuitableProductCommand");
 
         String company = request.getParameter("company").trim();
         String name = request.getParameter("name").trim();

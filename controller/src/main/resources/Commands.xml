@@ -50,13 +50,9 @@
         <webname>showUsers</webname>
         <classname>ShowUsersCommand</classname>
     </command>
-    <!--<command>-->
-        <!--<webname>selectAllProducts</webname>-->
-        <!--<classname>SelectAllProductsCommand</classname>-->
-    <!--</command>-->
     <command>
-        <webname>findSuitable</webname>
-        <classname>FindSuitableCommand</classname>
+        <webname>findSuitableProduct</webname>
+        <classname>FindSuitableProductCommand</classname>
     </command>
     <command>
         <webname>showReserved</webname>
@@ -66,10 +62,6 @@
         <webname>userInfo</webname>
         <classname>UserInfoCommand</classname>
     </command>
-    <!--<command>-->
-        <!--<webname>editProduct</webname>-->
-        <!--<classname>EditProductCommand</classname>-->
-    <!--</command>-->
     <command>
         <webname>updateUser</webname>
         <classname>UpdateUserCommand</classname>
@@ -90,18 +82,6 @@
         <webname>createOrder</webname>
         <classname>CreateOrderCommand</classname>
     </command>
-    <!--<command>-->
-        <!--<webname>selectAllNewOrders</webname>-->
-        <!--<classname>SelectAllNewOrdersCommand</classname>-->
-    <!--</command>-->
-    <!--<command>-->
-        <!--<webname>selectAllActiveOrders</webname>-->
-        <!--<classname>SelectAllActiveOrdersCommand</classname>-->
-    <!--</command>-->
-    <!--<command>-->
-        <!--<webname>selectAllSuccessOrders</webname>-->
-        <!--<classname>SelectAllSuccessOrdersCommand</classname>-->
-    <!--</command>-->
     <command>
         <webname>showUserOrders</webname>
         <classname>ShowUserOrdersCommand</classname>
@@ -110,14 +90,6 @@
         <webname>showUserOrdersByStatus</webname>
         <classname>ShowUserOrdersByStatusCommand</classname>
     </command>
-    <!--<command>-->
-        <!--<webname>showAllMyOrders</webname>-->
-        <!--<classname>ShowAllMyOrdersCommand</classname>-->
-    <!--</command>-->
-    <!--<command>-->
-        <!--<webname>showAllMyOrdersByStatus</webname>-->
-        <!--<classname>ShowAllMyOrdersByStatusCommand</classname>-->
-    <!--</command>-->
     <command>
         <webname>editNewOrder</webname>
         <classname>EditNewOrderCommand</classname>

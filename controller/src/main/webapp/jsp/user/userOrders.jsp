@@ -66,7 +66,6 @@
                             РУ
                         </button>
                     </form>
-
                 </div>
             </div>
             <div class="col-md-1" style="text-align:center">
@@ -183,13 +182,11 @@
                         <tbody>
                             <c:forEach items="${requestScope.orders}" var="order">
                                 <tr style="text-align: center">
-                                        <%--new: user ID - edit user --%>
                                     <td>
                                         <p>
                                             ${order.dateCreated}
                                         </p>
                                     </td>
-                                        <%--order id - open order--%>
                                     <td>
                                         <form title="Observe the order" action="FrontController" method="post">
                                             <input type="hidden" name="command" value="orderInfo" />
@@ -199,7 +196,6 @@
                                             <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
                                         </form>
                                     </td>
-                                        <%--set-active--%>
                                     <td>
                                         <p>
                                             ${order.status}
@@ -211,17 +207,17 @@
                     </table>
                     <ul class="pagination pull-right">
                         <c:forEach begin="1" end="${maxPage}" var="i">
-                            <c:if test="${i == currentPage}">
-                                <li class="active">
+                            <c:if test="${i == currentPage}">
+                                <li class="active">
                                     <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
-                            <c:if test="${i != currentPage}">
+                            <c:if test="${i != currentPage}">
                                 <li>
-                            		<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                </li>
+                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
                             </c:if>
-                        </c:forEach>
+                        </c:forEach>
                     </ul>
                 </div>
             </div>

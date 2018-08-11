@@ -18,7 +18,6 @@ public class ChangeLanguageCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(CHANGE_LANGUAGE);
-
 		try {
 			request.getSession(true).setAttribute(LOCAL.inString, request.getParameter(LOCAL.inString));
 

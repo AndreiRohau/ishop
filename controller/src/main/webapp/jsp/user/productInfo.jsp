@@ -42,183 +42,179 @@
     </title>
 </head>
 <body>
-<!-- HEADER -->
-<div class="headerAnim" >
-    <div class="row">
-        <div class="col-md-1">
-            <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="en"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="en_EN">
-                        EN
+    <!-- HEADER -->
+    <div class="headerAnim" >
+        <div class="row">
+            <div class="col-md-1">
+                <div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="en"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="en_EN">
+                            EN
+                        </button>
+                    </form>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="changeLanguage"/>
+                        <input type="hidden" name="local" value="ru"/>
+                        <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
+                            РУ
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-1" style="text-align:center">
+                <c:if test="${sessionScope.role == 'admin'}">
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
+                </c:if>
+                <c:if test="${sessionScope.role == 'user'}">
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
+                </c:if>
+                <c:if test="${sessionScope.role == null}">
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
+                </c:if>
+            </div>
+            <div class="col-md-7" style="text-align:center">
+                <h1>
+                    <c:out value="${requestScope.product.name}" />
+                </h1>
+            </div>
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="showReserved"/>
+                    <input type="hidden" name="page" value="1"/>
+                    <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
+                        <c:out value="${basket}"/>
                     </button>
                 </form>
             </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="changeLanguage"/>
-                    <input type="hidden" name="local" value="ru"/>
-                    <button class="btn btn-default" type="submit" name="lang" value="ru_RU">
-                        РУ
+            <div class="col-md-1" style="padding-top:10px;">
+                <form method="get" action="FrontController">
+                    <input type="hidden" name="command" value="goToPage"/>
+                    <input type="hidden" name="address" value="profile.jsp"/>
+                    <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
+                        <c:out  value="${updateProfile}"/>
                     </button>
                 </form>
+            </div>
+            <div class="col-md-1">
+                <div class="col-md-12">
+                    <h4>
+                        <c:out value="${sessionScope.login}"/>
+                    </h4>
+                </div>
+                <div class="col-md-12">
+                    <form action="FrontController" method="post">
+                        <input type="hidden" name="command" value="logout"/>
+                        <button class="btn btn-default" type="submit" value="logOut">
+                            <c:out value="${logOut}"/>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <%--<div class="col-md-1">--%>
+            <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
+            <%--</div>--%>
+        </div>
+    </div>
 
-            </div>
-        </div>
-        <div class="col-md-1" style="text-align:center">
-            <c:if test="${sessionScope.role == 'admin'}">
-                                <span>
-                                    <c:out value="${admin}"/>
-                                </span>
-            </c:if>
-            <c:if test="${sessionScope.role == 'user'}">
-                                <span>
-                                    <c:out value="${user}"/>
-                                </span>
-            </c:if>
-            <c:if test="${sessionScope.role == null}">
-                                <span>
-                                    <c:out value="${anonymous}"/>
-                                </span>
-            </c:if>
-        </div>
-        <div class="col-md-7" style="text-align:center">
-            <h1>
-                <c:out value="${requestScope.product.name}" />
-            </h1>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showReserved"/>
-                <input type="hidden" name="page" value="1"/>
-                <button style="min-width:100px;height:75px" class="btn btn-default" type="submit">
+    <!-- NAVIGATION -->
+    <div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
+        <ul class="nav nav-pills" >
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=index.jsp">
+                    <c:out value="${home}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=goToPage&address=main.jsp">
+                    <c:out value="${main}"/>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=showReserved&page=1">
                     <c:out value="${basket}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1" style="padding-top:10px;">
-            <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="goToPage"/>
-                <input type="hidden" name="address" value="profile.jsp"/>
-                <button class="btn btn-default" type="submit" style="min-width:100px;height:75px;white-space:pre-line;" >
-                    <c:out  value="${updateProfile}"/>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-1">
-            <div class="col-md-12">
-                <h4>
-                    <c:out value="${sessionScope.login}"/>
-                </h4>
-            </div>
-            <div class="col-md-12">
-                <form action="FrontController" method="post">
-                    <input type="hidden" name="command" value="logout"/>
-                    <button class="btn btn-default" type="submit" value="logOut">
-                        <c:out value="${logOut}"/>
-                    </button>
-                </form>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="FrontController?command=showUserOrders&page=1">
+                    <c:out value="${orders}"/>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN -->
+    <c:if test="${requestScope.product == ''}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${cannotFindProduct}"/></h3>
             </div>
         </div>
-        <%--<div class="col-md-1">--%>
-        <%--&lt;%&ndash;should be empty &ndash;%&gt;--%>
-        <%--</div>--%>
-    </div>
-</div>
+    </c:if>
 
-<!-- NAVIGATION -->
-<div class="well well-sm" style="padding: 30px 30px 0;background:0; border:1px; margin:0;">
-    <ul class="nav nav-pills" >
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=index.jsp">
-                <c:out value="${home}"/>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="FrontController?command=goToPage&address=main.jsp">
-                <c:out value="${main}"/>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="FrontController?command=showReserved&page=1">
-                <c:out value="${basket}"/>
-            </a>
-        </li>
-        <li role="presentation">
-            <a href="FrontController?command=showUserOrders&page=1">
-                <c:out value="${orders}"/>
-            </a>
-        </li>
-    </ul>
-</div>
-
-<!-- MAIN -->
-
-<c:if test="${requestScope.product == ''}">
-    <div class="panel-body">
-        <div class="alert alert-info" role="alert" style="padding:15px">
-            <h3><c:out value="${cannotFindProduct}"/></h3>
-        </div>
-    </div>
-</c:if>
-
-<c:if test="${requestScope.product != ''}">
-    <div class="col-md-12">
-        <!-- PICTURE -->
-        <div class="col-md-4">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-body">
-                    <%--product-picture todo--%>
+    <c:if test="${requestScope.product != ''}">
+        <div class="col-md-12">
+            <!-- PICTURE -->
+            <div class="col-md-4">
+                <div class="panel panel-default" style="margin-top:15px">
+                    <div class="panel-body">
+                        <%--product-picture todo--%>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- INFO -->
-        <div class="col-md-8 ">
-            <div class="panel panel-default" style="margin-top:15px">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <c:out value="${info}"/>
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover" >
-                        <thead style="color: #464a4c;background-color: #eceeef;">
-                            <tr style="text-align: center;">
-                                <td><c:out value="${company}"/></td>
-                                <td><c:out value="${name}"/></td>
-                                <td><c:out value="${type}"/></td>
-                                <td><c:out value="${price}"/></td>
-                                <td><c:out value="${buy}"/></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="text-align: center">
-                                <td>${requestScope.product.company}</td>
-                                <td>${requestScope.product.name}</td>
-                                <td>${requestScope.product.type}</td>
-                                <td>${requestScope.product.price}</td>
-                                <td>
-                                    <form action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="addToBasket" />
-                                        <input type="hidden" name="id" value="${requestScope.product.id}" />
-                                        <input class="btn btn-default" type="submit" name="buy" value="${buy}" /><br/>
-                                    </form>
+            <!-- INFO -->
+            <div class="col-md-8 ">
+                <div class="panel panel-default" style="margin-top:15px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <c:out value="${info}"/>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover" >
+                            <thead style="color: #464a4c;background-color: #eceeef;">
+                                <tr style="text-align: center;">
+                                    <td><c:out value="${company}"/></td>
+                                    <td><c:out value="${name}"/></td>
+                                    <td><c:out value="${type}"/></td>
+                                    <td><c:out value="${price}"/></td>
+                                    <td><c:out value="${buy}"/></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center">
+                                    <td>${requestScope.product.company}</td>
+                                    <td>${requestScope.product.name}</td>
+                                    <td>${requestScope.product.type}</td>
+                                    <td>${requestScope.product.price}</td>
+                                    <td>
+                                        <form action="FrontController" method="post">
+                                            <input type="hidden" name="command" value="addToBasket" />
+                                            <input type="hidden" name="id" value="${requestScope.product.id}" />
+                                            <input class="btn btn-default" type="submit" name="buy" value="${buy}" /><br/>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tr>
+                                <td colspan="5">
+                                    ${requestScope.product.description}
                                 </td>
                             </tr>
-                        </tbody>
-                        <tr>
-                            <td colspan="5">
-                                ${requestScope.product.description}
-                            </td>
-                        </tr>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-    </div>
-</c:if>
-
+    </c:if>
 </body>
 </html>

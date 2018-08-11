@@ -68,7 +68,6 @@
 								РУ
 							</button>
 						</form>
-
 					</div>
 				</div>
 				<div class="col-md-1" style="text-align:center">
@@ -97,7 +96,6 @@
 						<label for="password">
 							<c:out value="${password}" />:
 						</label>
-
 					</div>
 					<div class="col-md-2">
 						<div style="padding-top:5px">
@@ -168,10 +166,10 @@
 				</c:if>
 				<c:if test="${sessionScope.role == 'admin'}">
 					<div class="col-md-1" style="padding-top:10px;">
-
+							<%--should be empty --%>
 					</div>
 					<div class="col-md-1" style="padding-top:10px;">
-
+							<%--should be empty --%>
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12">
@@ -189,8 +187,6 @@
 						</div>
 					</div>
 				</c:if>
-
-
 			</div>
 		</div>
 
@@ -211,125 +207,110 @@
 				</c:if>
 			</ul>		
 		</div>
-		
+
 	<!-- MAIN -->
 		<div class="col-md-12">
 			<!-- INFO -->
-				<div class="col-md-6">
-					<div class="panel panel-default" style="margin-top:15px">
-						<div class="panel-heading">
-							<h3 class="panel-title">
-								<c:out value="${info}"/>
-							</h3>
-						</div>
-						<div class="panel-body">
-							<c:if test="${sessionScope.role == null}">
-								<div class="alert alert-info" role="alert">
-									<p>
-										<span>
-											<c:out value="${loginToStart}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-							<c:if test="${requestScope.isRegistered == true}">
-								<div class="alert alert-success" role="alert">
-									<p>
-										<span>
-											<c:out value="${successRegistration}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-							<c:if test="${requestScope.errorMessage == 'exists'}">
-								<div class="alert alert-danger" role="alert">
-									<p>
-										<span>
-											<c:out value="${loginExists}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-							<c:if test="${requestScope.errorMessage == 'logOutFirst'}">
-								<div class="alert alert-info" role="alert">
-									<p>
-										<span>
-											<c:out value="${logOutFirst}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-							<c:if test="${requestScope.errorMessage == 'noSuchUser'}">
-								<div class="alert alert-danger" role="alert">
-									<p>
-										<span>
-											<c:out value="${noSuchUser}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-							<c:if test="${requestScope.errorMessage == 'passwordsUnequal'}">
-								<div class="alert alert-danger" role="alert">
-									<p>
-										<span>
-											<c:out value="${unequalPasswords}"/>
-										</span>
-									</p>
-								</div>
-							</c:if>
-
-
-						</div>
+			<div class="col-md-6">
+				<div class="panel panel-default" style="margin-top:15px">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<c:out value="${info}"/>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<c:if test="${sessionScope.role == null}">
+							<div class="alert alert-info" role="alert">
+								<p>
+									<span>
+										<c:out value="${loginToStart}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
+						<c:if test="${requestScope.isRegistered == true}">
+							<div class="alert alert-success" role="alert">
+								<p>
+									<span>
+										<c:out value="${successRegistration}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
+						<c:if test="${requestScope.errorMessage == 'exists'}">
+							<div class="alert alert-danger" role="alert">
+								<p>
+									<span>
+										<c:out value="${loginExists}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
+						<c:if test="${requestScope.errorMessage == 'logOutFirst'}">
+							<div class="alert alert-info" role="alert">
+								<p>
+									<span>
+										<c:out value="${logOutFirst}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
+						<c:if test="${requestScope.errorMessage == 'noSuchUser'}">
+							<div class="alert alert-danger" role="alert">
+								<p>
+									<span>
+										<c:out value="${noSuchUser}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
+						<c:if test="${requestScope.errorMessage == 'passwordsUnequal'}">
+							<div class="alert alert-danger" role="alert">
+								<p>
+									<span>
+										<c:out value="${unequalPasswords}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
 					</div>
 				</div>
+			</div>
 			<!-- REGISTRATION -->
-				<div class="col-md-6 ">
-					<div class="panel panel-default" style="margin-top:15px">
-						<div class="panel-heading">
-							<h3 class="panel-title">
-								<c:out value="${registrationForm}"/>
-							</h3>
-						</div>
-						<div class="panel-body">
-							<form action="FrontController" method="post">
-								<input type="hidden" name="command" value="registration" />
-								<div class="form-group">
-									<label for="username">
-										<c:out value="${login}" />:
-									</label>
-									<input type="text" class="form-control" id="username" placeholder="${login}" name="login"/>
-								</div>
-								<div class="form-group">
-									<label for="password1">
-										<c:out value="${password}" />:
-									</label>
-									<input type="password" class="form-control" id="password1" placeholder="${password}" name="password"/>
-								</div>
-								<div class="form-group">
-									<label for="password2">
-										<c:out value="${password}" />:
-									</label>
-									<input type="password" class="form-control" id="password2" placeholder="${password}" name="password2"/>
-								</div>
-								<input type="submit" class="btn btn-default"  name="sign up" value="${signUp}" /><br/>
-							</form><br/>
-
-						</div>
+			<div class="col-md-6 ">
+				<div class="panel panel-default" style="margin-top:15px">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<c:out value="${registrationForm}"/>
+						</h3>
 					</div>
-				</div>			
-			
+					<div class="panel-body">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="registration" />
+							<div class="form-group">
+								<label for="username">
+									<c:out value="${login}" />:
+								</label>
+								<input type="text" class="form-control" id="username" placeholder="${login}" name="login"/>
+							</div>
+							<div class="form-group">
+								<label for="password1">
+									<c:out value="${password}" />:
+								</label>
+								<input type="password" class="form-control" id="password1" placeholder="${password}" name="password"/>
+							</div>
+							<div class="form-group">
+								<label for="password2">
+									<c:out value="${password}" />:
+								</label>
+								<input type="password" class="form-control" id="password2" placeholder="${password}" name="password2"/>
+							</div>
+							<input type="submit" class="btn btn-default"  name="sign up" value="${signUp}" /><br/>
+						</form><br/>
+					</div>
+				</div>
+			</div>
 		</div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 	</body>
 </html>

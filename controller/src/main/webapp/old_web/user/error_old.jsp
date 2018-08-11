@@ -14,7 +14,6 @@
  <fmt:setLocale value="${sessionScope.local}" />
  <fmt:setBundle basename="localization.local" var="loc" />
  <fmt:message bundle="${loc}" key="local.loginExists" var="loginExists" />
- <fmt:message bundle="${loc}" key="local.logout" var="logout" />
  <fmt:message bundle="${loc}" key="local.noSuchUser" var="noSuchUser" />
  <fmt:message bundle="${loc}" key="local.errorOccupied" var="errorOccupied" />
  <fmt:message bundle="${loc}" key="local.toIndexPage" var="toIndexPage" />

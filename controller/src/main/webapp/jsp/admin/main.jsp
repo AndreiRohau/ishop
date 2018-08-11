@@ -65,24 +65,23 @@
                             РУ
                         </button>
                     </form>
-
                 </div>
             </div>
             <div class="col-md-1" style="text-align:center">
                 <c:if test="${sessionScope.role == 'admin'}">
-                            <span>
-                                <c:out value="${admin}"/>
-                            </span>
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == 'user'}">
-                            <span>
-                                <c:out value="${user}"/>
-                            </span>
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == null}">
-                            <span>
-                                <c:out value="${anonymous}"/>
-                            </span>
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
                 </c:if>
             </div>
             <div class="col-md-6" style="text-align:center">
@@ -155,13 +154,12 @@
     </div>
 
     <!-- MAIN -->
-
     <div class="col-md-12">
         <div class="panel panel-default" style="margin-top:15px">
             <div class="panel-heading">
                 <form action="FrontController" method="post">
                     <div class="form-inline">
-                        <input class="form-control" type="hidden" name="command" value="findSuitable"/>
+                        <input class="form-control" type="hidden" name="command" value="findSuitableProduct"/>
                         <input class="form-control" type="hidden" name="page" value="1"/>
                         <input class="form-control" type="text" name="company" value="" placeholder="${company}"/>
                         <input class="form-control" type="text" name="name" value="" placeholder="${name}"/>

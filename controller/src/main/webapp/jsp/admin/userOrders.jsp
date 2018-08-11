@@ -36,6 +36,8 @@
     <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
     <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
     <fmt:message bundle="${loc}" key="local.newOrders" var="newOrders" />
+    <fmt:message bundle="${loc}" key="local.activeOrders" var="activeOrders" />
+    <fmt:message bundle="${loc}" key="local.closedOrders" var="closedOrders" />
     <fmt:message bundle="${loc}" key="local.active" var="active" />
     <fmt:message bundle="${loc}" key="local.success" var="success" />
     <fmt:message bundle="${loc}" key="local.orders" var="orders" />
@@ -73,24 +75,23 @@
                             РУ
                         </button>
                     </form>
-
                 </div>
             </div>
             <div class="col-md-1" style="text-align:center">
                 <c:if test="${sessionScope.role == 'admin'}">
-                                <span>
-                                    <c:out value="${admin}"/>
-                                </span>
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == 'user'}">
-                                <span>
-                                    <c:out value="${user}"/>
-                                </span>
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == null}">
-                                <span>
-                                    <c:out value="${anonymous}"/>
-                                </span>
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
                 </c:if>
             </div>
             <div class="col-md-6" style="text-align:center">
@@ -193,7 +194,7 @@
                         <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="status" value="active" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getActiveOrders" value="${active}" /><br/>
+                        <input class="btn btn-default" type="submit" name="getActiveOrders" value="${activeOrders}" /><br/>
                     </form>
                     <br/>
                     <form id="deleteForm" action="FrontController" method="post">
@@ -202,7 +203,7 @@
                         <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="status" value="closed" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getSuccessOrders" value="${success}" /><br/>
+                        <input class="btn btn-default" type="submit" name="getSuccessOrders" value="${closedOrders}" /><br/>
                     </form>
                 </div>
             </div>
@@ -221,69 +222,67 @@
                     </div>
                 </c:if>
                 <c:if test="${requestScope.orders != '[]'}">
-                <div class="panel-body">
-                    <table class="table table-hover" >
-                        <thead style="color: #464a4c;background-color: #eceeef;">
-                        <tr style="text-align: center;">
-                            <td><h4><c:out value="${user} ${id}"/></h4></td>
-                            <td><h4><c:out value="${dateCreated}"/></h4></td>
-                            <td><h4><c:out value="${status}"/></h4></td>
-                            <td><h4><c:out value="${order}"/></h4></td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${requestScope.orders}" var="order">
-                            <tr style="text-align: center">
-                                <td>
-                                    <form title="${info}" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="userInfo" />
-                                        <input type="hidden" name="id" value="${order.userId}" />
-                                        <input class="btn btn-default" type="submit" name="ok" value="${user} ${order.userId}" /><br/>
-                                    </form>
-                                </td>
-                                <td>
-                                    <p>
-                                        ${order.dateCreated}
-                                    </p>
-                                </td>
-                                <td>
-                                    <form title="${change}" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="orderSetStatus" />
-                                        <input type="hidden" name="id" value="${order.id}" />
-                                        <input type="hidden" name="status" value="${order.status}" />
-                                        <input class="btn btn-default" type="submit" name="status" value="${order.status}" /><br/>
-                                    </form>
-                                </td>
-                                <td>
-                                    <%--todo edit certatin order--%>
-                                    <form title="${edit}" action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="orderInfo" />
-                                        <input type="hidden" name="from" value="allUserOrders" />
-                                        <input type="hidden" name="page" value="1"/>
-                                        <input type="hidden" name="id" value="${order.id}" />
-                                        <input class="btn btn-default" type="submit" name="ok" value="${order.id}" /><br/>
-                                    </form>
-                                </td>
+                    <div class="panel-body">
+                        <table class="table table-hover" >
+                            <thead style="color: #464a4c;background-color: #eceeef;">
+                            <tr style="text-align: center;">
+                                <td><h4><c:out value="${user} ${id}"/></h4></td>
+                                <td><h4><c:out value="${dateCreated}"/></h4></td>
+                                <td><h4><c:out value="${status}"/></h4></td>
+                                <td><h4><c:out value="${order}"/></h4></td>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                    <ul class="pagination pull-right">
-                        <c:forEach begin="1" end="${maxPage}" var="i">
-                            <c:if test="${i == currentPage}">
-                                <li class="active">
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                </li>
-                            </c:if>
-                            <c:if test="${i != currentPage}">
-                                <li>
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </c:if>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${requestScope.orders}" var="order">
+                                    <tr style="text-align: center">
+                                        <td>
+                                            <form title="${info}" action="FrontController" method="post">
+                                                <input type="hidden" name="command" value="userInfo" />
+                                                <input type="hidden" name="id" value="${order.userId}" />
+                                                <input class="btn btn-default" type="submit" name="ok" value="${user} ${order.userId}" /><br/>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <p>${order.dateCreated}</p>
+                                        </td>
+                                        <td>
+                                            <form title="${change}" action="FrontController" method="post">
+                                                <input type="hidden" name="command" value="orderSetStatus" />
+                                                <input type="hidden" name="id" value="${order.id}" />
+                                                <input type="hidden" name="status" value="${order.status}" />
+                                                <input class="btn btn-default" type="submit" name="status" value="${order.status}" /><br/>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form title="${edit}" action="FrontController" method="post">
+                                                <input type="hidden" name="command" value="orderInfo" />
+                                                <input type="hidden" name="from" value="allUserOrders" />
+                                                <input type="hidden" name="page" value="1"/>
+                                                <input type="hidden" name="id" value="${order.id}" />
+                                                <input class="btn btn-default" type="submit" name="ok" value="${order.id}" /><br/>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                        <ul class="pagination pull-right">
+                            <c:forEach begin="1" end="${maxPage}" var="i">
+                                <c:if test="${i == currentPage}">
+                                    <li class="active">
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    </li>
+                                </c:if>
+                                <c:if test="${i != currentPage}">
+                                    <li>
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    </li>
+                                </c:if>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </c:if>
+            </div>
         </div>
     </div>
 

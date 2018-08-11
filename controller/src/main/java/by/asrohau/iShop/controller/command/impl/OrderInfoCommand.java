@@ -65,11 +65,8 @@ public class OrderInfoCommand implements Command {
                 products.add(product);
             }
 
-            String forUser = user.getLogin().equals(ADMIN.inString) ? "admin" : "for_user";
-
             request.setAttribute("order", order);
             request.setAttribute("products", products);
-            request.setAttribute("for_user", forUser);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",

@@ -72,7 +72,6 @@
                             РУ
                         </button>
                     </form>
-
                 </div>
             </div>
             <div class="col-md-1" style="text-align:center">
@@ -163,7 +162,7 @@
     </div>
 
     <!-- MAIN -->
-    <c:if test="${requestScope.productArray == '[]'}">
+    <c:if test="${requestScope.products == '[]'}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${basketIsEmpty}"/></h3>
@@ -192,7 +191,7 @@
         </div>
     </c:if>
 
-    <c:if test="${requestScope.productArray != '[]'}">
+    <c:if test="${requestScope.products != '[]'}">
         <div class="col-md-12">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">
@@ -206,63 +205,63 @@
                     </form>
                 </div>
                 <div class="panel-body">
-                        <h3><c:out value="${productsInTheBasket}"/></h3>
-                        <hr/>
-                        <table class="table table-hover" >
-                            <thead style="color: #464a4c;background-color: #eceeef;">
-                                <tr style="text-align: center;">
-                                    <td><h4><c:out value="${info}"/></h4></td>
-                                    <td><h4><c:out value="${company}"/></h4></td>
-                                    <td><h4><c:out value="${name}"/></h4></td>
-                                    <td><h4><c:out value="${type}"/></h4></td>
-                                    <td><h4><c:out value="${price}"/></h4></td>
-                                    <td><h4><c:out value="${remove}"/></h4></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach items="${requestScope.productArray}" var="product">
-                                    <tr style="text-align: center">
-                                        <td>
-                                            <form action="FrontController" method="post">
-                                                <input type="hidden" name="command" value="productInfo" />
-                                                <input type="hidden" name="id" value="${product.id}" />
-                                                <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
-                                            </form>
-                                        </td>
-                                        <td>${product.company}</td>
-                                        <td>${product.name}</td>
-                                        <td>${product.type}</td>
-                                        <td>${product.price}</td>
-                                        <td>
-                                            <form action="FrontController" method="post">
-                                                <input type="hidden" name="command" value="deleteReserve" />
-                                                <input type="hidden" name="reserveId" value="${product.reserveId}" />
-                                                <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
+                    <h3><c:out value="${productsInTheBasket}"/></h3>
+                    <hr/>
+                    <table class="table table-hover" >
+                        <thead style="color: #464a4c;background-color: #eceeef;">
+                        <tr style="text-align: center;">
+                            <td><h4><c:out value="${info}"/></h4></td>
+                            <td><h4><c:out value="${company}"/></h4></td>
+                            <td><h4><c:out value="${name}"/></h4></td>
+                            <td><h4><c:out value="${type}"/></h4></td>
+                            <td><h4><c:out value="${price}"/></h4></td>
+                            <td><h4><c:out value="${remove}"/></h4></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${requestScope.products}" var="product">
+                            <tr style="text-align: center">
+                                <td>
+                                    <form action="FrontController" method="post">
+                                        <input type="hidden" name="command" value="productInfo" />
+                                        <input type="hidden" name="id" value="${product.id}" />
+                                        <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+                                    </form>
+                                </td>
+                                <td>${product.company}</td>
+                                <td>${product.name}</td>
+                                <td>${product.type}</td>
+                                <td>${product.price}</td>
+                                <td>
+                                    <form action="FrontController" method="post">
+                                        <input type="hidden" name="command" value="deleteReserve" />
+                                        <input type="hidden" name="reserveId" value="${product.reserveId}" />
+                                        <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
 
-                        <ul class="pagination pull-right">
-                            <c:forEach begin="1" end="${maxPage}" var="i">
-                                <c:if test="${i == currentPage}">
-                                    <li class="active">
-                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                    </li>
-                                </c:if>
-                                <c:if test="${i != currentPage}">
-                                    <li>
-                                		<a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
-                                    </li>
-                                </c:if>
-                            </c:forEach>
-                        </ul>
-
+                    <ul class="pagination pull-right">
+                        <c:forEach begin="1" end="${maxPage}" var="i">
+                            <c:if test="${i == currentPage}">
+                                <li class="active">
+                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${i != currentPage}">
+                                <li>
+                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
                 </div>
             </div>
         </div>
     </c:if>
+
 </body>
 </html>

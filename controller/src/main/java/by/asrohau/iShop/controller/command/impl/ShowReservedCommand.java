@@ -40,16 +40,15 @@ public class ShowReservedCommand implements Command {
             int maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 
             List<Product> reservedIds = orderService.getAllReserved(userId, row);
-            List<Product> productArray = new ArrayList<>();
+            List<Product> products = new ArrayList<>();
             for(Product p : reservedIds){
                 Product product = productService.findProductWithId(p);
                 product.setReserveId(p.getReserveId());
-                productArray.add(product);
+                products.add(product);
                 product = new Product();
             }
 
-            request.setAttribute("productArray", productArray);
-
+            request.setAttribute("products", products);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute(LAST_COMMAND.inString,

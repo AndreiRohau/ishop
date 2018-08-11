@@ -12,7 +12,6 @@ import java.io.IOException;
 import static by.asrohau.iShop.controller.ControllerFinals.INDEX;
 
 public class LogoutCommand implements Command{
-
     private static final Logger logger = Logger.getLogger(LogoutCommand.class);
 
     @Override

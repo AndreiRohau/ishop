@@ -37,6 +37,8 @@
     <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
     <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
     <fmt:message bundle="${loc}" key="local.newOrders" var="newOrders" />
+    <fmt:message bundle="${loc}" key="local.activeOrders" var="activeOrders" />
+    <fmt:message bundle="${loc}" key="local.closedOrders" var="closedOrders" />
     <fmt:message bundle="${loc}" key="local.active" var="active" />
     <fmt:message bundle="${loc}" key="local.success" var="success" />
     <fmt:message bundle="${loc}" key="local.orders" var="orders" />
@@ -79,19 +81,19 @@
             </div>
             <div class="col-md-1" style="text-align:center">
                 <c:if test="${sessionScope.role == 'admin'}">
-                                    <span>
-                                        <c:out value="${admin}"/>
-                                    </span>
+                    <span>
+                        <c:out value="${admin}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == 'user'}">
-                                    <span>
-                                        <c:out value="${user}"/>
-                                    </span>
+                    <span>
+                        <c:out value="${user}"/>
+                    </span>
                 </c:if>
                 <c:if test="${sessionScope.role == null}">
-                                    <span>
-                                        <c:out value="${anonymous}"/>
-                                    </span>
+                    <span>
+                        <c:out value="${anonymous}"/>
+                    </span>
                 </c:if>
             </div>
             <div class="col-md-6" style="text-align:center">
@@ -170,7 +172,7 @@
 
     <!-- MAIN -->
     <div class="col-md-12">
-        <!-- Control panel -->
+        <!-- Orders -->
         <div class="col-md-2">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">
@@ -190,14 +192,14 @@
                         <input type="hidden" name="command" value="showOrdersByStatus" />
                         <input type="hidden" name="status" value="active" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getActiveOrders" value="${active}" /><br/>
+                        <input class="btn btn-default" type="submit" name="getActiveOrders" value="${activeOrders}" /><br/>
                     </form>
                     <br/>
                     <form id="deleteForm" action="FrontController" method="post">
                         <input type="hidden" name="command" value="showOrdersByStatus" />
                         <input type="hidden" name="status" value="closed" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getSuccessOrders" value="${success}" /><br/>
+                        <input class="btn btn-default" type="submit" name="getSuccessOrders" value="${closedOrders}" /><br/>
                     </form>
                 </div>
             </div>
@@ -237,9 +239,7 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <p>
-                                                ${order.dateCreated}
-                                        </p>
+                                        <p>${order.dateCreated}</p>
                                     </td>
                                     <td>
                                         <form title="${change}" action="FrontController" method="post">
@@ -249,7 +249,6 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <%--todo edit certatin order--%>
                                         <form title="${edit}" action="FrontController" method="post">
                                             <input type="hidden" name="command" value="orderInfo" />
                                             <input type="hidden" name="from" value="allUserOrders" />
@@ -277,6 +276,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>
