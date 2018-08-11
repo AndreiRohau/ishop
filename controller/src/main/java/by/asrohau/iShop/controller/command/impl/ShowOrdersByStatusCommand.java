@@ -22,7 +22,7 @@ public class ShowOrdersByStatusCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to ShowAllOrdersByStatusCommand");
+        logger.info("We got to ShowOrdersByStatusCommand");
 
         try{
             String status = request.getParameter(STATUS.inString);

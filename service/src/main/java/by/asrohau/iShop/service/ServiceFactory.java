@@ -2,6 +2,7 @@ package by.asrohau.iShop.service;
 
 import by.asrohau.iShop.service.impl.OrderServiceImpl;
 import by.asrohau.iShop.service.impl.ProductServiceImpl;
+import by.asrohau.iShop.service.impl.ReserveServiceImpl;
 import by.asrohau.iShop.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
@@ -10,6 +11,7 @@ public class ServiceFactory {
 
 	private final UserService userService = new UserServiceImpl();
 	private final ProductService productService = new ProductServiceImpl();
+	private final ReserveService reserveService = new ReserveServiceImpl();
 	private final OrderService orderService = new OrderServiceImpl();
 
 	private ServiceFactory() {}
@@ -24,6 +26,10 @@ public class ServiceFactory {
 
 	public ProductService getProductService() {
 		return productService;
+	}
+
+	public ReserveService getReserveService() {
+		return reserveService;
 	}
 
 	public OrderService getOrderService() {

@@ -8,7 +8,7 @@ public class User extends Base {
 
 	public User(){}
 
-	public User(int id) {
+	public User(long id) {
 		super(id);
 	}
 
@@ -16,7 +16,7 @@ public class User extends Base {
 		this.login = login;
 	}
 
-	public User(int id, String login) {
+	public User(long id, String login) {
 		super(id);
 		this.login = login;
 	}
@@ -26,7 +26,7 @@ public class User extends Base {
 		this.password = password;
 	}
 
-	public User(int id, String login, String password) {
+	public User(long id, String login, String password) {
 		super(id);
 		this.login = login;
 		this.password = password;
@@ -38,7 +38,7 @@ public class User extends Base {
 		this.role = role;
 	}
 
-	public User(int id, String login, String password, String role) {
+	public User(long id, String login, String password, String role) {
 		super(id);
 		this.login = login;
 		this.password = password;

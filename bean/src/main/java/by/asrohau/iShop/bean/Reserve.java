@@ -2,36 +2,40 @@ package by.asrohau.iShop.bean;
 
 public class Reserve extends Base {
 
-    private int rUserId;
-    private int rProductId;
+    private long rUserId;
+    private long rProductId;
 
     public Reserve() {
     }
 
-    public Reserve(int rUserId, int rProductId) {
+    public Reserve(long id) {
+        super(id);
+    }
+
+    public Reserve(long rUserId, long rProductId) {
         this.rUserId = rUserId;
         this.rProductId = rProductId;
     }
 
-    public Reserve(int id, int rUserId, int rProductId) {
+    public Reserve(long id, long rUserId, long rProductId) {
         super(id);
         this.rUserId = rUserId;
         this.rProductId = rProductId;
     }
 
-    public int getrUserId() {
+    public long getrUserId() {
         return rUserId;
     }
 
-    public void setrUserId(int rUserId) {
+    public void setrUserId(long rUserId) {
         this.rUserId = rUserId;
     }
 
-    public int getrProductId() {
+    public long getrProductId() {
         return rProductId;
     }
 
-    public void setrProductId(int rProductId) {
+    public void setrProductId(long rProductId) {
         this.rProductId = rProductId;
     }
 
@@ -50,8 +54,8 @@ public class Reserve extends Base {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + rUserId;
-        result = 31 * result + rProductId;
+        result = 31 * result + (int) (rUserId ^ (rUserId >>> 32));
+        result = 31 * result + (int) (rProductId ^ (rProductId >>> 32));
         return result;
     }
 

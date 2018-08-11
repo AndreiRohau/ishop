@@ -195,7 +195,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${requestScope.productArray}" var="product">
+							<c:forEach items="${requestScope.products}" var="product">
 								<tr style="text-align: center">
 									<td>
 										<form action="FrontController" method="post">

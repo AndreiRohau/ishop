@@ -191,7 +191,7 @@
         </div>
     </c:if>
 
-    <c:if test="${requestScope.products != '[]'}">
+    <c:if test="${ requestScope.products != '[]'}">
         <div class="col-md-12">
             <div class="panel panel-default" style="margin-top:15px">
                 <div class="panel-heading">

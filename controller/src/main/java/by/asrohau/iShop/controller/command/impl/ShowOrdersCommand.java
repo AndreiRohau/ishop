@@ -22,7 +22,7 @@ public class ShowOrdersCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to ShowAllOrdersCommand");
+        logger.info("We got to ShowOrdersCommand");
 
         try{
             int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));

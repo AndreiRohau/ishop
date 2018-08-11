@@ -5,8 +5,8 @@ CREATE SCHEMA IF NOT EXISTS `shop` DEFAULT CHARACTER SET utf8 ;
 USE `shop` ;
 
 CREATE TABLE IF NOT EXISTS `shop`.`orders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `user` bigint(20) NOT NULL,
   `products` varchar(500) NOT NULL,
   `address` varchar(1000) NOT NULL,
   `phone` varchar(30) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `shop`.`orders` (
 ) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shop`.`products` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `company` varchar(60) NOT NULL,
   `name` varchar(60) NOT NULL,
   `type` varchar(60) NOT NULL,
@@ -28,15 +28,15 @@ CREATE TABLE IF NOT EXISTS `shop`.`products` (
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shop`.`reserve` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL,
+  `userId` bigint(20) NOT NULL,
+  `productId` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `reserve_id_uindex` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shop`.`users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
   `login` varchar(60) NOT NULL,
   `password` varchar(60) NOT NULL,
   `role` varchar(20) NOT NULL,

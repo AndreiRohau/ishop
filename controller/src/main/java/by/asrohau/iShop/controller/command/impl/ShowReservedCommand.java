@@ -4,8 +4,8 @@ import by.asrohau.iShop.bean.Product;
 import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ProductService;
+import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -24,7 +24,7 @@ public class ShowReservedCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(ShowReservedCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    private OrderService orderService = serviceFactory.getOrderService();
+    private ReserveService reserveService= serviceFactory.getReserveService();
     private UserService userService = serviceFactory.getUserService();
     private ProductService productService = serviceFactory.getProductService();
 
@@ -33,13 +33,13 @@ public class ShowReservedCommand implements Command {
         logger.info("We got to ShowReservedCommand");
         try {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
-            int userId = userService.findUserDTOWithLogin(user).getId();
+            long userId = userService.findUserDTOWithLogin(user).getId();
 
             int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));;
             int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
-            int maxPage = (int) Math.ceil(((double) orderService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 
-            List<Product> reservedIds = orderService.getAllReserved(userId, row);
+            List<Product> reservedIds = reserveService.getAllReserved(userId, row);
             List<Product> products = new ArrayList<>();
             for(Product p : reservedIds){
                 Product product = productService.findProductWithId(p);

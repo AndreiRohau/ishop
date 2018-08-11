@@ -7,12 +7,12 @@ public class Product extends Base{
 	private String type;
 	private String price;
 	private String description;
-	private int reserveId;
-	private int orderId;
+	private long reserveId;
+	private long orderId;
 
 	public Product() {}
 
-	public Product(int id, int reserveId) {
+	public Product(long id, long reserveId) {
 		super(id);
 		this.reserveId = reserveId;
 	}
@@ -32,7 +32,7 @@ public class Product extends Base{
 		this.description = description;
 	}
 
-	public Product(int id, String company, String name, String type, String price, String description) {
+	public Product(long id, String company, String name, String type, String price, String description) {
 		super(id);
 		this.company = company;
 		this.name = name;
@@ -81,19 +81,19 @@ public class Product extends Base{
 		this.description = description;
 	}
 
-	public int getReserveId() {
+	public long getReserveId() {
 		return reserveId;
 	}
 
-	public void setReserveId(int reserveId) {
+	public void setReserveId(long reserveId) {
 		this.reserveId = reserveId;
 	}
 
-	public int getOrderId() {
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 
@@ -122,8 +122,8 @@ public class Product extends Base{
 		result = 31 * result + (type != null ? type.hashCode() : 0);
 		result = 31 * result + (price != null ? price.hashCode() : 0);
 		result = 31 * result + (description != null ? description.hashCode() : 0);
-		result = 31 * result + reserveId;
-		result = 31 * result + orderId;
+		result = 31 * result + (int) (reserveId ^ (reserveId >>> 32));
+		result = 31 * result + (int) (orderId ^ (orderId >>> 32));
 		return result;
 	}
 

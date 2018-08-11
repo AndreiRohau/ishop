@@ -53,18 +53,18 @@ public enum DAOFinals {
     /*
     OrderDAO queries
      */
-    SAVE_RESERVATION_QUERY("INSERT INTO shop.reserve (user_id, product_id) VALUES (?,?)"),
+    SAVE_RESERVATION_QUERY("INSERT INTO shop.reserve (userId, productId) VALUES (?,?)"),
     SAVE_NEW_ORDER_QUERY("INSERT INTO shop.orders (user, products, address, phone, status, dateCreated) VALUES (?,?,?,?,?,?)"),
-    SELECT_ALL_RESERVED_QUERY("SELECT * FROM shop.reserve WHERE user_id = ? LIMIT ?, ?"),
-    COUNT_RESERVED_QUERY("SELECT COUNT(*) FROM shop.reserve WHERE user_id = ?"),
-    SELECT_ALL_RESERVED_IDS_QUERY("SELECT * FROM shop.reserve WHERE user_id = ?"),
+    SELECT_ALL_RESERVED_QUERY("SELECT * FROM shop.reserve WHERE userId = ? LIMIT ?, ?"),
+    COUNT_RESERVED_QUERY("SELECT COUNT(*) FROM shop.reserve WHERE userId = ?"),
+    SELECT_ALL_RESERVED_IDS_QUERY("SELECT * FROM shop.reserve WHERE userId = ?"),
     COUNT_All_ORDERS_QUERY("SELECT COUNT(*) FROM shop.orders"),
     COUNT_All_ORDERS_STATUS_QUERY("SELECT COUNT(*) FROM shop.orders WHERE status = ?"),
     SELECT_ORDER_WITH_ID_QUERY("SELECT * FROM shop.orders WHERE id = ?"),
     UPDATE_SET_ORDER_STATUS_QUERY("UPDATE shop.orders SET status = ? WHERE id = ?"),
     UPDATE_ORDERS_PRODUCTS_QUERY("UPDATE shop.orders SET products = ? WHERE id = ?"),
     DELETE_RESERVED_QUERY("DELETE FROM shop.reserve WHERE id = ?"),
-    DELETE_ALL_RESERVED_QUERY("DELETE FROM shop.reserve WHERE user_id = ?"),
+    DELETE_ALL_RESERVED_QUERY("DELETE FROM shop.reserve WHERE userId = ?"),
     DELETE_ALL_ORDERS_WITH_USER_ID_QUERY("DELETE FROM shop.orders WHERE user = ?"),
     DELETE_ORDER_BY_ID_QUERY("DELETE FROM shop.orders WHERE id = ?"),
     SELECT_ALL_ORDERS_QUERY("SELECT * FROM shop.orders LIMIT ?, ?"),

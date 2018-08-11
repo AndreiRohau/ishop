@@ -256,7 +256,6 @@
                                         <td>
                                             <form title="${edit}" action="FrontController" method="post">
                                                 <input type="hidden" name="command" value="orderInfo" />
-                                                <input type="hidden" name="from" value="allUserOrders" />
                                                 <input type="hidden" name="page" value="1"/>
                                                 <input type="hidden" name="id" value="${order.id}" />
                                                 <input class="btn btn-default" type="submit" name="ok" value="${order.id}" /><br/>

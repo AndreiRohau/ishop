@@ -9,7 +9,7 @@ public interface ProductDAO extends AbstractDAO<Product> {
 
 	Product findProductWithId(Product product) throws DAOException;
 
-    int countProductsComprehensive(Product product) throws DAOException;
+    long countProductsComprehensive(Product product) throws DAOException;
 	List<Product> findProductsComprehensive(Product product, int row) throws DAOException; //arraylist
 
 }

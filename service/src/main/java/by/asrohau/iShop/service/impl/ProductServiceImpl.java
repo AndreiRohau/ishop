@@ -83,16 +83,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int countProducts() throws ServiceException {
+	public long countProducts() throws ServiceException {
 		try {
-			return (int) productDAO.countAll();
+			return productDAO.countAll();
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
-	public int countProductsComprehensive(Product product) throws ServiceException {
+	public long countProductsComprehensive(Product product) throws ServiceException {
 		try {
 			return productDAO.countProductsComprehensive(product);
 		} catch (DAOException e) {

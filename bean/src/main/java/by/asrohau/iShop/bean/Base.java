@@ -1,43 +1,36 @@
 package by.asrohau.iShop.bean;
 
 public class Base {
-    private int id;
+    private long id;
 
     public Base() {
     }
 
-    public Base(int id) {
+    public Base(long id) {
         this.id = id;
     }
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
 
-    public int getId(){
+    public long getId(){
         return this.id;
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        Base other = (Base) o;
+        Base base = (Base) o;
 
-        if(this.id != other.id) return false;
-
-        return true;
+        return id == base.id;
     }
 
     @Override
-    public int hashCode(){
-        final int prime = 31;
-        int result = this.id;
-
-        result = prime * result + this.id;
-
-        return result;
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override

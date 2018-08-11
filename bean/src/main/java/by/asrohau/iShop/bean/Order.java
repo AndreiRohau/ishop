@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Order extends Base {
 
-    private int userId;
+    private long userId;
     private String productIds;
     private String userAddress;
     private String userPhone;
@@ -13,23 +13,23 @@ public class Order extends Base {
 
     public Order() {}
 
-    public Order(int id) {
+    public Order(long id) {
         super(id);
     }
 
-    public Order(int userId, String status) {
+    public Order(long userId, String status) {
         this.userId = userId;
         this.status = status;
     }
 
-    public Order(int userId, String productIds, String userAddress, String userPhone) {
+    public Order(long userId, String productIds, String userAddress, String userPhone) {
         this.userId = userId;
         this.productIds = productIds;
         this.userAddress = userAddress;
         this.userPhone = userPhone;
     }
 
-    public Order(int userId, String productIds, String userAddress, String userPhone, String status) {
+    public Order(long userId, String productIds, String userAddress, String userPhone, String status) {
         this.userId = userId;
         this.productIds = productIds;
         this.userAddress = userAddress;
@@ -37,7 +37,7 @@ public class Order extends Base {
         this.status = status;
     }
 
-    public Order(int id, int userId, String productIds, String userAddress, String userPhone, String status) {
+    public Order(long id, long userId, String productIds, String userAddress, String userPhone, String status) {
         super(id);
         this.userId = userId;
         this.productIds = productIds;
@@ -46,7 +46,7 @@ public class Order extends Base {
         this.status = status;
     }
 
-    public Order(int userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
+    public Order(long userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
         this.userId = userId;
         this.productIds = productIds;
         this.userAddress = userAddress;
@@ -55,7 +55,7 @@ public class Order extends Base {
         this.dateCreated = dateCreated;
     }
 
-    public Order(int id, int userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
+    public Order(long id, long userId, String productIds, String userAddress, String userPhone, String status, Date dateCreated) {
         super(id);
         this.userId = userId;
         this.productIds = productIds;
@@ -65,11 +65,11 @@ public class Order extends Base {
         this.dateCreated = dateCreated;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -132,7 +132,7 @@ public class Order extends Base {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + userId;
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (productIds != null ? productIds.hashCode() : 0);
         result = 31 * result + (userAddress != null ? userAddress.hashCode() : 0);
         result = 31 * result + (userPhone != null ? userPhone.hashCode() : 0);

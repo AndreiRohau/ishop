@@ -10,6 +10,7 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
+import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
@@ -26,6 +27,7 @@ public class OrderInfoCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(OrderInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private UserService userService = serviceFactory.getUserService();
     private OrderService orderService = serviceFactory.getOrderService();
     private ProductService productService = serviceFactory.getProductService();
 
@@ -33,8 +35,8 @@ public class OrderInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to OrderInfoCommand");
         try {
-            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
             Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter(ID.inString))));
+            User user = userService.findUserWithId(new User(order.getUserId()));
 
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
             String[] productIdsArray = order.getProductIds().split(",");
@@ -67,25 +69,23 @@ public class OrderInfoCommand implements Command {
 
             request.setAttribute("order", order);
             request.setAttribute("products", products);
+            request.setAttribute("user", user);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute("lastCMD",
-                    "FrontController?command=orderInfo&page=" + currentPage
-                            + "&id=" + order.getId()
-                            + "&userId=" + order.getUserId()
-                            + "&address=" + order.getUserAddress()
-                            + "&phone=" + order.getUserPhone()
-                            + "&new_status=" + String.valueOf(request.getParameter("new_status"))
-                            + "&from=" + request.getParameter("from"));
-
-            request.setAttribute("lastCMDneedPage",
+            request.getSession().setAttribute(LAST_COMMAND.inString,
                     "FrontController?command=orderInfo"
                             + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
                             + "&address=" + order.getUserAddress()
                             + "&phone=" + order.getUserPhone()
-                            + "&new_status=" + String.valueOf(request.getParameter("new_status"))
-                            + "&from=" + request.getParameter("from")
+                            + "&page=" + currentPage);
+
+            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+                    "FrontController?command=orderInfo"
+                            + "&id=" + order.getId()
+                            + "&userId=" + order.getUserId()
+                            + "&address=" + order.getUserAddress()
+                            + "&phone=" + order.getUserPhone()
                             + "&page=");
 
             request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orderInfo.jsp")

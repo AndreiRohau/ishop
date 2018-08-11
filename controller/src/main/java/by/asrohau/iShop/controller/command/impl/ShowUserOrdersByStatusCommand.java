@@ -50,10 +50,12 @@ public class ShowUserOrdersByStatusCommand implements Command {
             request.getSession().setAttribute(LAST_COMMAND.inString,
                     "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
                             "&login=" + user.getLogin() +
+                            "&status=" + status +
                             "&page=" + currentPage);
             request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
                     "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
                             "&login=" + user.getLogin() +
+                            "&status=" + status +
                             "&page=");
 
             request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/userOrders.jsp")

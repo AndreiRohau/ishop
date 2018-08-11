@@ -4,13 +4,12 @@ import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import by.asrohau.iShop.service.OrderService;
+import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +22,7 @@ public class DeleteUserCommand implements Command {
 	private static final Logger logger = Logger.getLogger(DeleteUserCommand.class);
 	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private UserService userService = serviceFactory.getUserService();
-	private OrderService orderService = serviceFactory.getOrderService();
+	private ReserveService reserveService= serviceFactory.getReserveService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
@@ -59,7 +58,7 @@ public class DeleteUserCommand implements Command {
 				lastCMD = GO_TO_PAGE_PROFILE.inString;
 			}
 			if (isDeleted && actualUser) {
-				orderService.deleteAllReserved(userDTO.getId());
+				reserveService.deleteAllReserved(userDTO.getId());
 				request.getSession().invalidate();
 				goToPage = INDEX.inString;
 				lastCMD = GO_TO_PAGE_INDEX.inString;
@@ -69,9 +68,9 @@ public class DeleteUserCommand implements Command {
 				isDeleted = userService.deleteUser(user);
 			}
 			if (isDeleted && isAdmin) {
-				goToPage = "FrontController?command=showAllUsers&page=1";
-				lastCMD = "FrontController?command=showAllUsers&page=1";
-				orderService.deleteAllReserved(userDTO.getId());
+				goToPage = "FrontController?command=showUsers&page=1";
+				lastCMD = "FrontController?command=showUsers&page=1";
+				reserveService.deleteAllReserved(userDTO.getId());
 				request.removeAttribute(ERROR_MESSAGE.inString);
 			}
 

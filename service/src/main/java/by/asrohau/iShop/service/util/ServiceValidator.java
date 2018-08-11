@@ -24,6 +24,10 @@ public class ServiceValidator {
         return reserve.getrUserId() != 0 && reserve.getrProductId() != 0;
     }
 
+    public static boolean validation(long id) {
+        return id >= 0;
+    }
+
     public static boolean validation(int row) {
         return row >= 0;
     }

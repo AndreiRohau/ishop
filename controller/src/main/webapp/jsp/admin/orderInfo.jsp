@@ -26,6 +26,7 @@
     <fmt:message bundle="${loc}" key="local.home" var="home" />
     <fmt:message bundle="${loc}" key="local.main" var="main" />
     <fmt:message bundle="${loc}" key="local.order" var="order" />
+    <fmt:message bundle="${loc}" key="local.orders" var="orders" />
     <fmt:message bundle="${loc}" key="local.allOrders" var="allOrders" />
     <fmt:message bundle="${loc}" key="local.addProduct" var="addProduct" />
     <fmt:message bundle="${loc}" key="local.manageUsers" var="manageUsers" />
@@ -161,6 +162,12 @@
                     <c:out value="${user} ${requestScope.order.userId}"/>
                 </a>
             </li>
+            <li role="presentation">
+                <a href="FrontController?command=showUserOrders&id=${requestScope.user.id}&login=${requestScope.user.login}&page=1">
+                    <c:out value="${orders}"/>
+                </a>
+            </li>
+
         </ul>
     </div>
 
@@ -239,12 +246,12 @@
                             <c:forEach begin="1" end="${maxPage}" var="i">
                                 <c:if test="${i == currentPage}">
                                     <li class="active">
-                                        <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${i != currentPage}">
                                     <li>
-                                        <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                             </c:forEach>

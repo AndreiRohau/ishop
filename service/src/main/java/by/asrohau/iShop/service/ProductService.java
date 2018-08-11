@@ -3,7 +3,6 @@ package by.asrohau.iShop.service;
 import by.asrohau.iShop.bean.Product;
 import by.asrohau.iShop.service.exception.ServiceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ProductService {
@@ -15,8 +14,8 @@ public interface ProductService {
 
 	Product findProduct(Product product) throws ServiceException;
 	boolean deleteProduct(Product product) throws ServiceException;
-	int countProducts() throws  ServiceException;
+	long countProducts() throws  ServiceException;
 
-	int countProductsComprehensive(Product product) throws  ServiceException;
+	long countProductsComprehensive(Product product) throws  ServiceException;
 	List<Product>  findProductsComprehensive(Product product, int row) throws  ServiceException; //ArrayList
 }

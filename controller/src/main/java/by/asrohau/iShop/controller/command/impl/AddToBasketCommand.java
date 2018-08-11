@@ -5,7 +5,7 @@ import by.asrohau.iShop.bean.User;
 import by.asrohau.iShop.bean.UserDTO;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import by.asrohau.iShop.service.OrderService;
+import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -15,15 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.ID;
-import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
-import static by.asrohau.iShop.controller.ControllerFinals.LOGIN;
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class AddToBasketCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(AddToBasketCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    private OrderService orderService = serviceFactory.getOrderService();
+    private ReserveService reserveService= serviceFactory.getReserveService();
     private UserService userService = serviceFactory.getUserService();
 
     @Override
@@ -33,9 +31,12 @@ public class AddToBasketCommand implements Command {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
             UserDTO userDTO = userService.findUserDTOWithLogin(user);
 
+            logger.info("!!!!!!!" + userDTO);
             Reserve reserve = new Reserve(userDTO.getId(), Integer.parseInt(request.getParameter(ID.inString)));
+            logger.info("!!!!!!!" + reserve);
 
-            boolean success = orderService.saveReserve(reserve);
+            boolean success = reserveService.saveReserve(reserve);
+            logger.info("!!!!!!!" + success);
 
             response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
                     + "&success=" + success);

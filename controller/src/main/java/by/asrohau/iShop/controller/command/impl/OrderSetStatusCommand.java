@@ -31,9 +31,9 @@ public class OrderSetStatusCommand implements Command {
                 case "new": status = ACTIVE.inString;
                             break;
                 case "active": status = CLOSED.inString;
-                                break;
+                            break;
                 case "closed": status = NEW.inString;
-                                break;
+                            break;
             }
             Order order = new Order(Integer.parseInt(request.getParameter(ID.inString)));
 
