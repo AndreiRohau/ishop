@@ -40,11 +40,9 @@
 
     <c:set var="currentPage" value="${requestScope.currentPage}"/>
     <c:set var="maxPage" value="${requestScope.maxPage}"/>
-    <c:set var="productIDsString" value="${requestScope.productIDsString}"/>
-    <c:set var="orderId" value="${requestScope.orderId}"/>
 
     <title>
-        <c:out value="${order} ${requestScope.orderId}"/>
+        <c:out value="${order} ${requestScope.order.id}"/>
     </title>
 </head>
 <body>
@@ -91,7 +89,7 @@
         </div>
         <div class="col-md-7" style="text-align:center">
             <h1>
-                <c:out value="${order} ${requestScope.orderId}" />
+                <c:out value="${order} ${requestScope.order.id}" />
             </h1>
         </div>
         <div class="col-md-1" style="padding-top:10px;">
@@ -165,10 +163,10 @@
     <div class="col-md-4">
         <div class="panel panel-default" style="margin-top:15px">
             <div class="panel-body">
-                <p>${order} ${requestScope.orderId}</p>
-                <p>${status} ${requestScope.status}</p>
-                <p>${address} : ${requestScope.address}</p>
-                <p>${phone} : ${requestScope.phone}</p>
+                <p>${order} ${requestScope.order.id}</p>
+                <p>${status} ${requestScope.order.status}</p>
+                <p>${address} : ${requestScope.order.userAddress}</p>
+                <p>${phone} : ${requestScope.order.userPhone}</p>
             </div>
         </div>
     </div>

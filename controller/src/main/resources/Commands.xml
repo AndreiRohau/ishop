@@ -47,8 +47,8 @@
         <classname>AddNewProductCommand</classname>
     </command>
     <command>
-        <webname>showAllUsers</webname>
-        <classname>ShowAllUsersCommand</classname>
+        <webname>showUsers</webname>
+        <classname>ShowUsersCommand</classname>
     </command>
     <!--<command>-->
         <!--<webname>selectAllProducts</webname>-->

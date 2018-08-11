@@ -14,7 +14,7 @@ import static by.asrohau.iShop.service.util.ServiceValidator.validation;
 
 public class UserServiceImpl implements UserService {
 
-	private final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
+	private static final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
 	public UserServiceImpl() {
 	}

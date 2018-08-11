@@ -105,7 +105,7 @@
         </div>
         <div class="col-md-1" style="padding-top:10px;">
             <form method="get" action="FrontController">
-                <input type="hidden" name="command" value="showAllUsers"/>
+                <input type="hidden" name="command" value="showUsers"/>
                 <input type="hidden" name="page" value="1"/>
                 <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
                     <c:out value="${manageUsers}"/>
@@ -156,7 +156,7 @@
             </a>
         </li>
         <li role="presentation" class="active">
-            <a href="FrontController?command=showAllUsers&page=1">
+            <a href="FrontController?command=showUsers&page=1">
                 <c:out value="${users}"/>
             </a>
         </li>

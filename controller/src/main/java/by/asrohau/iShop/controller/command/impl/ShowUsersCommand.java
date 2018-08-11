@@ -17,9 +17,9 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class ShowAllUsersCommand implements Command {
+public class ShowUsersCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(ShowAllUsersCommand.class);
+    private static final Logger logger = Logger.getLogger(ShowUsersCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserService userService = serviceFactory.getUserService();
 

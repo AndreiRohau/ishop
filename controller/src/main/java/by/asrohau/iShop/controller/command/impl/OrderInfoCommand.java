@@ -10,16 +10,15 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
-import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
@@ -28,7 +27,6 @@ public class OrderInfoCommand implements Command {
     private static final Logger logger = Logger.getLogger(OrderInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
-    private UserService userService = serviceFactory.getUserService();
     private ProductService productService = serviceFactory.getProductService();
 
     @Override
@@ -36,14 +34,10 @@ public class OrderInfoCommand implements Command {
         logger.info("We got to OrderInfoCommand");
         try {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
-            Product product = new Product();
-
-            //int orderId = Integer.parseInt(request.getParameter("orderId"));
             Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter(ID.inString))));
 
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
-            String productIdsString = order.getProductIds();
-            String[] productIdsArray = productIdsString.split(",");
+            String[] productIdsArray = order.getProductIds().split(",");
 
             //finding maxPage
             int currentPage= Integer.parseInt(request.getParameter(PAGE.inString));
@@ -62,27 +56,20 @@ public class OrderInfoCommand implements Command {
             }
 
             //find each product. create an arraylist
-            ArrayList<Product> productArray = new ArrayList<>();
+            List<Product> products = new ArrayList<>();
             for(int id : productIDs){
+                Product product = new Product();
                 product.setId(id);
                 product = productService.findProductWithId(product);
                 product.setOrderId(order.getId());
-                productArray.add(product);
-                product = new Product();
+                products.add(product);
             }
 
             String forUser = user.getLogin().equals(ADMIN.inString) ? "admin" : "for_user";
 
-            request.setAttribute("productArray", productArray);
-            request.setAttribute("productIDsString", productIdsString);
-            request.setAttribute("new_status", request.getParameter("new_status"));
-            request.setAttribute("status", order.getStatus());
-            request.setAttribute("id", order.getId());
-            request.setAttribute("userId", order.getUserId());
+            request.setAttribute("order", order);
+            request.setAttribute("products", products);
             request.setAttribute("for_user", forUser);
-            request.setAttribute("address", order.getUserAddress());
-            request.setAttribute("phone", order.getUserPhone());
-            request.setAttribute("status", order.getStatus());
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute("lastCMD",
