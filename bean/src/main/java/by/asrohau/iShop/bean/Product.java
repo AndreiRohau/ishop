@@ -11,6 +11,9 @@ public class Product extends Base{
 	private long orderId;
 
 	public Product() {}
+	public Product(long id) {
+		super(id);
+	}
 
 	public Product(long id, long reserveId) {
 		super(id);

@@ -54,7 +54,7 @@ public class OrderInfoCommand implements Command {
                             productIdsArray.length % Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             int[] productIDs = new int[finArrlength];
             for(int i = 0; i < finArrlength; i++){
-                productIDs[i] = Integer.parseInt(productIdsArray[i+row]);
+                productIDs[i] = Integer.parseInt(productIdsArray[i + row]);
             }
 
             //find each product. create an arraylist

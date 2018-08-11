@@ -19,8 +19,8 @@ public class LogoutCommand implements Command{
         logger.info("We got to LogoutCommand");
         try {
             request.getSession().invalidate();
-            request.getRequestDispatcher(INDEX.inString).forward(request, response);
-        } catch (IOException | ServletException e) {
+            response.sendRedirect(INDEX.inString);
+        } catch (IOException e) {
             throw new ControllerException(e);
         }
     }

@@ -26,8 +26,7 @@ public class DeleteProductCommand implements Command {
         logger.info("We got to delete PRODUCT Command");
         try {
             String lastCommand = "";
-            Product product = new Product();
-            product.setId(Integer.parseInt(request.getParameter(ID.inString)));
+            Product product = new Product(Long.parseLong(request.getParameter(ID.inString)));
 
             if (productService.deleteProduct(product)) {
                 lastCommand = "FrontController?command=goToPage&address=main.jsp";

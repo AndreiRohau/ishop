@@ -19,7 +19,6 @@ public class GoToPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info(GO_TO_PAGE_COMMAND.inString);
-        logger.info("Acting as: " + request.getSession().getAttribute(ROLE.inString));
         try {
             String goToPage = INDEX.inString.equals(request.getParameter(ADDRESS.inString)) ? INDEX.inString :
                     "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/" + request.getParameter(ADDRESS.inString);
