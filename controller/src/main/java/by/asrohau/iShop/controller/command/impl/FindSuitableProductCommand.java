@@ -50,7 +50,7 @@ public class FindSuitableProductCommand implements Command {
             int maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
             int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
 
-            List<Product> products = productService.findProductsComprehensive(product, row); //ArrayList
+            List<Product> products = productService.findProductsComprehensive(product, row);
             request.setAttribute("products", products);
 
             request.setAttribute("maxPage", maxPage);

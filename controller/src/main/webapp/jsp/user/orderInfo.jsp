@@ -191,7 +191,7 @@
                             </thead>
                             <tbody>
                                 <c:set value="1" var="indexRemovingProduct"/>
-                                <c:forEach items="${requestScope.productArray}" var="product">
+                                <c:forEach items="${requestScope.products}" var="product">
                                     <tr style="text-align: center">
                                         <td>
                                             <form action="FrontController" method="post">
@@ -213,12 +213,12 @@
                             <c:forEach begin="1" end="${maxPage}" var="i">
                                 <c:if test="${i == currentPage}">
                                     <li class="active">
-                                        <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${i != currentPage}">
                                     <li>
-                                        <a href="${requestScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                             </c:forEach>
