@@ -26,9 +26,17 @@ public abstract class AbstractConnection {
 			if(resultSet != null) {
 				resultSet.close();
 			}
+		} catch (SQLException e) {
+			throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
+		}
+		try {
 			if(preparedStatement != null) {
 				preparedStatement.close();
 			}
+		} catch (SQLException e) {
+			throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
+		}
+		try {
 			if(connection != null) {
 				connection.close();
 			}
@@ -41,6 +49,10 @@ public abstract class AbstractConnection {
 			if(preparedStatement != null) {
 				preparedStatement.close();
 			}
+		} catch (SQLException e) {
+			throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
+		}
+		try {
 			if(connection != null) {
 				connection.close();
 			}

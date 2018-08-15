@@ -12,14 +12,19 @@ public class DatabaseConfigReader {
 
 	private Properties properties;
 
-	public DatabaseConfigReader() throws DAOException {
-		load();
+	public DatabaseConfigReader() {
+		try {
+			load();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void load() throws DAOException {
 		try (InputStream is = DatabaseConfigReader.class.getClassLoader().getResourceAsStream(DATABASE_SETTINGS_PATH.inString)) {
 			properties = new Properties();
 			properties.load(is);
+			is.close();
 		} catch (IOException e) {
 			throw new DAOException(DATABASE_CONFIG_INIT_ERROR.inString, e);
 		}

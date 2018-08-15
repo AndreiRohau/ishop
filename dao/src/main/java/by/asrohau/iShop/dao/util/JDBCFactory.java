@@ -13,25 +13,17 @@ public class JDBCFactory {
 
 	private final static Logger logger = Logger.getLogger(JDBCFactory.class);
 
-	private static DatabaseConfigReader databaseConfigReader;
-	static {
-		try {
-			databaseConfigReader = new DatabaseConfigReader();
-		}catch (DAOException e){
-			//...//
-		}
-	}
-
+	private static DatabaseConfigReader databaseConfigReader = new DatabaseConfigReader();
 	private static boolean driverIsLoaded = false;
+
+	public JDBCFactory() {
+	}
 
 	public static Connection getConnection() {
 		try {
 			Connection connection = null;
 			getJDBCDriver();
-			connection = DriverManager.getConnection(
-					databaseConfigReader.get(DB_URL_FIXED.inString),
-					databaseConfigReader.get(DB_LOGIN.inString),
-					databaseConfigReader.get(DB_PASSWORD.inString));
+			connection = DriverManager.getConnection(databaseConfigReader.get(DB_URL_FIXED.inString));
 			return connection;
 		} catch (SQLException e) {
 			logger.error(CONNECTION_FAILED.inString);
