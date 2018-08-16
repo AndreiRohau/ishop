@@ -35,23 +35,21 @@ public class OrderInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to OrderInfoCommand");
         try {
-            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter(ID.inString))));
+            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter(ID))));
             User user = userService.findUserWithId(new User(order.getUserId()));
 
             //find and get all prod ids from order; put into  String[] as [x, x, x ...]
             String[] productIdsArray = order.getProductIds().split(",");
 
             //finding maxPage
-            int currentPage= Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage  = (int) Math.ceil(((double) productIdsArray.length) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) productIdsArray.length) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
-            //due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45]......
-            int finArrlength = currentPage < maxPage ?
-                    Integer.parseInt(MAX_ROWS_AT_PAGE.inString) :
-                    (productIdsArray.length % Integer.parseInt(MAX_ROWS_AT_PAGE.inString) == 0 ?
-                            Integer.parseInt(MAX_ROWS_AT_PAGE.inString) :
-                            productIdsArray.length % Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            //due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45] - if(4)[46-48]...
+            int finArrlength = (currentPage < maxPage) || (productIdsArray.length % MAX_ROWS_AT_PAGE) == 0 ?
+                    MAX_ROWS_AT_PAGE : productIdsArray.length % MAX_ROWS_AT_PAGE;
+
             int[] productIDs = new int[finArrlength];
             for(int i = 0; i < finArrlength; i++){
                 productIDs[i] = Integer.parseInt(productIdsArray[i + row]);
@@ -72,7 +70,7 @@ public class OrderInfoCommand implements Command {
             request.setAttribute("user", user);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=orderInfo"
                             + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
@@ -80,7 +78,7 @@ public class OrderInfoCommand implements Command {
                             + "&phone=" + order.getUserPhone()
                             + "&page=" + currentPage);
 
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=orderInfo"
                             + "&id=" + order.getId()
                             + "&userId=" + order.getUserId()
@@ -88,7 +86,7 @@ public class OrderInfoCommand implements Command {
                             + "&phone=" + order.getUserPhone()
                             + "&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orderInfo.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/orderInfo.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

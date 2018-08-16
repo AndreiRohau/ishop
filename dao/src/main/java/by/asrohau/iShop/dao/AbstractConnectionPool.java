@@ -9,8 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.ERROR_IN_DAO_METHOD_FINAL_BLOCK;
-
 public abstract class AbstractConnectionPool {
     private final static Logger logger = Logger.getLogger(AbstractConnectionPool.class);
     private static ConnectionPool connectionPool = new ConnectionPool();
@@ -31,14 +29,14 @@ public abstract class AbstractConnectionPool {
                 resultSet.close();
             }
         } catch (SQLException e) {
-            throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
+            throw new DAOException("Error while closing resultSet or prepared statement, or connection", e);
         }
         try {
             if(preparedStatement != null) {
                 preparedStatement.close();
             }
         } catch (SQLException e) {
-            throw new DAOException(ERROR_IN_DAO_METHOD_FINAL_BLOCK.inString, e);
+            throw new DAOException("Error while closing resultSet or prepared statement, or connection", e);
         }
     }
 

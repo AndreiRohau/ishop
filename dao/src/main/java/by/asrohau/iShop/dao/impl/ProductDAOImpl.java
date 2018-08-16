@@ -17,6 +17,18 @@ import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
 public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO {
 	private final static Logger logger = Logger.getLogger(ProductDAOImpl.class);
+	/*
+    ProductDAO queries
+     */
+	private static final String FIND_EQUAL_PRODUCT_QUERY = "SELECT * FROM shop.products WHERE company = ? AND name = ? AND type = ? AND price = ?";
+	private static final String SAVE_PRODUCT_QUERY = "INSERT INTO shop.products (company, name, type, price, description) VALUES (?,?,?,?,?)";
+	private static final String FIND_PRODUCT_BY_ID_QUERY = "SELECT * FROM shop.products WHERE id = ?";
+	private static final String UPDATE_PRODUCT_BY_ID_QUERY = "UPDATE shop.products SET company = ?, name = ?, type = ?, price = ?, description = ? WHERE id = ?";
+	private static final String DELETE_PRODUCT_BY_ID_QUERY = "DELETE FROM shop.products WHERE id = ?";
+	private static final String FIND_PRODUCTS_LIMIT_QUERY = "SELECT * FROM shop.products LIMIT ?, ?";
+	private static final String COUNT_PRODUCTS_QUERY = "SELECT COUNT(*) FROM shop.products";
+	private static final String COUNT_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE id";
+	private static final String FIND_PRODUCTS_BY_ID_COMPREHENSIVE_QUERY = "SELECT * FROM shop.products WHERE id";
 
 	/*
 	save new Product
@@ -31,7 +43,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(SAVE_PRODUCT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(SAVE_PRODUCT_QUERY);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -45,9 +57,9 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -64,7 +76,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = getConnection().prepareStatement(FIND_EQUAL_PRODUCT_QUERY.inString);
+			preparedStatement = getConnection().prepareStatement(FIND_EQUAL_PRODUCT_QUERY);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -84,10 +96,10 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			if (foundProduct.getName() != null) {
 				return foundProduct;
 			}
-			logger.info(CANNOT_IDENTIFY_PRODUCT.inString);
+			logger.info("Can not identify Product");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -101,7 +113,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_PRODUCT_BY_ID_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_PRODUCT_BY_ID_QUERY);
 			preparedStatement.setLong(1, id);
 			resultSet = preparedStatement.executeQuery();
 			Product product = new Product();
@@ -117,10 +129,10 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			if (product.getName() != null) {
 				return product;
 			}
-			logger.info(CANNOT_IDENTIFY_PRODUCT_BY_ID.inString);
+			logger.info("Can not identify Order by id");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -142,7 +154,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_BY_ID_QUERY.inString);
+			preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_BY_ID_QUERY);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -157,9 +169,9 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -176,7 +188,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_BY_ID_QUERY.inString);
+			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_BY_ID_QUERY);
 			preparedStatement.setLong(1, product.getId());
 
 			int result = preparedStatement.executeUpdate();
@@ -186,9 +198,9 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -205,9 +217,9 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_PRODUCTS_LIMIT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_PRODUCTS_LIMIT_QUERY);
 			preparedStatement.setInt(1, row);
-			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
 			ArrayList<Product> productArrayList = new ArrayList<>();
 			resultSet = preparedStatement.executeQuery();
 			Product product;
@@ -231,7 +243,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 
 			return productArrayList;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -248,12 +260,12 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(COUNT_PRODUCTS_QUERY.inString);
+			preparedStatement = connection.prepareStatement(COUNT_PRODUCTS_QUERY);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			return resultSet.getLong(1);
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -263,7 +275,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 	//comprehensive part
 	@Override
 	public long countProductsComprehensive(Product product) throws DAOException {
-		String query = COUNT_PRODUCTS_COMPREHENSIVE_QUERY.inString;
+		String query = COUNT_PRODUCTS_COMPREHENSIVE_QUERY;
 		if(product.getCompany() != null){
 			query += " AND company = \'" + product.getCompany() + "\'";
 		}
@@ -288,7 +300,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			resultSet.next();
 			return resultSet.getLong(1);
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -297,7 +309,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 
 	@Override
 	public List<Product> findProductsComprehensive(Product product, int row) throws DAOException {
-		String query = FIND_PRODUCTS_BY_ID_COMPREHENSIVE_QUERY.inString;
+		String query = FIND_PRODUCTS_BY_ID_COMPREHENSIVE_QUERY;
 		if(product.getCompany() != null){
 			query += " AND company = \'" + product.getCompany() + "\'";
 		}
@@ -319,7 +331,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			connection = getConnection();
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, row);
-			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
 			List<Product> productArrayList = new ArrayList<>();
 			resultSet = preparedStatement.executeQuery();
 			Product productFound;
@@ -342,7 +354,7 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 			}
 			return productArrayList;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);

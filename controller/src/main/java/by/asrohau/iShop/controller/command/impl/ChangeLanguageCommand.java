@@ -19,10 +19,10 @@ public class ChangeLanguageCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(CHANGE_LANGUAGE);
 		try {
-			request.getSession(true).setAttribute(LOCAL.inString, request.getParameter(LOCAL.inString));
+			request.getSession(true).setAttribute(LOCAL, request.getParameter(LOCAL));
 
-			String lastCommand = String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString));
-			String path = lastCommand.equals(NULL.inString) ? INDEX.inString : lastCommand;
+			String lastCommand = String.valueOf(request.getSession().getAttribute(LAST_COMMAND));
+			String path = lastCommand.equals(NULL) ? INDEX : lastCommand;
 
 			response.sendRedirect(path);
 		} catch ( IOException e) {

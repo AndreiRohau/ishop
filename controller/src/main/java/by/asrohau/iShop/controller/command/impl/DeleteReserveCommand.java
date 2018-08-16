@@ -27,7 +27,7 @@ public class DeleteReserveCommand implements Command {
             boolean deleted = reserveService
                     .deleteReserved(new Reserve(Long.parseLong(request.getParameter("reserveId"))));
 
-            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
+            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
                     + "&deleted=" + deleted);
 
         } catch (ServiceException | IOException e) {

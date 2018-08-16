@@ -27,13 +27,13 @@ public class RegistrationCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(REGISTRATION_COMMAND);
 		try {
-			User user = new User(request.getParameter(LOGIN.inString).trim(),
-					request.getParameter(PASSWORD.inString).trim(),
-					USER.inString);
+			User user = new User(request.getParameter(LOGIN).trim(),
+					request.getParameter(PASSWORD).trim(),
+					USER);
 			boolean isRegistered = false;
 			boolean passwordEquals = request.getParameter("password2").trim().equals(user.getPassword());
 
-			if(passwordEquals && request.getSession().getAttribute(ROLE.inString) == null) {
+			if(passwordEquals && request.getSession().getAttribute(ROLE) == null) {
 				isRegistered = userService.registration(user);
 			}
 
@@ -41,11 +41,11 @@ public class RegistrationCommand implements Command {
 				request.setAttribute("isRegistered", true);
 			} else {
 				String errorMessage = passwordEquals ? "exists" : "passwordsUnequal";
-				errorMessage = request.getSession().getAttribute(ROLE.inString) == null ? errorMessage : "logOutFirst";
-				request.setAttribute(ERROR_MESSAGE.inString, errorMessage);
+				errorMessage = request.getSession().getAttribute(ROLE) == null ? errorMessage : "logOutFirst";
+				request.setAttribute(ERROR_MESSAGE, errorMessage);
 			}
-			request.getSession().setAttribute(LAST_COMMAND.inString, INDEX.inString);
-			request.getRequestDispatcher(INDEX.inString).forward(request, response);
+			request.getSession().setAttribute(LAST_COMMAND, INDEX);
+			request.getRequestDispatcher(INDEX).forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);
 		}

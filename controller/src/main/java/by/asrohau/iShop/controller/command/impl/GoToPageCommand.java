@@ -18,13 +18,13 @@ public class GoToPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info(GO_TO_PAGE_COMMAND.inString);
+        logger.info(GO_TO_PAGE_COMMAND);
         try {
-            String goToPage = INDEX.inString.equals(request.getParameter(ADDRESS.inString)) ? INDEX.inString :
-                    "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/" + request.getParameter(ADDRESS.inString);
+            String goToPage = INDEX.equals(request.getParameter(ADDRESS)) ? INDEX :
+                    "/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
-            request.getSession().setAttribute(LAST_COMMAND.inString,
-                    GO_TO_PAGE_.inString + request.getParameter(ADDRESS.inString));
+            request.getSession().setAttribute(LAST_COMMAND,
+                    GO_TO_PAGE_ + request.getParameter(ADDRESS));
             request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);

@@ -25,20 +25,20 @@ public class ShowOrdersByStatusCommand implements Command {
         logger.info("We got to ShowOrdersByStatusCommand");
 
         try{
-            String status = request.getParameter(STATUS.inString);
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) orderService.countOrdersByStatus(status)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            String status = request.getParameter(STATUS);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) orderService.countOrdersByStatus(status)) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
             request.setAttribute("orders", orderService.getOrdersByStatus(row, status));
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showOrdersByStatus&status=" + status + "&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showOrdersByStatus&status=" + status + "&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orders.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

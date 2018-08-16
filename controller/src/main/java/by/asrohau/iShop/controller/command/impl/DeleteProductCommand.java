@@ -18,15 +18,15 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class DeleteProductCommand implements Command {
     private static final Logger logger = Logger.getLogger(DeleteProductCommand.class);
-    ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    ProductService productService = serviceFactory.getProductService();
+    private ServiceFactory serviceFactory = ServiceFactory.getInstance();
+    private ProductService productService = serviceFactory.getProductService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to delete PRODUCT Command");
         try {
             String lastCommand = "";
-            Product product = new Product(Long.parseLong(request.getParameter(ID.inString)));
+            Product product = new Product(Long.parseLong(request.getParameter(ID)));
 
             if (productService.deleteProduct(product)) {
                 lastCommand = "FrontController?command=goToPage&address=main.jsp";
@@ -34,7 +34,7 @@ public class DeleteProductCommand implements Command {
                 lastCommand = "FrontController?command=productInfo&productId=" + product.getId();
                 request.setAttribute("updateFailed", true);
             }
-            request.getSession().setAttribute(LAST_COMMAND.inString, lastCommand);
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

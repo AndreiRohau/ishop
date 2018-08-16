@@ -35,11 +35,11 @@ public final class FrontController extends HttpServlet {
 	private void doExecute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("START servlet : " + request.getMethod() + " : command : " + request.getParameter("command"));
 		try {
-			Command command = (Command) commandMap.get(request.getParameter(COMMAND.inString));
+			Command command = (Command) commandMap.get(request.getParameter(COMMAND));
 			command.execute(request, response);
 		} catch (ControllerException e) {
-			request.setAttribute(ERROR_MESSAGE.inString, e.toString());
-			request.getRequestDispatcher(ERROR.inString).forward(request, response);
+			request.setAttribute(ERROR_MESSAGE, e.toString());
+			request.getRequestDispatcher(ERROR).forward(request, response);
 		}
 	}
 }

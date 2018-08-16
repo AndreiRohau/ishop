@@ -27,18 +27,18 @@ public class OrderSetStatusCommand implements Command {
         logger.info("We got to OrderSetStatusCommand");
         try {
             String status = "";
-            switch (request.getParameter(STATUS.inString)) {
-                case "new": status = ACTIVE.inString;
+            switch (request.getParameter(STATUS)) {
+                case "new": status = ACTIVE;
                             break;
-                case "active": status = CLOSED.inString;
+                case "active": status = CLOSED;
                             break;
-                case "closed": status = NEW.inString;
+                case "closed": status = NEW;
                             break;
             }
-            Order order = new Order(Integer.parseInt(request.getParameter(ID.inString)));
+            Order order = new Order(Integer.parseInt(request.getParameter(ID)));
 
-            request.setAttribute(MESSAGE.inString, orderService.orderSetStatus(order, status));
-            request.getRequestDispatcher((String) request.getSession().getAttribute(LAST_COMMAND.inString))
+            request.setAttribute(MESSAGE, orderService.orderSetStatus(order, status));
+            request.getRequestDispatcher((String) request.getSession().getAttribute(LAST_COMMAND))
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

@@ -32,12 +32,12 @@ public class ShowReservedCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowReservedCommand");
         try {
-            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            User user = new User((String) request.getSession().getAttribute(LOGIN));
             long userId = userService.findUserDTOWithLogin(user).getId();
 
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
-            int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
+            int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / MAX_ROWS_AT_PAGE);
 
             List<Product> reservedIds = reserveService.getAllReserved(userId, row);
             List<Product> products = new ArrayList<>();
@@ -51,9 +51,9 @@ public class ShowReservedCommand implements Command {
             request.setAttribute("products", products);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showReserved&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showReserved&page=");
 
             request.getRequestDispatcher("/jsp/user/basket.jsp").forward(request, response);

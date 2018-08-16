@@ -27,18 +27,18 @@ public class ShowUsersCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowUsersCommand");
         try {
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) userService.countUsers()) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) userService.countUsers()) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
             List<User> users = userService.getAllUsers(row);
 
             request.setAttribute("users", users);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showUsers&page=");
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showUsers&page=" + currentPage);
 
             request.getRequestDispatcher("/jsp/admin/users.jsp").forward(request, response);

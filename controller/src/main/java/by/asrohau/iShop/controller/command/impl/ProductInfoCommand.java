@@ -27,18 +27,18 @@ public class ProductInfoCommand implements Command {
         logger.info("We got to ProductInfoCommand");
         try {
             Product product  = new Product();
-            product.setId(Integer.parseInt(request.getParameter(ID.inString)));
+            product.setId(Integer.parseInt(request.getParameter(ID)));
             product = productService.findProductWithId(product);
 
             if(product != null){
                 request.setAttribute("product", product);
-                request.getSession().setAttribute(LAST_COMMAND.inString,
-                        "FrontController?command=productInfo&id=" + request.getParameter(ID.inString));
+                request.getSession().setAttribute(LAST_COMMAND,
+                        "FrontController?command=productInfo&id=" + request.getParameter(ID));
             } else {
                 request.setAttribute("cannotFindProduct", true);
             }
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/productInfo.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

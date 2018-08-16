@@ -11,7 +11,7 @@ public class PageUtil {
     public PageUtil(){}
 
     public PageUtil(String page, long countItems){
-        int _MAX_ROWS_AT_PAGE = Integer.parseInt(DAOFinals.MAX_ROWS_AT_PAGE.inString);
+        int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
         this.currentPage = Integer.parseInt(page);
         this.maxPage = calculateMaxPage(countItems, _MAX_ROWS_AT_PAGE);
         this.row = calculateRow(currentPage, _MAX_ROWS_AT_PAGE);

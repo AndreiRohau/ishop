@@ -46,9 +46,9 @@ public class FindSuitableProductCommand implements Command {
         }
 
         try {
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) productService.countProductsComprehensive(product)) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
             List<Product> products = productService.findProductsComprehensive(product, row);
             request.setAttribute("products", products);
@@ -61,10 +61,10 @@ public class FindSuitableProductCommand implements Command {
                     + "&type=" + type
                     + "&price=" + price
                     + "&page=";
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString, path);
-            request.getSession().setAttribute(LAST_COMMAND.inString, path + currentPage);
+            request.getSession().setAttribute(LAST_COMMAND_PAGE, path);
+            request.getSession().setAttribute(LAST_COMMAND, path + currentPage);
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/main.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/main.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

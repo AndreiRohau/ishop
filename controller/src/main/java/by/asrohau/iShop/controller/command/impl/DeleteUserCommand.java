@@ -26,42 +26,42 @@ public class DeleteUserCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(DELETE_USER_COMMAND.inString);
+		logger.info(DELETE_USER_COMMAND);
 		try {
-			User user = new User(request.getParameter(LOGIN.inString).trim(),
-								request.getParameter(PASSWORD.inString).trim());
+			User user = new User(request.getParameter(LOGIN).trim(),
+								request.getParameter(PASSWORD).trim());
 			UserDTO userDTO = userService.findUserDTOWithLogin(user);
 			String goToPage;
 			String lastCMD;
 			boolean isDeleted = false;
 
-			String userLogin = ((String) request.getSession().getAttribute(LOGIN.inString));
+			String userLogin = ((String) request.getSession().getAttribute(LOGIN));
 			boolean actualUser = userLogin.equals(user.getLogin());
-			boolean isAdmin = request.getSession().getAttribute(ROLE.inString).equals(ADMIN.inString);
+			boolean isAdmin = request.getSession().getAttribute(ROLE).equals(ADMIN);
 
 
 			if (!isAdmin) {
 				goToPage = "/jsp/user/profile.jsp";
-				lastCMD = GO_TO_PAGE_PROFILE.inString;
-				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
+				lastCMD = GO_TO_PAGE_PROFILE;
+				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
 			} else {
 				goToPage = "FrontController?command=userInfo&id=" + userDTO.getId();
 				lastCMD = "FrontController?command=userInfo&id=" + userDTO.getId();
-				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
+				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
 			}
 
 			if (actualUser) {
 				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
 				isDeleted = userService.deleteUser(user);
-				request.setAttribute(ERROR_MESSAGE.inString, "deleteUserError");
+				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
 				goToPage = "/jsp/user/profile.jsp";
-				lastCMD = GO_TO_PAGE_PROFILE.inString;
+				lastCMD = GO_TO_PAGE_PROFILE;
 			}
 			if (isDeleted && actualUser) {
 				reserveService.deleteAllReserved(userDTO.getId());
 				request.getSession().invalidate();
-				goToPage = INDEX.inString;
-				lastCMD = GO_TO_PAGE_INDEX.inString;
+				goToPage = INDEX;
+				lastCMD = GO_TO_PAGE_INDEX;
 			}
 			if (isAdmin) {
 				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
@@ -71,10 +71,10 @@ public class DeleteUserCommand implements Command {
 				goToPage = "FrontController?command=showUsers&page=1";
 				lastCMD = "FrontController?command=showUsers&page=1";
 				reserveService.deleteAllReserved(userDTO.getId());
-				request.removeAttribute(ERROR_MESSAGE.inString);
+				request.removeAttribute(ERROR_MESSAGE);
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND.inString, lastCMD);
+			request.getSession().setAttribute(LAST_COMMAND, lastCMD);
 			request.getRequestDispatcher(goToPage).forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);

@@ -25,19 +25,19 @@ public class ShowOrdersCommand implements Command {
         logger.info("We got to ShowOrdersCommand");
 
         try{
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) orderService.countOrders()) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) orderService.countOrders()) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
             request.setAttribute("orders", orderService.getOrders(row));
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showOrders&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showOrders&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/orders.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

@@ -19,7 +19,19 @@ import static by.asrohau.iShop.dao.util.DAOFinals.*;
 public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 
 	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
-
+	/*
+    UserDAO queries
+     */
+	private static final String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password, role) VALUES (?,?,?)";
+	private static final String FIND_USER_BY_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
+	private static final String FIND_USER_BY_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";
+	private static final String FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY = "SELECT * FROM shop.users WHERE login = ? AND password = ?";
+	private static final String FIND_USERS_LIMIT_QUERY = "SELECT * FROM shop.users LIMIT ?,?";
+	private static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM shop.users";
+	private static final String UPDATE_USER_BY_ID_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
+	private static final String UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
+	private static final String DELETE_USER_BY_LOGIN_AND_PASSWORD_QUERY = "DELETE FROM shop.users WHERE login = ? AND password = ?";
+	
 	/*
 	save new User
 	 */
@@ -33,7 +45,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(SAVE_USER_QUERY.inString);
+			preparedStatement = connection.prepareStatement(SAVE_USER_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setString(3, user.getRole());
@@ -45,9 +57,9 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -64,7 +76,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			resultSet = preparedStatement.executeQuery();
@@ -79,10 +91,10 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			if (user.getLogin() != null) {
 				return user;
 			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_LOGIN_AND_PASSWORD.inString);
+			logger.info("Can not identify User by login and password");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -99,7 +111,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_BY_ID_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_ID_QUERY);
 			preparedStatement.setLong(1, id);
 			resultSet = preparedStatement.executeQuery();
 
@@ -114,10 +126,10 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			if (user.getLogin() != null) {
 				return user;
 			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_ID.inString);
+			logger.info("Can not identify User with id");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -139,7 +151,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_QUERY.inString);
+			preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setLong(3, user.getId());
@@ -151,9 +163,9 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -174,7 +186,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(DELETE_USER_BY_LOGIN_AND_PASSWORD_QUERY.inString);
+			preparedStatement = connection.prepareStatement(DELETE_USER_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 
@@ -185,9 +197,9 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);
@@ -204,9 +216,9 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USERS_LIMIT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USERS_LIMIT_QUERY);
 			preparedStatement.setInt(1, row);
-			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
+			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
 			List<User> userArrayList = new ArrayList<>();
 			resultSet = preparedStatement.executeQuery();
 			User user;
@@ -226,7 +238,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 
 			return userArrayList;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -243,12 +255,12 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY.inString);
+			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			return resultSet.getLong(1);
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -262,7 +274,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			resultSet = preparedStatement.executeQuery();
 			UserDTO userDTO = new UserDTO();
@@ -276,10 +288,10 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			if (userDTO.getLogin() != null) {
 				return userDTO;
 			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_LOGIN_AND_PASSWORD.inString);
+			logger.info("Can not identify User by login and password");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
 			returnConnection(connection);
@@ -297,7 +309,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY.inString);
+			preparedStatement = connection.prepareStatement(UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, newPassword);
 			preparedStatement.setString(2, user.getLogin());
 			preparedStatement.setString(3, user.getPassword());
@@ -310,9 +322,9 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
 			returnConnection(connection);

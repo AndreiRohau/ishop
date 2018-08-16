@@ -28,11 +28,11 @@ public class AddToBasketCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to AddToBasketCommand");
         try {
-            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            User user = new User((String) request.getSession().getAttribute(LOGIN));
             UserDTO userDTO = userService.findUserDTOWithLogin(user);
-            Reserve reserve = new Reserve(userDTO.getId(), Integer.parseInt(request.getParameter(ID.inString)));
+            Reserve reserve = new Reserve(userDTO.getId(), Integer.parseInt(request.getParameter(ID)));
 
-            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
+            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
                     + "&success=" + reserveService.saveReserve(reserve));
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

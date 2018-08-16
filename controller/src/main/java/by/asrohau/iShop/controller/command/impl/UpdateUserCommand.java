@@ -26,9 +26,9 @@ public class UpdateUserCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to UpdateUserCommand");
         try {
-            User user  = new User(Integer.parseInt(request.getParameter(ID.inString)),
-                    request.getParameter(LOGIN.inString),
-                    request.getParameter(PASSWORD.inString));
+            User user  = new User(Integer.parseInt(request.getParameter(ID)),
+                    request.getParameter(LOGIN),
+                    request.getParameter(PASSWORD));
 
             if(!userService.updateUser(user)){
                 request.setAttribute("updateFailed", true);
@@ -36,7 +36,7 @@ public class UpdateUserCommand implements Command {
             }
 
             request.setAttribute("user", user);
-            request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=userInfo&id=" + request.getParameter("id"));
+            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=userInfo&id=" + request.getParameter("id"));
             request.getRequestDispatcher("/jsp/admin/userInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

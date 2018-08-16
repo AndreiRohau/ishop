@@ -18,15 +18,15 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        if (request.getParameter(COMMAND.inString).matches("logout") ||
-                request.getParameter(COMMAND.inString).matches("logination") ||
-                request.getParameter(COMMAND.inString).matches("registration") ||
-                request.getParameter(COMMAND.inString).matches("changeLanguage") ||
-                request.getSession().getAttribute(ROLE.inString) != null) {
+        if (request.getParameter(COMMAND).matches("logout") ||
+                request.getParameter(COMMAND).matches("logination") ||
+                request.getParameter(COMMAND).matches("registration") ||
+                request.getParameter(COMMAND).matches("changeLanguage") ||
+                request.getSession().getAttribute(ROLE) != null) {
 
             chain.doFilter(req, res);
         } else {
-            response.sendRedirect(INDEX.inString);
+            response.sendRedirect(INDEX);
         }
     }
 

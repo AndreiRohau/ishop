@@ -1,6 +1,5 @@
 package by.asrohau.iShop.controller.command.parser;
 
-import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import org.xml.sax.Attributes;
@@ -12,14 +11,14 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
-
 public class CommandSaxHandler extends DefaultHandler {
 
     private static final Logger logger = Logger.getLogger(CommandSaxHandler.class);
-
-    private final String PATH = COMMAND_PATH.inString;
-    private final String COMMAND_TAG = COMMAND.inString;
+    /*
+    path for creation commmand instances
+    */
+    private final String PATH = "by.asrohau.iShop.controller.command.impl.";
+    private final String COMMAND_TAG = "command";
 
     private CommandObj commandObj;
     private StringBuilder text;
@@ -54,7 +53,7 @@ public class CommandSaxHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        ControllerFinals tagName = ControllerFinals.valueOf(qName.toUpperCase().replace("-", "_"));
+        CommandTags tagName = CommandTags.valueOf(qName.toUpperCase().replace("-", "_"));
         switch(tagName){
             case WEBNAME:
                 commandObj.setWebName(text.toString());

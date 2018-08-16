@@ -29,7 +29,7 @@ public class DeleteFromOrderCommand implements Command{
             String[] productIdsArray = order.getProductIds().split(",");
 
             int currentPage = Integer.parseInt(request.getParameter("currentPage"));
-            int indexRemovingProduct = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString)
+            int indexRemovingProduct = (currentPage - 1) * MAX_ROWS_AT_PAGE
                     + Integer.parseInt(request.getParameter("indexRemovingProduct"));
 
             StringBuilder finalIds = new StringBuilder();
@@ -44,10 +44,10 @@ public class DeleteFromOrderCommand implements Command{
 
             if("".equals(order.getProductIds())) {
                 orderService.deleteOrder(order);
-                request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=showOrders&page=1");
+                request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showOrders&page=1");
                 request.getRequestDispatcher("FrontController?command=showOrders&page=1").forward(request, response);
             }else {
-                response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
+                response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
                         + "&productDeleted=" + orderService.deleteProductFromOrder(order) + "&orderId=" + order.getId());
             }
         } catch (ServiceException | ServletException | IOException e) {

@@ -1,6 +1,7 @@
 package by.asrohau.iShop.controller.command.parser;
 
 public class CommandObj {
+
     private String webName;
     private String className;
 

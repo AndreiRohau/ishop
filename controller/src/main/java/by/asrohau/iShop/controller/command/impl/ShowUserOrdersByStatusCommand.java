@@ -29,36 +29,38 @@ public class ShowUserOrdersByStatusCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowUserOrdersByStatusCommand");
         try {
-            String status = request.getParameter(STATUS.inString);
+            String status = request.getParameter(STATUS);
             User user;
-            if (request.getSession().getAttribute(ROLE.inString).equals("user")) {
-                user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            if (request.getSession().getAttribute(ROLE).equals("user")) {
+                user = new User((String) request.getSession().getAttribute(LOGIN));
                 user = new User(userService.findUserDTOWithLogin(user).getId(), user.getLogin());
             } else {
-                user = userService.findUserWithId(new User(Integer.parseInt(request.getParameter(ID.inString))));
-                user.setLogin(request.getParameter(LOGIN.inString));
+                user = userService.findUserWithId(new User(Integer.parseInt(request.getParameter(ID))));
+//                user.setLogin(request.getParameter(LOGIN));
             }
             Order order = new Order(user.getId(), status);
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) orderService.countUserOrdersByStatus(order)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            int currentPage = Integer.parseInt(request.getParameter(PAGE));
+            int maxPage = (int) Math.ceil(((double) orderService.countUserOrdersByStatus(order)) / MAX_ROWS_AT_PAGE);
+            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
             request.setAttribute("orders", orderService.getUserOrdersByStatus(row, order));
             request.setAttribute("user", user);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND.inString,
+            request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
+                            "&id=" + user.getId() +
                             "&login=" + user.getLogin() +
                             "&status=" + status +
                             "&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
+            request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
+                            "&id=" + user.getId() +
                             "&login=" + user.getLogin() +
                             "&status=" + status +
                             "&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/userOrders.jsp")
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

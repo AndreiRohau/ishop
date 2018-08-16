@@ -26,18 +26,18 @@ public class UserInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to UserInfoCommand");
         try {
-            User user  = new User(Integer.parseInt(request.getParameter(ID.inString)));
+            User user  = new User(Integer.parseInt(request.getParameter(ID)));
             user = userService.findUserWithId(user);
 
             if(user != null){
                 request.setAttribute("user", user);
-                request.getSession().setAttribute(LAST_COMMAND.inString,
-                        "FrontController?command=userInfo&id=" + request.getParameter(ID.inString));
+                request.getSession().setAttribute(LAST_COMMAND,
+                        "FrontController?command=userInfo&id=" + request.getParameter(ID));
             } else {
                 request.setAttribute("cannotFindUser", true);
             }
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE.inString)
+            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE)
                     + "/userInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

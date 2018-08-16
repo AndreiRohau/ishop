@@ -15,19 +15,26 @@ public class ConnectionPool {
     private final static Logger logger = Logger.getLogger(ConnectionPool.class);
 
     private static DatabaseConfigReader databaseConfigReader = new DatabaseConfigReader();
-    private static boolean driverIsLoaded = false;
+    private static final String DRIVER = databaseConfigReader.get(SQL_DRIVER);
+    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
+    private static final String URL = databaseConfigReader.get(DB_URL);
+    private static final String USER = databaseConfigReader.get(DB_LOGIN);
+    private static final String PASSWORD = databaseConfigReader.get(DB_PASSWORD);
+    private static final String SETTINGS = databaseConfigReader.get(DB_SETTINGS);
+    private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
 
-    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS.inString));
+    private static boolean driverIsLoaded = false;
     private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
     private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
 
     public ConnectionPool() {
         try {
             getJDBCDriver();
+            for (int i = 0; i < AMOUNT_OF_CONNECTIONS; i++) {
+                availableConnections.add(getConnection());
+            }
         } catch (DAOException e) {}
-        for (int i = 0; i < AMOUNT_OF_CONNECTIONS; i++) {
-            availableConnections.add(getConnection());
-        }
+
         logger.info("availableConnections.size() is " + availableConnections.size());
         logger.info("takenConnections.size() is " + takenConnections.size());
     }
@@ -74,12 +81,12 @@ public class ConnectionPool {
         }
     }
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws DAOException{
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection(databaseConfigReader.get(DB_URL_FIXED.inString));
+            connection = DriverManager.getConnection(FIXED_URL);
         } catch (SQLException e) {
-            logger.error(CONNECTION_FAILED.inString);
+            throw new DAOException("Connection to database failed", e);
         }
         return connection;
     }
@@ -87,12 +94,11 @@ public class ConnectionPool {
     private static void getJDBCDriver() throws DAOException {
         if (!driverIsLoaded) {
             try {
-                Class.forName(databaseConfigReader.get(SQL_DRIVER.inString));
+                Class.forName(DRIVER);
                 driverIsLoaded = true;
-                logger.info(MYSQL_DRIVER_IS_LOADED.inString);
+                logger.info("MySQL driver is loaded");
             } catch (ClassNotFoundException e) {
-                logger.error(MYSQL_DRIVER_NOT_LOADED.inString);
-                throw new DAOException(e);
+                throw new DAOException("MySQL driver is not loaded", e);
             }
         }
     }

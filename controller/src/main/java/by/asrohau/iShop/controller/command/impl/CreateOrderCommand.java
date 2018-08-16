@@ -28,9 +28,9 @@ public class CreateOrderCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info(CREATE_ORDER_COMMAND.inString);
+        logger.info(CREATE_ORDER_COMMAND);
         try{
-            User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
+            User user = new User((String) request.getSession().getAttribute(LOGIN));
             user.setId(userService.findUserDTOWithLogin(user).getId());
             StringBuilder productIds = new StringBuilder();
             for(long id : reserveService.getAllReservedIds(user.getId())){
@@ -41,16 +41,16 @@ public class CreateOrderCommand implements Command {
                     productIds.toString(),
                     request.getParameter("userAddress"),
                     request.getParameter("userPhone"),
-                    NEW.inString);
+                    NEW);
 
             if (orderService.saveNewOrder(order)) {
                 reserveService.deleteAllReserved(user.getId());
-                request.setAttribute(MESSAGE.inString, true);
+                request.setAttribute(MESSAGE, true);
             } else {
-                request.setAttribute(ERROR_MESSAGE.inString, false);
+                request.setAttribute(ERROR_MESSAGE, false);
             }
 
-            request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=showReserved&page=1");
+            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showReserved&page=1");
             request.getRequestDispatcher("FrontController?command=showReserved&page=1").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

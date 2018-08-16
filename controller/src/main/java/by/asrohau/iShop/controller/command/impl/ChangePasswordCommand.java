@@ -24,20 +24,20 @@ public class ChangePasswordCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(CHANGE_PASSWORD_COMMAND.inString);
+		logger.info(CHANGE_PASSWORD_COMMAND);
 		try {
-			User user = new User(request.getParameter(LOGIN.inString).trim(), request.getParameter(PASSWORD.inString).trim());
-			String newPassword = request.getParameter(NEW_PASSWORD.inString).trim();
+			User user = new User(request.getParameter(LOGIN).trim(), request.getParameter(PASSWORD).trim());
+			String newPassword = request.getParameter(NEW_PASSWORD).trim();
 
-			boolean isChanged = request.getSession().getAttribute(LOGIN.inString).equals(user.getLogin())
+			boolean isChanged = request.getSession().getAttribute(LOGIN).equals(user.getLogin())
 					&& userService.changePassword(user, newPassword);
 			if (isChanged) {
-				request.setAttribute(IS_CHANGED.inString, newPassword);
+				request.setAttribute(IS_CHANGED, newPassword);
 			} else {
-				request.setAttribute(ERROR_MESSAGE.inString, "changePasswordError");
+				request.setAttribute(ERROR_MESSAGE, "changePasswordError");
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=goToPage&address=profile.jsp");
+			request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=goToPage&address=profile.jsp");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/user/profile.jsp");
 			dispatcher.forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
