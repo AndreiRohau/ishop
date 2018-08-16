@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product findProductWithId(Product product) throws ServiceException {
 		try {
-			return productDAO.findProductWithId(product);
+			return productDAO.findOne(product.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

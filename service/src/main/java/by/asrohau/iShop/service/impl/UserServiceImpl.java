@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 		try {
-			return userDAO.findUserWithId(user);
+			return userDAO.findOne(user.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 		try {
-			return userDAO.findUserWithLogin(user);
+			return userDAO.findUserByLogin(user);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

@@ -6,10 +6,6 @@ import by.asrohau.iShop.dao.exception.DAOException;
 import java.util.List;
 
 public interface ProductDAO extends AbstractDAO<Product> {
-
-	Product findProductWithId(Product product) throws DAOException;
-
-    long countProductsComprehensive(Product product) throws DAOException;
-	List<Product> findProductsComprehensive(Product product, int row) throws DAOException; //arraylist
-
+	List<Product> findProductsComprehensive(Product product, int row) throws DAOException;
+	long countProductsComprehensive(Product product) throws DAOException;
 }

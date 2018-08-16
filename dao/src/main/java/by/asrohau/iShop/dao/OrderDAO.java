@@ -9,15 +9,15 @@ import java.util.List;
 
 public interface OrderDAO extends AbstractDAO<Order> {
 
-    List<Order> findAllOrders(int row, String status) throws DAOException; //arraylist
-    List<Order> findUserOrders(int row, long userId) throws DAOException; //arraylist
-    List<Order> findUserOrdersByStatus(int row, Order order) throws DAOException; //arraylist
+    List<Order> findOrders(int row, String status) throws DAOException;
+    long countOrders(String status) throws DAOException;
+
+    List<Order> findUserOrders(int row, long userId) throws DAOException;
+    long countUserOrders(long userId) throws DAOException;
+
+    List<Order> findUserOrdersByStatus(int row, Order order) throws DAOException;
+    long countUserOrdersByStatus(Order order) throws DAOException;
 
     boolean update(Order order, String status) throws DAOException;
-
     boolean deleteAllOrders(long userId) throws DAOException;
-
-    long countOrders(String status) throws DAOException;
-    long countUserOrders(long userId) throws DAOException;
-    long countUserOrdersByStatus(Order order) throws DAOException;
 }

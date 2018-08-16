@@ -1,7 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.dao.AbstractConnection;
+import by.asrohau.iShop.dao.AbstractConnectionPool;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
@@ -15,13 +15,8 @@ import java.util.List;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
-
+public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO {
 	private final static Logger logger = Logger.getLogger(ProductDAOImpl.class);
-
-	private PreparedStatement preparedStatement = null;
-	private Connection connection = null;
-	private ResultSet resultSet = null;
 
 	/*
 	save new Product
@@ -31,10 +26,12 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		if(find(product) != null){
 			return false;
 		}
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(ADD_NEW_PRODUCT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(SAVE_PRODUCT_QUERY.inString);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -52,7 +49,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(null, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -61,6 +59,9 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 	 */
 	@Override
 	public Product find(Product product) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
 			preparedStatement = getConnection().prepareStatement(FIND_EQUAL_PRODUCT_QUERY.inString);
@@ -88,24 +89,60 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
+		}
+	}
+
+	@Override
+	public Product findOne(long id) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(FIND_PRODUCT_BY_ID_QUERY.inString);
+			preparedStatement.setLong(1, id);
+			resultSet = preparedStatement.executeQuery();
+			Product product = new Product();
+			while (resultSet.next()) {
+				product.setId(resultSet.getLong(1));
+				product.setCompany(resultSet.getString(2));
+				product.setName(resultSet.getString(3));
+				product.setType(resultSet.getString(4));
+				product.setPrice(resultSet.getString(5));
+				product.setDescription(resultSet.getString(6));
+			}
+
+			if (product.getName() != null) {
+				return product;
+			}
+			logger.info(CANNOT_IDENTIFY_PRODUCT_BY_ID.inString);
+			return null;
+		} catch (SQLException e) {
+			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+		} finally {
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	/*
-	update product
-	 */
+        update product
+         */
 	@Override
 	public boolean update(Product product) throws DAOException {
 		Product productCheck = find(product);
 		if(productCheck != null && productCheck.getId() != product.getId()){
 			return false;
 		}
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(UPDATE_PRODUCT_BY_ID_QUERY.inString);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -124,7 +161,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(preparedStatement, connection);
+			close(null, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -133,10 +171,12 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 	 */
 	@Override
 	public boolean delete(Product product) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_QUERY.inString);
+			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_BY_ID_QUERY.inString);
 			preparedStatement.setLong(1, product.getId());
 
 			int result = preparedStatement.executeUpdate();
@@ -150,7 +190,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 			}
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(preparedStatement, connection);
+			close(null, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -159,9 +200,12 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 	 */
 	@Override
 	public List<Product> findAll(int row) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(SELECT_ALL_PRODUCTS_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_PRODUCTS_LIMIT_QUERY.inString);
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 			ArrayList<Product> productArrayList = new ArrayList<>();
@@ -189,7 +233,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -198,6 +243,9 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 	 */
 	@Override
 	public long countAll() throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
 			preparedStatement = connection.prepareStatement(COUNT_PRODUCTS_QUERY.inString);
@@ -207,36 +255,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
-		}
-	}
-
-	@Override
-	public Product findProductWithId(Product product) throws DAOException {
-		try {
-			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_PRODUCT_WITH_ID_QUERY.inString);
-			preparedStatement.setLong(1, product.getId());
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				product.setId(resultSet.getLong(1));
-				product.setCompany(resultSet.getString(2));
-				product.setName(resultSet.getString(3));
-				product.setType(resultSet.getString(4));
-				product.setPrice(resultSet.getString(5));
-				product.setDescription(resultSet.getString(6));
-			}
-
-			if (product.getName() != null) {
-				return product;
-			}
-			logger.info(CANNOT_IDENTIFY_PRODUCT_BY_ID.inString);
-			return null;
-		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
-		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -258,6 +278,9 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		}
 
 		logger.info("- - - QUERY is : [" + query + "]");
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
 			preparedStatement = connection.prepareStatement(query);
@@ -267,13 +290,14 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	@Override
 	public List<Product> findProductsComprehensive(Product product, int row) throws DAOException {
-		String query = SELECT_ALL_PRODUCTS_COMPREHENSIVE_QUERY.inString;
+		String query = FIND_PRODUCTS_BY_ID_COMPREHENSIVE_QUERY.inString;
 		if(product.getCompany() != null){
 			query += " AND company = \'" + product.getCompany() + "\'";
 		}
@@ -288,6 +312,9 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		}
 		query += " LIMIT ?,?";
 		logger.info("- - - QUERY is : [" + query + "]");
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
 			preparedStatement = connection.prepareStatement(query);
@@ -317,7 +344,8 @@ public class ProductDAOImpl extends AbstractConnection implements ProductDAO {
 		} catch (SQLException e) {
 			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 }

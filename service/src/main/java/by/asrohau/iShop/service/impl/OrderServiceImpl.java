@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Order> getOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
         try {
-            return orderDAO.findAllOrders(row, status);
+            return orderDAO.findOrders(row, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order findOrderWithID(Order order)  throws ServiceException{
         try {
-            return orderDAO.find(order);
+            return orderDAO.findOne(order.getId());
         } catch(DAOException e){
             throw new ServiceException(e);
         }

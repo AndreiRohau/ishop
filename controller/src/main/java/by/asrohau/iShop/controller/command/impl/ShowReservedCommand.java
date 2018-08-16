@@ -35,7 +35,7 @@ public class ShowReservedCommand implements Command {
             User user = new User((String) request.getSession().getAttribute(LOGIN.inString));
             long userId = userService.findUserDTOWithLogin(user).getId();
 
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));;
+            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
             int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
             int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
 
