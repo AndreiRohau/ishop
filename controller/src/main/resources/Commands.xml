@@ -91,10 +91,6 @@
         <classname>ShowUserOrdersByStatusCommand</classname>
     </command>
     <command>
-        <webname>editNewOrder</webname>
-        <classname>EditNewOrderCommand</classname>
-    </command>
-    <command>
         <webname>orderInfo</webname>
         <classname>OrderInfoCommand</classname>
     </command>
@@ -102,10 +98,14 @@
         <webname>orderSetStatus</webname>
         <classname>OrderSetStatusCommand</classname>
     </command>
-    <command>
-        <webname>deleteOrder</webname>
-        <classname>DeleteOrderCommand</classname>
-    </command>
+    <!--<command>-->
+        <!--<webname>editNewOrder</webname>-->
+        <!--<classname>EditNewOrderCommand</classname>-->
+    <!--</command>-->
+    <!--<command>-->
+        <!--<webname>deleteOrder</webname>-->
+        <!--<classname>DeleteOrderCommand</classname>-->
+    <!--</command>-->
     <command>
         <webname>deleteFromOrder</webname>
         <classname>DeleteFromOrderCommand</classname>

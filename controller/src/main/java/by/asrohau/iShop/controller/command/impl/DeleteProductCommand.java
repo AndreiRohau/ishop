@@ -1,23 +1,23 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.Product;
+import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+import static by.asrohau.iShop.controller.ControllerFinals.ID;
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
 
 public class DeleteProductCommand implements Command {
-    private static final Logger logger = Logger.getLogger(DeleteProductCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeleteProductCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private ProductService productService = serviceFactory.getProductService();
 

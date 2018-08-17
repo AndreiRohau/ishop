@@ -1,7 +1,7 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.Order;
-import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
@@ -44,7 +44,7 @@ public class CreateOrderCommand implements Command {
                     NEW);
 
             if (orderService.saveNewOrder(order)) {
-                reserveService.deleteAllReserved(user.getId());
+                //reserveService.deleteAllReserved(user.getId());
                 request.setAttribute(MESSAGE, true);
             } else {
                 request.setAttribute(ERROR_MESSAGE, false);

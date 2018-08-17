@@ -1,23 +1,25 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.Order;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
+import static by.asrohau.iShop.controller.ControllerFinals.MAX_ROWS_AT_PAGE;
 
 public class DeleteFromOrderCommand implements Command{
 
-    private static final Logger logger = Logger.getLogger(DeleteFromOrderCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeleteFromOrderCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
 

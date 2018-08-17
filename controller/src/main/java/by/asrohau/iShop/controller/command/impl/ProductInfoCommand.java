@@ -1,14 +1,14 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.Product;
+import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class ProductInfoCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(ProductInfoCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private ProductService productService = serviceFactory.getProductService();
 

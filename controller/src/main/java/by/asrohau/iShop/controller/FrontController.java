@@ -3,9 +3,9 @@ package by.asrohau.iShop.controller;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.command.CommandFactory;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ import java.util.Map;
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public final class FrontController extends HttpServlet {
-	private final static Logger logger = Logger.getLogger(FrontController.class);
+	private final static Logger logger = LoggerFactory.getLogger(FrontController.class);
 	private static final long serialVersionUID = 1L;
 	private final Map<String, Command> commandMap = CommandFactory.getInstance().getCommandMap();
 

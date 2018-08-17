@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class CommandFactory {
+
     private static final CommandFactory INSTANCE = new CommandFactory();
 
     private Map<String, Command> commandMap;

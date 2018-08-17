@@ -1,6 +1,6 @@
 //package by.asrohau.iShop.controller.command.impl;
 //
-//import by.asrohau.iShop.bean.Order;
+//import by.asrohau.iShop.entity.Order;
 //import by.asrohau.iShop.controller.command.Command;
 //import by.asrohau.iShop.controller.exception.ControllerException;
 //import by.asrohau.iShop.service.OrderService;

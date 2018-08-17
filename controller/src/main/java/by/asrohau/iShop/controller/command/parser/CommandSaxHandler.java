@@ -2,18 +2,19 @@ package by.asrohau.iShop.controller.command.parser;
 
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandSaxHandler extends DefaultHandler {
 
-    private static final Logger logger = Logger.getLogger(CommandSaxHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommandSaxHandler.class);
     /*
     path for creation commmand instances
     */
@@ -87,7 +88,7 @@ public class CommandSaxHandler extends DefaultHandler {
     }
 
     public void fatalError(SAXParseException exception) throws SAXException {
-        logger.fatal("FATAL: line " + exception.getLineNumber() + ": "
+        logger.error("FATAL: line " + exception.getLineNumber() + ": "
                 + exception.getMessage());
     }
 }

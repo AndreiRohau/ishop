@@ -1,11 +1,10 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class GoToPageCommand implements Command {
-    private final static Logger logger = Logger.getLogger(GoToPageCommand.class);
+    private final static Logger logger = LoggerFactory.getLogger(GoToPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
