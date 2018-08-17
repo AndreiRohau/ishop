@@ -27,6 +27,7 @@ public class ConnectionPool {
 
     private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
     private static boolean driverIsLoaded = false;
+
     private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
     private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
 
@@ -41,6 +42,9 @@ public class ConnectionPool {
         logger.info("takenConnections.size() is " + takenConnections.size());
     }
 
+    /*
+    provides with a database connection if available according to connection pool
+     */
     public Connection provide() throws DAOException {
         Connection newConnection;
         try{
@@ -55,6 +59,9 @@ public class ConnectionPool {
         return newConnection;
     }
 
+    /*
+    returns connection back to the connection pool
+     */
     public void retrieve(Connection connection) throws DAOException {
         if (connection != null) {
             logger.info("ConnectionPool.retrieve(Connection connection)");
@@ -68,6 +75,9 @@ public class ConnectionPool {
         logger.info("ConnectionPool.takenConnections.size() is " + takenConnections.size());
     }
 
+    /*
+    creates a connection
+     */
     private static Connection getConnection() throws DAOException{
         Connection connection = null;
         try {
@@ -80,6 +90,9 @@ public class ConnectionPool {
         return connection;
     }
 
+    /*
+    method loads database driver
+     */
     private static void getJDBCDriver() throws DAOException {
         if (!driverIsLoaded) {
             try {
@@ -94,6 +107,9 @@ public class ConnectionPool {
         }
     }
 
+    /*
+    in case of any fatal errors we can stop tomcat
+     */
     private static void shutdownTomcat() throws DAOException{
         try {
             // path to command C:\Program Files\apache-tomcat-8.5.15\conf\server.xml

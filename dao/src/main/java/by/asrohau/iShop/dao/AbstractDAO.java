@@ -2,7 +2,8 @@ package by.asrohau.iShop.dao;
 
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.util.ConnectionPool;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class AbstractDAO {
-    private final static Logger logger = Logger.getLogger(AbstractDAO.class);
+
+    private final static Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
+
     private static ConnectionPool connectionPool = new ConnectionPool();
 
     /*

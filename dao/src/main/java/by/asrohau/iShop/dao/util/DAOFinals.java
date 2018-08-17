@@ -18,5 +18,4 @@ public class DAOFinals {
     public static final String DB_PASSWORD = "db.password";
     public static final String DB_SETTINGS = "db.settings";
 
-
 }

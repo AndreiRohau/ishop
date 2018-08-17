@@ -107,6 +107,9 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 		}
 	}
 
+	/*
+	find product by ID
+	 */
 	@Override
 	public Product findOne(long id) throws DAOException {
 		Connection connection = null;
@@ -141,8 +144,8 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	/*
-        update product
-         */
+	update product
+	 */
 	@Override
 	public boolean update(Product product) throws DAOException {
 		Product productCheck = find(product);
@@ -180,7 +183,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	/*
-	delete existing product
+	delete existing product by id
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {
@@ -209,7 +212,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	/*
-	find all Products
+	find all Products, limit
 	 */
 	@Override
 	public List<Product> findAll(int row) throws DAOException {
@@ -273,7 +276,6 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 		}
 	}
 
-	//comprehensive part
 	@Override
 	public long countProductsComprehensive(Product product) throws DAOException {
 		String query = COUNT_PRODUCTS_COMPREHENSIVE_QUERY;

@@ -58,7 +58,7 @@ public class UserDTO extends Base {
 	@Override
 	public String toString() {
 		return "UserDTO{" +
-				"id='" + super.getId() + '\'' +
+				super.toString() +
 				"login='" + login + '\'' +
 				", role='" + role + '\'' +
 				'}';

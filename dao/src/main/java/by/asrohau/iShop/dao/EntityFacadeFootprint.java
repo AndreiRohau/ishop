@@ -34,7 +34,7 @@ public interface EntityFacadeFootprint<T> {
     boolean delete(long id) throws DAOException;
 
     /*
-    find all
+    find all, limit
      */
     List<T> findAll(int row) throws DAOException;
 

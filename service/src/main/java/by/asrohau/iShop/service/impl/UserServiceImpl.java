@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		try {
-			return userDAO.renewPassword(user,newPassword);
+			return userDAO.changeUserPassword(user,newPassword);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

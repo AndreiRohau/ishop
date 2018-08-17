@@ -21,6 +21,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     OrderDAO queries
      */
     private static final String SAVE_NEW_ORDER_QUERY = "INSERT INTO shop.orders (user, products, address, phone, status, dateCreated) VALUES (?,?,?,?,?,?)";
+    private static final String FIND_ORDER_BY_ID_USER_PRODUCTS_ADDRESS_PHONE_QUERY = "SELECT * FROM shop.orders WHERE id = ? AND user = ? AND products = ? AND address = ? AND phone = ?";
     private static final String FIND_ORDER_BY_ID_QUERY = "SELECT * FROM shop.orders WHERE id = ?";
     private static final String FIND_ORDERS_LIMIT_QUERY = "SELECT * FROM shop.orders LIMIT ?, ?";
     private static final String FIND_ORDERS_BY_STATUS_LIMIT_QUERY = "SELECT * FROM shop.orders WHERE status = ? LIMIT ?, ?";
@@ -77,11 +78,43 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     }
 
     /*
-    find Order
+    find Order equals
      */
     @Override
     public Order find(Order order) throws DAOException {
-        return null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(FIND_ORDER_BY_ID_USER_PRODUCTS_ADDRESS_PHONE_QUERY);
+            preparedStatement.setLong(1, order.getId());
+            preparedStatement.setLong(2, order.getUserId());
+            preparedStatement.setString(3, order.getProductIds());
+            preparedStatement.setString(4, order.getUserAddress());
+            preparedStatement.setString(5, order.getUserPhone());
+            resultSet = preparedStatement.executeQuery();
+            order = new Order();
+
+            while (resultSet.next()) {
+                order.setId(resultSet.getLong(1));
+                order.setUserId(resultSet.getLong(2));
+                order.setProductIds(resultSet.getString(3));
+                order.setUserAddress(resultSet.getString(4));
+                order.setUserPhone(resultSet.getString(5));
+            }
+
+            if (order.getId() != 0) {
+                return order;
+            }
+            logger.info("Can not identify Order");
+            return null;
+        } catch (SQLException e) {
+            throw new DAOException("Error in DAO method", e);
+        } finally {
+            close(resultSet, preparedStatement);
+            returnConnection(connection);
+        }
     }
     
     /*
@@ -120,7 +153,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             close(resultSet, preparedStatement);
             returnConnection(connection);
         }
-
     }
 
     /*
@@ -179,7 +211,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             close(null, preparedStatement);
             returnConnection(connection);
         }
-
     }
 
     /*
@@ -247,9 +278,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    delete all Orders of a certain User by userId
-     */
     @Override
     public boolean deleteAllOrders(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -276,9 +304,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finding out the amount of all Orders sorting by Status
-     */
     @Override
     public long countOrders(String status) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -299,9 +324,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finds all Orders by Status
-     */
     @Override
     public List<Order> findOrders(int row, String status) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -343,9 +365,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    changes certain Order's status
-    */
     @Override
     public boolean update(Order order, String status) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -370,9 +389,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finding out the amount of all Orders of a certain User by userId
-     */
     @Override
     public long countUserOrders(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -394,9 +410,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finding out the amount of all OrdersByStatus of a certain User by userId
-     */
     @Override
     public long countUserOrdersByStatus(Order order) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -418,9 +431,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finds all Orders of a certain User by userId
-     */
     @Override
     public List<Order> findUserOrders(int row, long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -462,9 +472,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         }
     }
 
-    /*
-    finds all OrdersByStatus of a certain User by userId
-     */
     @Override
     public List<Order> findUserOrdersByStatus(int row, Order order) throws DAOException {
         PreparedStatement preparedStatement = null;

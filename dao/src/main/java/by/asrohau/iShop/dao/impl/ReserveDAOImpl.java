@@ -25,10 +25,12 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     ReserveDAO queries
      */
     private static final String SAVE_RESERVATION_QUERY = "INSERT INTO shop.reserve (userId, productId) VALUES (?,?)";
-    //private static final String FIND_RESERVE_BY_ID_QUERY = "SELECT * FROM shop.reserve WHERE id = ?";
+    private static final String FIND_RESERVE_BY_USER_ID_AND_PRODUCT_ID_QUERY = "SELECT * FROM shop.reserve WHERE userId = ? AND productID = ?";
+    private static final String FIND_RESERVE_BY_ID_QUERY = "SELECT * FROM shop.reserve WHERE id = ?";
     private static final String FIND_RESERVES_BY_USER_ID_QUERY = "SELECT * FROM shop.reserve WHERE userId = ?";
     private static final String FIND_RESERVES_BY_USER_ID_LIMIT_QUERY = "SELECT * FROM shop.reserve WHERE userId = ? LIMIT ?, ?";
-    private static final String COUNT_RESERVED_QUERY = "SELECT COUNT(*) FROM shop.reserve WHERE userId = ?";
+    private static final String COUNT_RESERVED_QUERY = "SELECT COUNT(*) FROM shop.reserve";
+    private static final String COUNT_RESERVED_BY_USER_ID_QUERY = "SELECT COUNT(*) FROM shop.reserve WHERE userId = ?";
     private static final String DELETE_RESERVATION_BY_ID_QUERY = "DELETE FROM shop.reserve WHERE id = ?";
     private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
     
@@ -39,8 +41,8 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         try {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
-            preparedStatement.setLong(1, reserve.getrUserId());
-            preparedStatement.setLong(2, reserve.getrProductId());
+            preparedStatement.setLong(1, reserve.getRUserId());
+            preparedStatement.setLong(2, reserve.getRProductId());
 
             int result = preparedStatement.executeUpdate();
 
@@ -55,12 +57,66 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
     @Override
     public Reserve find(Reserve reserve) throws DAOException {
-        return null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(FIND_RESERVE_BY_USER_ID_AND_PRODUCT_ID_QUERY);
+            preparedStatement.setLong(1, reserve.getRUserId());
+            preparedStatement.setLong(2, reserve.getRProductId());
+            resultSet = preparedStatement.executeQuery();
+            reserve = new Reserve();
+
+            while (resultSet.next()) {
+                reserve.setId(resultSet.getLong(1));
+                reserve.setRUserId(resultSet.getLong(2));
+                reserve.setRProductId(resultSet.getLong(3));
+            }
+
+            if (reserve.getId() != 0) {
+                return reserve;
+            }
+            logger.info("Can not identify Reservation by UserId and ProductId");
+            return null;
+        } catch (SQLException e) {
+            throw new DAOException("Error in DAO method", e);
+        } finally {
+            close(resultSet, preparedStatement);
+            returnConnection(connection);
+        }
+
     }
 
     @Override
     public Reserve findOne(long id) throws DAOException {
-        return null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(FIND_RESERVE_BY_ID_QUERY);
+            preparedStatement.setLong(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            Reserve reserve = new Reserve();
+            while (resultSet.next()) {
+                reserve.setId(resultSet.getLong(1));
+                reserve.setRUserId(resultSet.getLong(2));
+                reserve.setRProductId(resultSet.getLong(3));
+            }
+
+            if (reserve.getId() != 0) {
+                return reserve;
+            }
+            logger.info("Can not identify User with id");
+            return null;
+        } catch (SQLException e) {
+            throw new DAOException("Error in DAO method", e);
+        } finally {
+            close(resultSet, preparedStatement);
+            returnConnection(connection);
+        }
     }
 
     @Override
@@ -184,7 +240,21 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
     @Override
     public long countAll() throws DAOException {
-        return 0;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getLong(1);
+        } catch (SQLException e) {
+            throw new DAOException("Error in DAO method", e);
+        } finally {
+            close(resultSet, preparedStatement);
+            returnConnection(connection);
+        }
     }
 
     @Override
@@ -194,7 +264,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         ResultSet resultSet = null;
         try {
             connection = getConnection();
-            preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY);
+            preparedStatement = connection.prepareStatement(COUNT_RESERVED_BY_USER_ID_QUERY);
             preparedStatement.setLong(1, userId);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();

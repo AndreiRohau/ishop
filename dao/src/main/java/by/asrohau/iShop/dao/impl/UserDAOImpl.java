@@ -207,7 +207,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	}
 
 	/*
-	find all Users
+	find all Users limit
 	 */
 	@Override
 	public List<User> findAll(int row) throws DAOException {
@@ -299,7 +299,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	}
 
 	@Override
-	public boolean renewPassword(User user, String newPassword) throws DAOException {
+	public boolean changeUserPassword(User user, String newPassword) throws DAOException {
 		if(find(user) == null){
 			return false;
 		}

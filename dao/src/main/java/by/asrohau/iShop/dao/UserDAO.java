@@ -5,6 +5,14 @@ import by.asrohau.iShop.entity.UserDTO;
 import by.asrohau.iShop.dao.exception.DAOException;
 
 public interface UserDAO extends EntityFacadeFootprint<User> {
+
+	/*
+	find user by login
+	 */
 	UserDTO findUserByLogin(User user) throws DAOException;
-	boolean renewPassword(User user, String newPassword) throws DAOException;
+
+	/*
+	change user's password by login and password
+	 */
+	boolean changeUserPassword(User user, String newPassword) throws DAOException;
 }
