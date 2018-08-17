@@ -1,7 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.dao.AbstractConnectionPool;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO {
+public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	private final static Logger logger = Logger.getLogger(ProductDAOImpl.class);
 	/*
     ProductDAO queries
@@ -182,14 +182,14 @@ public class ProductDAOImpl extends AbstractConnectionPool implements ProductDAO
 	delete existing product
 	 */
 	@Override
-	public boolean delete(Product product) throws DAOException {
+	public boolean delete(long id) throws DAOException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_BY_ID_QUERY);
-			preparedStatement.setLong(1, product.getId());
+			preparedStatement.setLong(1, id);
 
 			int result = preparedStatement.executeUpdate();
 			connection.commit();

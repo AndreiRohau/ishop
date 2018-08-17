@@ -1,48 +1,52 @@
 package by.asrohau.iShop.dao;
 
 import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.dao.util.ConnectionPool;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
-/*
-    abstract CRUD and abstract findAll() and abstract countAll()
- */
-public interface AbstractDAO<T> {
+import java.sql.SQLException;
+
+public abstract class AbstractDAO {
+    private final static Logger logger = Logger.getLogger(AbstractDAO.class);
+    private static ConnectionPool connectionPool = new ConnectionPool();
 
     /*
-    abstract create, same as SAVE
+    getting an available connection from ConnectionPool
      */
-    boolean save(T t) throws DAOException;
+    protected Connection getConnection() throws DAOException {
+        logger.info("AbstractConnectionPool.getConnection()");
+        return connectionPool.provide();
+    }
 
     /*
-    abstract read, same as FIND
+    returning back connection to ConnectionPool
      */
-    T find(T t) throws DAOException;
+    protected void returnConnection(Connection connection) throws DAOException {
+        logger.info("AbstractConnectionPool.returnConnection(Connection connection)");
+        connectionPool.retrieve(connection);
+    }
 
     /*
-    abstract read, same as FIND
+    unified close-method for PreparedStatement and ResultSet
      */
-    T findOne(long id) throws DAOException;
+    protected void close(ResultSet resultSet, PreparedStatement preparedStatement) throws DAOException {
+        try {
+            if(resultSet != null) {
+                resultSet.close();
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error while closing resultSet or prepared statement, or connection", e);
+        }
+        try {
+            if(preparedStatement != null) {
+                preparedStatement.close();
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error while closing resultSet or prepared statement, or connection", e);
+        }
+    }
 
-    /*
-    update
-     */
-    boolean update(T t) throws DAOException;
-
-    /*
-    delete
-     */
-    boolean delete(T t) throws DAOException;
-
-    /*
-    find all
-     */
-    List<T> findAll(int row) throws DAOException;
-
-    /*
-    count all
-     */
-    long countAll() throws DAOException;
 }

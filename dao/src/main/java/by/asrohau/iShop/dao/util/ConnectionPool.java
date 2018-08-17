@@ -3,6 +3,9 @@ package by.asrohau.iShop.dao.util;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,8 +24,8 @@ public class ConnectionPool {
     private static final String USER = databaseConfigReader.get(DB_LOGIN);
     private static final String PASSWORD = databaseConfigReader.get(DB_PASSWORD);
     private static final String SETTINGS = databaseConfigReader.get(DB_SETTINGS);
-    private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
 
+    private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
     private static boolean driverIsLoaded = false;
     private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
     private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
@@ -34,23 +37,17 @@ public class ConnectionPool {
                 availableConnections.add(getConnection());
             }
         } catch (DAOException e) {}
-
         logger.info("availableConnections.size() is " + availableConnections.size());
         logger.info("takenConnections.size() is " + takenConnections.size());
     }
 
-    public synchronized Connection provide() throws DAOException {
+    public Connection provide() throws DAOException {
         Connection newConnection;
-        if (availableConnections.size() == 0) {
-            newConnection = getConnection();
-        } else {
-            try{
-                newConnection = availableConnections.take();
-                availableConnections.remove(newConnection);
-                takenConnections.add(newConnection);
-            } catch (InterruptedException e) {
-                throw new DAOException(e);
-            }
+        try{
+            newConnection = availableConnections.take();
+            takenConnections.add(newConnection);
+        } catch (InterruptedException e) {
+            throw new DAOException(e);
         }
         logger.info("ConnectionPool.provide()");
         logger.info("ConnectionPool.availableConnections.size() is " + availableConnections.size());
@@ -58,34 +55,26 @@ public class ConnectionPool {
         return newConnection;
     }
 
-    public synchronized void retrieve(Connection connection) throws DAOException {
+    public void retrieve(Connection connection) throws DAOException {
         if (connection != null) {
             logger.info("ConnectionPool.retrieve(Connection connection)");
-            if (takenConnections.remove(connection)) {
-                availableConnections.offer(connection);
-                logger.info("origin connection");
-            } else {
-                try {
-                    logger.info("runtime connection");
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e);
-                }
-            }
-
-            logger.info("ConnectionPool.availableConnections.size() is " + availableConnections.size());
-            logger.info("ConnectionPool.takenConnections.size() is " + takenConnections.size());
+            takenConnections.remove(connection);
+            availableConnections.add(connection);
         } else {
             logger.info("ConnectionPool.retrieve(Connection connection)");
             logger.info("connection is NULL");
         }
+        logger.info("ConnectionPool.availableConnections.size() is " + availableConnections.size());
+        logger.info("ConnectionPool.takenConnections.size() is " + takenConnections.size());
     }
 
-    public static Connection getConnection() throws DAOException{
+    private static Connection getConnection() throws DAOException{
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(FIXED_URL);
         } catch (SQLException e) {
+            logger.error("Could not connect to database");
+            shutdownTomcat();
             throw new DAOException("Connection to database failed", e);
         }
         return connection;
@@ -98,8 +87,25 @@ public class ConnectionPool {
                 driverIsLoaded = true;
                 logger.info("MySQL driver is loaded");
             } catch (ClassNotFoundException e) {
+                logger.error("MySQL driver is not loaded");
+                shutdownTomcat();
                 throw new DAOException("MySQL driver is not loaded", e);
             }
+        }
+    }
+
+    private static void shutdownTomcat() throws DAOException{
+        try {
+            // path to command C:\Program Files\apache-tomcat-8.5.15\conf\server.xml
+            Socket socket = new Socket("localhost", 8005);
+            if (socket.isConnected()) {
+                PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+                pw.println("SHUTDOWN");
+                pw.close();
+                socket.close();
+            }
+        } catch (IOException e) {
+            throw new DAOException("Can NOT stop TOMCAT", e);
         }
     }
 

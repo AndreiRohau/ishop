@@ -1,7 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.bean.Order;
-import by.asrohau.iShop.dao.AbstractConnectionPool;
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.OrderDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
@@ -13,7 +13,7 @@ import java.util.List;
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
 
-public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
+public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
 
     private final static Logger logger = Logger.getLogger(OrderDAOImpl.class);
     /*
@@ -35,14 +35,16 @@ public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
     private static final String DELETE_ORDER_BY_ID_QUERY = "DELETE FROM shop.orders WHERE id = ?";
 
     /*
-    create new Order
+    create new Order - this is a transactional method with roleback
      */
     @Override
     public boolean save(Order order) throws DAOException {
         PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement2 = null;
         Connection connection = null;
         try {
             connection = getConnection();
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(SAVE_NEW_ORDER_QUERY);
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getProductIds());
@@ -51,11 +53,24 @@ public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
             preparedStatement.setString(5, order.getStatus());
             preparedStatement.setDate(6, order.getDateCreated());
             int result = preparedStatement.executeUpdate();
-            return (result > 0);
+
+            preparedStatement2 = connection.prepareStatement("DELETE FROM shop.reserve WHERE userId = ?");
+            preparedStatement2.setLong(1, order.getUserId());
+            int result2 = preparedStatement2.executeUpdate();
+
+            connection.commit();
+
+            return (result > 0) && (result2 > 0);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new DAOException("Error during rollback", ex);
+            }
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
+            close(null, preparedStatement2);
             returnConnection(connection);
         }
     }
@@ -123,6 +138,11 @@ public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
             int result = preparedStatement.executeUpdate();
             return (result > 0);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                throw new DAOException("Error during rollback", ex);
+            }
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
@@ -134,7 +154,7 @@ public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
     delete Order by Id
      */
     @Override
-    public boolean delete(Order order) throws DAOException {
+    public boolean delete(long id) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -142,7 +162,7 @@ public class OrderDAOImpl extends AbstractConnectionPool implements OrderDAO {
             connection.setAutoCommit(false);
 
             preparedStatement = connection.prepareStatement(DELETE_ORDER_BY_ID_QUERY);
-            preparedStatement.setLong(1, order.getId());
+            preparedStatement.setLong(1, id);
 
             int result = preparedStatement.executeUpdate();
             connection.commit();

@@ -1,8 +1,8 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
-import by.asrohau.iShop.dao.AbstractConnectionPool;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
+import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ReserveDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class ReserveDAOImpl extends AbstractConnectionPool implements ReserveDAO {
+public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
     private final static Logger logger = Logger.getLogger(ReserveDAOImpl.class);
     /*
@@ -68,14 +68,14 @@ public class ReserveDAOImpl extends AbstractConnectionPool implements ReserveDAO
     }
 
     @Override
-    public boolean delete(Reserve reserve) throws DAOException {
+    public boolean delete(long id) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(DELETE_RESERVATION_BY_ID_QUERY);
-            preparedStatement.setLong(1, reserve.getId());
+            preparedStatement.setLong(1, id);
 
             int result = preparedStatement.executeUpdate();
             connection.commit();

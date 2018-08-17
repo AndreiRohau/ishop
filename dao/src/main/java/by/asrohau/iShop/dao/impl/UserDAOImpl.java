@@ -1,8 +1,8 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.bean.User;
-import by.asrohau.iShop.bean.UserDTO;
-import by.asrohau.iShop.dao.AbstractConnectionPool;
+import by.asrohau.iShop.entity.User;
+import by.asrohau.iShop.entity.UserDTO;
+import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
+public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
 
 	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
 	/*
@@ -30,8 +30,8 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 	private static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM shop.users";
 	private static final String UPDATE_USER_BY_ID_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
 	private static final String UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
-	private static final String DELETE_USER_BY_LOGIN_AND_PASSWORD_QUERY = "DELETE FROM shop.users WHERE login = ? AND password = ?";
-	
+	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ?";
+
 	/*
 	save new User
 	 */
@@ -137,7 +137,7 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 	}
 
 	/*
-	change user's credentials
+	change user's credentials where id=?
 	 */
 	@Override
 	public boolean update(User user) throws DAOException {
@@ -173,11 +173,11 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 	}
 
 	/*
-	delete User
+	delete User by id
 	 */
 	@Override
-	public boolean delete(User user) throws DAOException {
-		if(find(user) == null){
+	public boolean delete(long id) throws DAOException {
+		if(findOne(id) == null){
 			return false;
 		}
 		Connection connection = null;
@@ -186,9 +186,8 @@ public class UserDAOImpl extends AbstractConnectionPool implements UserDAO {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(DELETE_USER_BY_LOGIN_AND_PASSWORD_QUERY);
-			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
+			preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_QUERY);
+			preparedStatement.setLong(1, id);
 
 			int result = preparedStatement.executeUpdate();
 			connection.commit();
