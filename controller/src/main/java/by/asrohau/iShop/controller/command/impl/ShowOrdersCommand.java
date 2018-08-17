@@ -38,7 +38,7 @@ public class ShowOrdersCommand implements Command {
             request.getSession().setAttribute(LAST_COMMAND_PAGE,
                     "FrontController?command=showOrders&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

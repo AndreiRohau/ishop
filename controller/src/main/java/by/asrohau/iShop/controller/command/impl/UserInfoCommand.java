@@ -37,7 +37,7 @@ public class UserInfoCommand implements Command {
                 request.setAttribute("cannotFindUser", true);
             }
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE)
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE)
                     + "/userInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

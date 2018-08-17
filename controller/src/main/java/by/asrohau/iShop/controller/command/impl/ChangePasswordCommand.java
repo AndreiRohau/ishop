@@ -39,7 +39,7 @@ public class ChangePasswordCommand implements Command {
 			}
 
 			request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=goToPage&address=profile.jsp");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/user/profile.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/user/profile.jsp");
 			dispatcher.forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);

@@ -37,7 +37,7 @@ public class UpdateUserCommand implements Command {
 
             request.setAttribute("user", user);
             request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=userInfo&id=" + request.getParameter("id"));
-            request.getRequestDispatcher("/jsp/admin/userInfo.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/admin/userInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

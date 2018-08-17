@@ -42,7 +42,7 @@ public class DeleteUserCommand implements Command {
 
 
 			if (!isAdmin) {
-				goToPage = "/jsp/user/profile.jsp";
+				goToPage = "/WEB-INF/jsp/user/profile.jsp";
 				lastCMD = GO_TO_PAGE_PROFILE;
 				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
 			} else {
@@ -55,7 +55,7 @@ public class DeleteUserCommand implements Command {
 				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
 				isDeleted = userService.deleteUser(user);
 				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
-				goToPage = "/jsp/user/profile.jsp";
+				goToPage = "/WEB-INF/jsp/user/profile.jsp";
 				lastCMD = GO_TO_PAGE_PROFILE;
 			}
 			if (isDeleted && actualUser) {

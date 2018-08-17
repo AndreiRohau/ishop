@@ -40,7 +40,7 @@ public class UpdateProductCommand implements Command {
 
             request.setAttribute("product", product);
             request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=productInfo&id=" + request.getParameter(ID));
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

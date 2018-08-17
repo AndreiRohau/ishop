@@ -20,7 +20,7 @@ public class GoToPageCommand implements Command {
         logger.info(GO_TO_PAGE_COMMAND);
         try {
             String goToPage = INDEX.equals(request.getParameter(ADDRESS)) ? INDEX :
-                    "/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
+                    "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
             request.getSession().setAttribute(LAST_COMMAND,
                     GO_TO_PAGE_ + request.getParameter(ADDRESS));

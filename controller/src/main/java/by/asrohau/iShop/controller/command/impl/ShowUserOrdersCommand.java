@@ -55,7 +55,7 @@ public class ShowUserOrdersCommand implements Command {
                             "&login=" + user.getLogin() +
                             "&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

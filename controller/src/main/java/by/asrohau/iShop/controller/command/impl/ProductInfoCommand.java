@@ -38,7 +38,7 @@ public class ProductInfoCommand implements Command {
                 request.setAttribute("cannotFindProduct", true);
             }
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

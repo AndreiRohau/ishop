@@ -38,7 +38,7 @@ public class AddNewProductCommand implements Command {
             }
 
             request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=goToPage&address=addProduct.jsp");
-            request.getRequestDispatcher("/jsp/admin/addProduct.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/admin/addProduct.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

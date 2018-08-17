@@ -99,7 +99,7 @@
             </div>
             <div class="col-md-1" style="padding-top:10px;">
                 <form method="get" action="FrontController">
-                    <input type="hidden" name="command" value="showAllUsers"/>
+                    <input type="hidden" name="command" value="showUsers"/>
                     <input type="hidden" name="page" value="1"/>
                     <button style="min-width:100px;height:75px;white-space:pre-line;" class="btn btn-default" type="submit">
                         <c:out value="${manageUsers}"/>

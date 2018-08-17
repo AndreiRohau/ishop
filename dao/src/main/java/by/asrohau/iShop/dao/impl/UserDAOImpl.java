@@ -16,7 +16,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class UserDAOImpl extends AbstractDAO<User> implements UserDAO {
+public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
 	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
 	/*

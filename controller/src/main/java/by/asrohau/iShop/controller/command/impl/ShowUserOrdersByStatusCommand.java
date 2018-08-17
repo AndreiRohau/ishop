@@ -60,7 +60,7 @@ public class ShowUserOrdersByStatusCommand implements Command {
                             "&status=" + status +
                             "&page=");
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

@@ -65,7 +65,7 @@ public class FindSuitableProductCommand implements Command {
             request.getSession().setAttribute(LAST_COMMAND_PAGE, path);
             request.getSession().setAttribute(LAST_COMMAND, path + currentPage);
 
-            request.getRequestDispatcher("/jsp/" + request.getSession().getAttribute(ROLE) + "/main.jsp")
+            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/main.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);

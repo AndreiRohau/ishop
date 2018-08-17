@@ -39,7 +39,7 @@ public class LoginationCommand implements Command {
 				lastCMD = GO_TO_PAGE_INDEX;
 				request.setAttribute(ERROR_MESSAGE, NO_SUCH_USER);
 			} else {
-				goToPage = "/jsp/" + userDTO.getRole() + "/main.jsp";
+				goToPage = "/WEB-INF/jsp/" + userDTO.getRole() + "/main.jsp";
 				lastCMD = GO_TO_PAGE_MAIN;
 				request.getSession(true).setAttribute(ID, userDTO.getId());
 				request.getSession().setAttribute(ROLE, userDTO.getRole());

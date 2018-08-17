@@ -41,7 +41,7 @@ public class ShowUsersCommand implements Command {
             request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showUsers&page=" + currentPage);
 
-            request.getRequestDispatcher("/jsp/admin/users.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/admin/users.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }
