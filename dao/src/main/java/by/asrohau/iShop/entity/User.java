@@ -1,4 +1,4 @@
-package by.asrohau.iShop.bean;
+package by.asrohau.iShop.entity;
 
 public class User extends Base {
 

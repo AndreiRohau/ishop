@@ -1,16 +1,16 @@
-package by.asrohau.iShop.bean;
+package by.asrohau.iShop.entity;
 
 import by.asrohau.iShop.dao.util.DAOFinals;
 
-public class PageUtil {
+public class Page {
 
     private int currentPage;
     private int maxPage;
     private int row;
 
-    public PageUtil(){}
+    public Page(){}
 
-    public PageUtil(String page, long countItems){
+    public Page(String page, long countItems){
         int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
         this.currentPage = Integer.parseInt(page);
         this.maxPage = calculateMaxPage(countItems, _MAX_ROWS_AT_PAGE);

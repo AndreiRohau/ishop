@@ -1,4 +1,4 @@
-package by.asrohau.iShop.bean;
+package by.asrohau.iShop.entity;
 
 public class UserDTO extends Base {
 
@@ -58,6 +58,7 @@ public class UserDTO extends Base {
 	@Override
 	public String toString() {
 		return "UserDTO{" +
+				"id='" + super.getId() + '\'' +
 				"login='" + login + '\'' +
 				", role='" + role + '\'' +
 				'}';

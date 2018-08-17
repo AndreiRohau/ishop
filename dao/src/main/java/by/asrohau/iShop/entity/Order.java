@@ -1,4 +1,4 @@
-package by.asrohau.iShop.bean;
+package by.asrohau.iShop.entity;
 
 import java.sql.Date;
 
