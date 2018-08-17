@@ -1,21 +1,22 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.OrderDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
-import org.apache.log4j.Logger;
+import by.asrohau.iShop.entity.Order;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
+import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
 
 
 public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
 
-    private final static Logger logger = Logger.getLogger(OrderDAOImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(OrderDAOImpl.class);
     /*
     OrderDAO queries
      */

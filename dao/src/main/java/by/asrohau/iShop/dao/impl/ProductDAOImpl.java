@@ -1,10 +1,11 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
-import org.apache.log4j.Logger;
+import by.asrohau.iShop.entity.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +14,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
+import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
 
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
-	private final static Logger logger = Logger.getLogger(ProductDAOImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(ProductDAOImpl.class);
 	/*
     ProductDAO queries
      */
