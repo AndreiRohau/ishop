@@ -151,7 +151,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     }
 
     @Override
-    public boolean deleteAllReserved(long userId) throws DAOException {
+    public boolean deleteReservesByUserId(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -183,7 +183,26 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     }
 
     @Override
-    public List<Product> findAllReserved(long userId, int row) throws DAOException {
+    public long countAll() throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = getConnection();
+            preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getLong(1);
+        } catch (SQLException e) {
+            throw new DAOException("Error in DAO method", e);
+        } finally {
+            close(resultSet, preparedStatement);
+            returnConnection(connection);
+        }
+    }
+
+    @Override
+    public List<Product> findReservesByUserId(long userId, int row) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         ResultSet resultSet = null;
@@ -214,7 +233,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     }
 
     @Override
-    public List<Long> findAllReservedIds(long userId) throws DAOException {
+    public List<Long> findReservedProductIdsByUserId(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         ResultSet resultSet = null;
@@ -239,26 +258,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     }
 
     @Override
-    public long countAll() throws DAOException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = getConnection();
-            preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY);
-            resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getLong(1);
-        } catch (SQLException e) {
-            throw new DAOException("Error in DAO method", e);
-        } finally {
-            close(resultSet, preparedStatement);
-            returnConnection(connection);
-        }
-    }
-
-    @Override
-    public long countReservedByUserId(long userId) throws DAOException {
+    public long countReservesByUserId(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         ResultSet resultSet = null;

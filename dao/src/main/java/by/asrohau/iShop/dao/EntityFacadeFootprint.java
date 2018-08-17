@@ -14,7 +14,8 @@ public interface EntityFacadeFootprint<T> {
     boolean save(T t) throws DAOException;
 
     /*
-    abstract read, same as FIND
+    abstract read, same as FIND,
+    NB! can be specific for a certain entity
      */
     T find(T t) throws DAOException;
 
@@ -25,6 +26,7 @@ public interface EntityFacadeFootprint<T> {
 
     /*
     update
+    NB! can be specific for a certain entity
      */
     boolean update(T t) throws DAOException;
 

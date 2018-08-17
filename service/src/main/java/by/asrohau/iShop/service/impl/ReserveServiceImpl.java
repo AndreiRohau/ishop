@@ -35,7 +35,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public List<Product> getAllReserved(long userId, int row) throws ServiceException { //ArrayList
         try {
-            return reserveDAO.findAllReserved(userId, row);
+            return reserveDAO.findReservesByUserId(userId, row);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -45,7 +45,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public long countReserved(long userId) throws ServiceException {
         try {
-            return reserveDAO.countReservedByUserId(userId);
+            return reserveDAO.countReservesByUserId(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -63,7 +63,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public List<Long> getAllReservedIds(long userId) throws ServiceException { // LinkedList
         try {
-            return reserveDAO.findAllReservedIds(userId);
+            return reserveDAO.findReservedProductIdsByUserId(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -72,7 +72,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public boolean deleteAllReserved(long userId) throws ServiceException {
         try {
-            return reserveDAO.deleteAllReserved(userId);
+            return reserveDAO.deleteReservesByUserId(userId);
         } catch(DAOException e){
             throw new ServiceException(e);
         }

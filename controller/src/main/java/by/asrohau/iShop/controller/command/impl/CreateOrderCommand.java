@@ -44,7 +44,6 @@ public class CreateOrderCommand implements Command {
                     NEW);
 
             if (orderService.saveNewOrder(order)) {
-                //reserveService.deleteAllReserved(user.getId());
                 request.setAttribute(MESSAGE, true);
             } else {
                 request.setAttribute(ERROR_MESSAGE, false);
