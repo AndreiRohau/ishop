@@ -1,6 +1,6 @@
 package by.asrohau.iShop.service;
 
-import by.asrohau.iShop.bean.Order;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.List;

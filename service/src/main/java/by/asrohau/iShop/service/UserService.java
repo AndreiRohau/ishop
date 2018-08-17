@@ -1,10 +1,9 @@
 package by.asrohau.iShop.service;
 
-import by.asrohau.iShop.bean.User;
-import by.asrohau.iShop.bean.UserDTO;
+import by.asrohau.iShop.entity.User;
+import by.asrohau.iShop.entity.UserDTO;
 import by.asrohau.iShop.service.exception.ServiceException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface UserService {

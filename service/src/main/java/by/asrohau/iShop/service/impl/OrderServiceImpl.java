@@ -1,6 +1,6 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.bean.Order;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.OrderDAO;
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public boolean deleteOrder(Order order) throws ServiceException {
         try {
-            return orderDAO.delete(order);
+            return orderDAO.delete(order.getId());
         } catch(DAOException e){
             throw new ServiceException(e);
         }

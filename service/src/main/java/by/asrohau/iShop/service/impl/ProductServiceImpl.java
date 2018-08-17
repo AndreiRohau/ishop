@@ -1,6 +1,6 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.bean.Product;
+import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.exception.DAOException;
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 			return false;
 		}
 		try {
-			return productDAO.delete(product);
+			return productDAO.delete(product.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

@@ -1,8 +1,8 @@
 package by.asrohau.iShop.service.util;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
-import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
+import by.asrohau.iShop.entity.User;
 
 public class ServiceValidator {
 

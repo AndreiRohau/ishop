@@ -1,7 +1,7 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.bean.User;
-import by.asrohau.iShop.bean.UserDTO;
+import by.asrohau.iShop.entity.User;
+import by.asrohau.iShop.entity.UserDTO;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		try {
-			return userDAO.delete(user);
+			return userDAO.delete(user.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

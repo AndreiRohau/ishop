@@ -1,7 +1,7 @@
 package by.asrohau.iShop.service;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.List;

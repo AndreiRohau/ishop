@@ -1,7 +1,7 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.ReserveDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
@@ -54,7 +54,7 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public boolean deleteReserved(Reserve reserve) throws ServiceException {
         try {
-            return reserveDAO.delete(reserve);
+            return reserveDAO.delete(reserve.getId());
         } catch(DAOException e){
             throw new ServiceException(e);
         }
