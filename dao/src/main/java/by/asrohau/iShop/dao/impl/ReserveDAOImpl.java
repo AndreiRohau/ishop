@@ -275,7 +275,6 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
                 reserve = new Reserve(reserveId, userId, productId);
                 reservations.add(reserve);
             }
-            logger.info("["+reservations+"]");
             return reservations;
         } catch (SQLException e) {
             throw new DAOException("Error in DAO method", e);

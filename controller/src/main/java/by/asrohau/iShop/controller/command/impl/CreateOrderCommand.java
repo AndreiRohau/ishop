@@ -1,9 +1,9 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Order;
-import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
@@ -11,12 +11,13 @@ import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+import static by.asrohau.iShop.controller.ControllerFinals.ID;
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
 
 public class CreateOrderCommand implements Command {
 
@@ -24,34 +25,19 @@ public class CreateOrderCommand implements Command {
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
     private ReserveService reserveService= serviceFactory.getReserveService();
-    private UserService userService = serviceFactory.getUserService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info(CREATE_ORDER_COMMAND);
+        logger.info("We got to CreateOrderCommand");
         try{
-            User user = new User((String) request.getSession().getAttribute(LOGIN));
-            user.setId(userService.findUserDTOWithLogin(user).getId());
-            StringBuilder productIds = new StringBuilder();
-            for(long id : reserveService.getAllReservedIds(user.getId())){
-                productIds.append(String.valueOf(id)).append(",");
-            }
+            long userId = (Long) request.getSession().getAttribute(ID);
+            List<Long> reservedProductIds = reserveService.getAllReservedIds(userId);
+            Order order = new Order(userId, request.getParameter("userAddress"), request.getParameter("userPhone"));
+            boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 
-            Order order = new Order(user.getId(),
-                    productIds.toString(),
-                    request.getParameter("userAddress"),
-                    request.getParameter("userPhone"),
-                    NEW);
-
-            if (orderService.saveNewOrder(order)) {
-                request.setAttribute(MESSAGE, true);
-            } else {
-                request.setAttribute(ERROR_MESSAGE, false);
-            }
-
-            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showReserved&page=1");
-            request.getRequestDispatcher("FrontController?command=showReserved&page=1").forward(request, response);
-        } catch (ServiceException | ServletException | IOException e) {
+            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showReserved&page=1&orderCreated=" + orderCreated);
+            response.sendRedirect("FrontController?command=showReserved&page=1&orderCreated=" + orderCreated);
+        } catch (ServiceException  | IOException e) {
             throw new ControllerException(e);
         }
     }

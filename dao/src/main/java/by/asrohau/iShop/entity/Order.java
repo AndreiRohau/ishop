@@ -22,6 +22,12 @@ public class Order extends Base {
         this.status = status;
     }
 
+    public Order(long userId, String userAddress, String userPhone) {
+        this.userId = userId;
+        this.userAddress = userAddress;
+        this.userPhone = userPhone;
+    }
+
     public Order(long userId, String productIds, String userAddress, String userPhone) {
         this.userId = userId;
         this.productIds = productIds;
@@ -144,7 +150,7 @@ public class Order extends Base {
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + super.getId() +
+                super.toString() +
                 "userId=" + userId +
                 ", productIds='" + productIds + '\'' +
                 ", userAddress='" + userAddress + '\'' +

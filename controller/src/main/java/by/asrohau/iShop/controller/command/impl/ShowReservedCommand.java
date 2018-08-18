@@ -10,6 +10,7 @@ import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
+import by.asrohau.iShop.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +35,7 @@ public class ShowReservedCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowReservedCommand");
         try {
-            User user = new User((String) request.getSession().getAttribute(LOGIN));
-            long userId = userService.findUserDTOWithLogin(user).getId();
-
+            long userId = (Long) request.getSession().getAttribute(ID);
             int currentPage = Integer.parseInt(request.getParameter(PAGE));
             int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
             int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / MAX_ROWS_AT_PAGE);
@@ -44,22 +43,16 @@ public class ShowReservedCommand implements Command {
             List<Reserve> reservations = reserveService.getAllReserved(userId, row);
             List<Product> products = new ArrayList<>();
 
-            logger.info(reservations.toString());
-            logger.info("________________________________");
-            logger.info("________________________________");
             for(Reserve reservation : reservations){
-                logger.info(reservation.toString());
                 Product product = productService.findProductWithId(reservation.getProductId());
-                logger.info(product.toString());
-
                 product.setReserveId(reservation.getId());
                 products.add(product);
-                product = new Product();
             }
 
             request.setAttribute("products", products);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
+            request.setAttribute("orderCreated", request.getParameter("orderCreated"));
             request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showReserved&page=" + currentPage);
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE,

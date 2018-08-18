@@ -16,8 +16,7 @@ public class UserServiceImpl implements UserService {
 
 	private static final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
-	public UserServiceImpl() {
-	}
+	public UserServiceImpl() {}
 
 	@Override
 	public boolean registration(User user, String password2) throws ServiceException {

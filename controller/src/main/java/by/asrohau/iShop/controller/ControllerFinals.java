@@ -42,7 +42,6 @@ public class ControllerFinals {
      */
     public static final String COMMAND = "command";
     public static final String GO_TO_PAGE_COMMAND = "GoToPage command";
-    public static final String CREATE_ORDER_COMMAND = "CreateOrderCommand command";
     public static final String CHANGE_PASSWORD_COMMAND = "ChangePasswordCommand command";
     public static final String DELETE_USER_COMMAND = "DeleteUserCommand command";
 

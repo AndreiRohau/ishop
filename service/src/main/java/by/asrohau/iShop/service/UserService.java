@@ -49,7 +49,7 @@ public interface UserService {
 	long countUsers() throws ServiceException;
 
 	/*
-
+	helps to find user by login
 	 */
 	UserDTO findUserDTOWithLogin(User user) throws ServiceException;
 }

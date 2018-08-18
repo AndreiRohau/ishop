@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderService {
 
     boolean deleteAllOrdersWithUserId(long userId) throws ServiceException;
-    boolean saveNewOrder(Order order) throws ServiceException;
+    boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException;
     boolean orderSetStatus(long id, String status) throws ServiceException;
     List<Order> getOrders(int row) throws ServiceException; // ArrayList
     List<Order> getOrdersByStatus(int row, String status) throws ServiceException; // ArrayList

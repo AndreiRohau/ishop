@@ -44,8 +44,8 @@ public class DeleteFromOrderCommand implements Command{
 
             order.setProductIds(finalIds.toString());
 
-            if("".equals(order.getProductIds())) {
-                orderService.deleteOrder(order);
+            if("".equals(order.getProductIds()) && orderService.deleteOrder(order)) {
+                //orderService.deleteOrder(order) // went up ^^^^
                 request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showOrders&page=1");
                 request.getRequestDispatcher("FrontController?command=showOrders&page=1").forward(request, response);
             }else {

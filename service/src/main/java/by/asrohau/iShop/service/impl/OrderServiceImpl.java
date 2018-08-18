@@ -20,8 +20,14 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean saveNewOrder(Order order) throws ServiceException {
+    public boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException {
         try {
+            StringBuilder productIds = new StringBuilder();
+            for(long id : reservedProductIds){
+                productIds.append(String.valueOf(id)).append(",");
+            }
+            order.setProductIds(productIds.toString());
+            order.setStatus("new");
             order.setDateCreated(new Date(System.currentTimeMillis()));
             return orderDAO.save(order);
         } catch(DAOException e){
