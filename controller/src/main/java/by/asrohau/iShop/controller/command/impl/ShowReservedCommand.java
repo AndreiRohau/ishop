@@ -54,7 +54,7 @@ public class ShowReservedCommand implements Command {
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showReserved&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE,
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE,
                     "FrontController?command=showReserved&page=");
 
             request.getRequestDispatcher("/WEB-INF/jsp/user/basket.jsp").forward(request, response);

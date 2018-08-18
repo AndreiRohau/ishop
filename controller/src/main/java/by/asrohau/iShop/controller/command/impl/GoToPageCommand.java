@@ -19,7 +19,7 @@ public class GoToPageCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info(GO_TO_PAGE_COMMAND);
         try {
-            String goToPage = INDEX.equals(request.getParameter(ADDRESS)) ? INDEX :
+            String goToPage = "index.jsp".equals(request.getParameter(ADDRESS)) ? "index.jsp" :
                     "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
             request.getSession().setAttribute(LAST_COMMAND,

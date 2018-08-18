@@ -10,11 +10,11 @@ public class Page {
 
     public Page(){}
 
-    public Page(String page, long countItems){
+    public Page(String currentPage, long countItems){
         int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
-        this.currentPage = Integer.parseInt(page);
+        this.currentPage = Integer.parseInt(currentPage);
         this.maxPage = calculateMaxPage(countItems, _MAX_ROWS_AT_PAGE);
-        this.row = calculateRow(currentPage, _MAX_ROWS_AT_PAGE);
+        this.row = calculateRow(this.currentPage, _MAX_ROWS_AT_PAGE);
     }
 
     public int getCurrentPage() {
@@ -30,7 +30,7 @@ public class Page {
     }
 
     private int calculateMaxPage(long countItems, int _MAX_ROWS_AT_PAGE){
-        return (int) Math.ceil(((double) countItems / _MAX_ROWS_AT_PAGE));
+        return (int) Math.ceil(((double) countItems) / _MAX_ROWS_AT_PAGE);
     }
 
     private int calculateRow(int currentPage, int _MAX_ROWS_AT_PAGE) {

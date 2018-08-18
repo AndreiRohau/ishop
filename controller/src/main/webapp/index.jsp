@@ -19,6 +19,7 @@
 		<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
 		<fmt:message bundle="${loc}" key="local.locbutton.name.ch" var="ch_button" />
+		<fmt:message bundle="${loc}" key="local.errorOccupied" var="errorOccupied" />
 		<fmt:message bundle="${loc}" key="local.admin" var="admin" />
 		<fmt:message bundle="${loc}" key="local.user" var="user" />
 		<fmt:message bundle="${loc}" key="local.anonymous" var="anonymous" />
@@ -219,6 +220,15 @@
 						</h3>
 					</div>
 					<div class="panel-body">
+						<c:if test="${requestScope.errorMessage == 'error'}">
+							<div class="alert alert-danger" role="alert">
+								<p>
+									<span>
+										<c:out value="${errorOccupied}"/>
+									</span>
+								</p>
+							</div>
+						</c:if>
 						<c:if test="${sessionScope.role == null}">
 							<div class="alert alert-info" role="alert">
 								<p>
@@ -247,7 +257,7 @@
 							</div>
 						</c:if>
 						<c:if test="${requestScope.errorMessage == 'logOutFirst'}">
-							<div class="alert alert-info" role="alert">
+							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>
 										<c:out value="${logOutFirst}"/>

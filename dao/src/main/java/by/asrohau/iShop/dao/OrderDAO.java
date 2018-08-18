@@ -40,10 +40,10 @@ public interface OrderDAO extends EntityFacadeFootprint<Order> {
     /*
     changes status of a certain Order
     */
-    boolean update(Order order, String status) throws DAOException;
+    boolean updateOrderStatus(long id, String status) throws DAOException;
 
     /*
     delete all Orders of a certain User by userId
      */
-    boolean deleteAllOrders(long userId) throws DAOException;
+    boolean deleteUserOrders(long userId) throws DAOException;
 }

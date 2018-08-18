@@ -23,7 +23,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	/*
     UserDAO queries
      */
-	private static final String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password, role) VALUES (?,?,?)";
+	private static final String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password) VALUES (?,?)";
 	private static final String FIND_USER_BY_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
 	private static final String FIND_USER_BY_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";
 	private static final String FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY = "SELECT * FROM shop.users WHERE login = ? AND password = ?";
@@ -31,27 +31,36 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	private static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM shop.users";
 	private static final String UPDATE_USER_BY_ID_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
 	private static final String UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
-	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ?";
+	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ? AND role = 'user'"; //todo unreachable if role is admin
 
 	/*
 	save new User
 	 */
 	@Override
 	public boolean save(User user) throws DAOException {
-		if(findUserByLogin(user) != null){
-			return false;
-		}
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			int result = 0;
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(SAVE_USER_QUERY);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setString(3, user.getRole());
-			int result = preparedStatement.executeUpdate();
+			resultSet = preparedStatement.executeQuery();
+			User userCheck = new User();
+			while (resultSet.next()) {
+				userCheck.setId(resultSet.getLong(1));
+				userCheck.setLogin(resultSet.getString(2));
+				userCheck.setRole(resultSet.getString(4));
+			}
 
+			if (userCheck.getLogin() == null) {
+				preparedStatement = connection.prepareStatement(SAVE_USER_QUERY);
+				preparedStatement.setString(1, user.getLogin());
+				preparedStatement.setString(2, user.getPassword());
+				result = preparedStatement.executeUpdate();
+			}
 			connection.commit();
 			return (result != 0);
 		} catch (SQLException e) {
@@ -62,7 +71,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			}
 			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(null, preparedStatement);
+			close(resultSet, preparedStatement);
 			returnConnection(connection);
 		}
 	}
@@ -82,13 +91,11 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			preparedStatement.setString(2, user.getPassword());
 			resultSet = preparedStatement.executeQuery();
 			user = new User();
-
 			while (resultSet.next()) {
 				user.setId(resultSet.getLong(1));
 				user.setLogin(resultSet.getString(2));
 				user.setRole(resultSet.getString(4));
 			}
-
 			if (user.getLogin() != null) {
 				return user;
 			}
@@ -142,22 +149,30 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	 */
 	@Override
 	public boolean update(User user) throws DAOException {
-		UserDTO userCheck = findUserByLogin(user);
-		if(userCheck != null && userCheck.getId() != user.getId()){
-			return false;
-		}
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			int result = 0;
 			connection = getConnection();
 			connection.setAutoCommit(false);
-
-			preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_QUERY);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setLong(3, user.getId());
+			resultSet = preparedStatement.executeQuery();
+			User userCheck = new User();
+			while (resultSet.next()) {
+				userCheck.setId(resultSet.getLong(1));
+				userCheck.setLogin(resultSet.getString(2));
+				userCheck.setRole(resultSet.getString(4));
+			}
 
-			int result = preparedStatement.executeUpdate();
+			if(userCheck.getId() == 0 || user.getId() == userCheck.getId()) {
+				preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_QUERY);
+				preparedStatement.setString(1, user.getLogin());
+				preparedStatement.setString(2, user.getPassword());
+				preparedStatement.setLong(3, user.getId());
+				result = preparedStatement.executeUpdate();
+			}
 			connection.commit();
 			return (result != 0);
 		} catch (SQLException e) {
@@ -168,7 +183,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			}
 			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(null, preparedStatement);
+			close(resultSet, preparedStatement);
 			returnConnection(connection);
 		}
 	}
@@ -178,9 +193,6 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {
-		if(findOne(id) == null){
-			return false;
-		}
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
@@ -219,7 +231,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			preparedStatement = connection.prepareStatement(FIND_USERS_LIMIT_QUERY);
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
-			List<User> userArrayList = new ArrayList<>();
+			List<User> users = new ArrayList<>();
 			resultSet = preparedStatement.executeQuery();
 			User user;
 
@@ -233,10 +245,9 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 				password = resultSet.getString(3);
 				role = resultSet.getString(4);
 				user = new User(id, login, password, role);
-				userArrayList.add(user);
+				users.add(user);
 			}
-
-			return userArrayList;
+			return users;
 		} catch (SQLException e) {
 			throw new DAOException("Error in DAO method", e);
 		} finally {

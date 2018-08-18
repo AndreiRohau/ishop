@@ -20,25 +20,39 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO logination(User user) throws ServiceException {
+	public boolean registration(User user, String password2) throws ServiceException {
 		if (!validation(user)) {
-			return null;
+			return false;
 		}
+		boolean passwordEquals = password2.equals(user.getPassword());
+		boolean notAuthorized = "null".equals(user.getRole());
 		try {
-			user = userDAO.find(user);
-			return user == null ? null : new UserDTO(user);
+			return passwordEquals && notAuthorized && userDAO.save(user);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
-	public boolean registration(User user) throws ServiceException {
+	public UserDTO logination(User user) throws ServiceException {
 		if (!validation(user)) {
-			return false;
+			return null;
 		}
 		try {
-			return userDAO.save(user);
+			user = userDAO.find(user);
+			return (user == null) ? null : new UserDTO(user);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public User findUserWithId(long id) throws ServiceException {
+		if (!validation(id)){
+			return null;
+		}
+		try {
+			return userDAO.findOne(id);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -62,7 +76,7 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		try {
-			return userDAO.delete(user.getId());
+			return userDAO.findOne(user.getId()) != null && userDAO.delete(user.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -75,18 +89,6 @@ public class UserServiceImpl implements UserService {
 		}
 		try {
 			return userDAO.findAll(row);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
-	}
-
-	@Override
-	public User findUserWithId(User user) throws ServiceException {
-		if (!validation(user.getId())){
-			return null;
-		}
-		try {
-			return userDAO.findOne(user.getId());
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

@@ -26,8 +26,7 @@ public class UserInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to UserInfoCommand");
         try {
-            User user  = new User(Integer.parseInt(request.getParameter(ID)));
-            user = userService.findUserWithId(user);
+            User user = userService.findUserWithId(Long.parseLong(request.getParameter(ID)));
 
             if(user != null){
                 request.setAttribute("user", user);

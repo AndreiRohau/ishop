@@ -1,6 +1,7 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
@@ -32,33 +33,25 @@ public class ShowUserOrdersByStatusCommand implements Command {
             String status = request.getParameter(STATUS);
             User user;
             if (request.getSession().getAttribute(ROLE).equals("user")) {
-                user = new User((String) request.getSession().getAttribute(LOGIN));
-                user = new User(userService.findUserDTOWithLogin(user).getId(), user.getLogin());
+                user = userService.findUserWithId((Long) request.getSession().getAttribute(ID));
             } else {
-                user = userService.findUserWithId(new User(Integer.parseInt(request.getParameter(ID))));
-//                user.setLogin(request.getParameter(LOGIN));
+                user = userService.findUserWithId(Long.parseLong(request.getParameter(ID)));
             }
-            Order order = new Order(user.getId(), status);
-            int currentPage = Integer.parseInt(request.getParameter(PAGE));
-            int maxPage = (int) Math.ceil(((double) orderService.countUserOrdersByStatus(order)) / MAX_ROWS_AT_PAGE);
-            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
 
-            request.setAttribute("orders", orderService.getUserOrdersByStatus(row, order));
+            Order order = new Order(user.getId(), status);
+            Page page = new Page(request.getParameter(PAGE), orderService.countUserOrdersByStatus(order));
+
+            request.setAttribute("orders", orderService.getUserOrdersByStatus(page.getRow(), order));
             request.setAttribute("user", user);
-            request.setAttribute("maxPage", maxPage);
-            request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND,
-                    "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
-                            "&id=" + user.getId() +
-                            "&login=" + user.getLogin() +
-                            "&status=" + status +
-                            "&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE,
-                    "FrontController?command=showUserOrdersByStatus&id=" + user.getId() +
-                            "&id=" + user.getId() +
-                            "&login=" + user.getLogin() +
-                            "&status=" + status +
-                            "&page=");
+            request.setAttribute("page", page);
+            String lastCommandNeedPage = "FrontController?command=showUserOrdersByStatus" +
+                    "&id=" + user.getId() +
+                    "&login=" + user.getLogin() +
+                    "&status=" + status +
+                    "&page=";
+
+            request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
 
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/userOrders.jsp")
                     .forward(request, response);

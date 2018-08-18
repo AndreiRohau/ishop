@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public boolean deleteAllOrdersWithUserId(long userId) throws ServiceException {
         try {
-            return orderDAO.deleteAllOrders(userId);
+            return orderDAO.deleteUserOrders(userId);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
@@ -85,18 +85,18 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean orderSetStatus(Order order, String status) throws ServiceException {
+    public boolean orderSetStatus(long id, String status) throws ServiceException {
         try {
-            return orderDAO.update(order, status);
+            return orderDAO.updateOrderStatus(id, status);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Order findOrderWithID(Order order)  throws ServiceException{
+    public Order findOrderById(long id)  throws ServiceException{
         try {
-            return orderDAO.findOne(order.getId());
+            return orderDAO.findOne(id);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
@@ -113,18 +113,18 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getUserOrders(int row, Order order) throws ServiceException { // ArrayList
+    public List<Order> getUserOrders(int row, long userId) throws ServiceException { // ArrayList
         try {
-            return orderDAO.findUserOrders(row, order.getUserId());
+            return orderDAO.findUserOrders(row, userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public long countUserOrders(Order order) throws ServiceException {
+    public long countUserOrders(long userId) throws ServiceException {
         try {
-            return orderDAO.countUserOrders(order.getUserId());
+            return orderDAO.countUserOrders(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

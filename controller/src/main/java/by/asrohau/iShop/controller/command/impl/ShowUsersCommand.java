@@ -36,7 +36,7 @@ public class ShowUsersCommand implements Command {
             request.setAttribute("users", users);
             request.setAttribute("maxPage", maxPage);
             request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE,
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE,
                     "FrontController?command=showUsers&page=");
             request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showUsers&page=" + currentPage);

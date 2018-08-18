@@ -42,10 +42,6 @@
     <fmt:message bundle="${loc}" key="local.price" var="price" />
     <fmt:message bundle="${loc}" key="local.remove" var="remove" />
 
-    <c:set var="currentPage" value="${requestScope.currentPage}"/>
-    <c:set var="maxPage" value="${requestScope.maxPage}"/>
-    <c:set var="indexRemovingProduct" value="1"/>
-
     <title>
         <c:out value="${order} ${requestScope.order.id}"/>
     </title>
@@ -199,7 +195,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <c:if test="${currentPage != null}">
+                    <c:if test="${requestScope.page.currentPage != null}">
                         <table class="table table-hover" >
                             <thead style="color: #464a4c;background-color: #eceeef;">
                             <tr style="text-align: center;">
@@ -230,7 +226,7 @@
                                         <form action="FrontController" method="post">
                                             <input type="hidden" name="command" value="deleteFromOrder" />
                                             <input type="hidden" name="indexRemovingProduct" value="${indexRemovingProduct}" />
-                                            <input type="hidden" name="currentPage" value="${currentPage}" />
+                                            <input type="hidden" name="currentPage" value="${requestScope.page.currentPage}" />
                                             <input type="hidden" name="productIds" value="${requestScope.order.productIds}" />
                                             <input type="hidden" name="orderId" value="${requestScope.order.id}" />
                                             <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
@@ -243,13 +239,13 @@
                         </table>
 
                         <ul class="pagination pull-right">
-                            <c:forEach begin="1" end="${maxPage}" var="i">
-                                <c:if test="${i == currentPage}">
+                            <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
+                                <c:if test="${i == requestScope.page.currentPage}">
                                     <li class="active">
                                         <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
-                                <c:if test="${i != currentPage}">
+                                <c:if test="${i != requestScope.page.currentPage}">
                                     <li>
                                         <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>

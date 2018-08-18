@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.INDEX;
-
 public class LogoutCommand implements Command{
     private static final Logger logger = LoggerFactory.getLogger(LogoutCommand.class);
 
@@ -19,7 +17,7 @@ public class LogoutCommand implements Command{
         logger.info("We got to LogoutCommand");
         try {
             request.getSession().invalidate();
-            response.sendRedirect(INDEX);
+            response.sendRedirect("index.jsp");
         } catch (IOException e) {
             throw new ControllerException(e);
         }

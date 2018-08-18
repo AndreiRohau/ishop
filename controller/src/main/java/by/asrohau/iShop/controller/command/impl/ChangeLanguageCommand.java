@@ -17,12 +17,12 @@ public class ChangeLanguageCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(CHANGE_LANGUAGE);
+		logger.info("We got to ChangeLanguageCommand");
 		try {
-			request.getSession(true).setAttribute(LOCAL, request.getParameter(LOCAL));
+			request.getSession(true).setAttribute("local", request.getParameter("local"));
 
 			String lastCommand = String.valueOf(request.getSession().getAttribute(LAST_COMMAND));
-			String path = lastCommand.equals(NULL) ? INDEX : lastCommand;
+			String path = lastCommand.equals("null") ? "index.jsp" : lastCommand;
 
 			response.sendRedirect(path);
 		} catch ( IOException e) {

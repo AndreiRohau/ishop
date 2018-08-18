@@ -35,9 +35,8 @@ public class OrderSetStatusCommand implements Command {
                 case "closed": status = NEW;
                             break;
             }
-            Order order = new Order(Integer.parseInt(request.getParameter(ID)));
 
-            request.setAttribute(MESSAGE, orderService.orderSetStatus(order, status));
+            request.setAttribute(MESSAGE, orderService.orderSetStatus(Long.parseLong(request.getParameter(ID)), status));
             request.getRequestDispatcher((String) request.getSession().getAttribute(LAST_COMMAND))
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {

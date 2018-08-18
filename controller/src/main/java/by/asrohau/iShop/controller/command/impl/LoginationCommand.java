@@ -19,32 +19,31 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class LoginationCommand implements Command {
 
-	private final static Logger logger = LoggerFactory.getLogger(LoginationCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoginationCommand.class);
 	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(LOGINATION_COMMAND);
+		logger.info("We got to LoginationCommand");
 		try {
 			User user = new User(request.getParameter(LOGIN).trim(),
 					request.getParameter(PASSWORD).trim());
+
 			UserDTO userDTO = userService.logination(user);
 
 			String lastCMD;
 			String goToPage;
-
 			if (userDTO == null) {
-				goToPage = INDEX;
-				lastCMD = GO_TO_PAGE_INDEX;
-				request.setAttribute(ERROR_MESSAGE, NO_SUCH_USER);
+				goToPage = "index.jsp";
+				lastCMD = "FrontController?command=goToPage&address=index.jsp";
+				request.setAttribute(ERROR_MESSAGE, "noSuchUser");
 			} else {
 				goToPage = "/WEB-INF/jsp/" + userDTO.getRole() + "/main.jsp";
-				lastCMD = GO_TO_PAGE_MAIN;
+				lastCMD = "FrontController?command=goToPage&address=main.jsp";
 				request.getSession(true).setAttribute(ID, userDTO.getId());
 				request.getSession().setAttribute(ROLE, userDTO.getRole());
 				request.getSession().setAttribute(LOGIN, userDTO.getLogin());
-
 			}
 
 			request.getSession(true).setAttribute(LAST_COMMAND, lastCMD);

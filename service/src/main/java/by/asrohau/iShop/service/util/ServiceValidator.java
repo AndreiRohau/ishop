@@ -9,6 +9,7 @@ public class ServiceValidator {
     public static boolean validation(User user) {
         return !"".equals(user.getLogin()) && !"".equals(user.getPassword());
     }
+
     public static boolean validation(String login) {
         return !"".equals(login);
     }
@@ -25,7 +26,7 @@ public class ServiceValidator {
     }
 
     public static boolean validation(long id) {
-        return id >= 0;
+        return id > 0;
     }
 
     public static boolean validation(int row) {

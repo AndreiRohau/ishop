@@ -18,33 +18,30 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class RegistrationCommand implements Command {
 
-	private final static Logger logger = LoggerFactory.getLogger(RegistrationCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegistrationCommand.class);
 	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(REGISTRATION_COMMAND);
+		logger.info("We got to RegistrationCommand");
 		try {
 			User user = new User(request.getParameter(LOGIN).trim(),
 					request.getParameter(PASSWORD).trim(),
-					USER);
-			boolean isRegistered = false;
-			boolean passwordEquals = request.getParameter("password2").trim().equals(user.getPassword());
+					String.valueOf(request.getSession().getAttribute(ROLE)));
 
-			if(passwordEquals && request.getSession().getAttribute(ROLE) == null) {
-				isRegistered = userService.registration(user);
-			}
+			String password2 = request.getParameter(PASSWORD_2).trim();
 
-			if (isRegistered) {
+			if (userService.registration(user, password2)) {
 				request.setAttribute("isRegistered", true);
 			} else {
-				String errorMessage = passwordEquals ? "exists" : "passwordsUnequal";
+				String errorMessage = password2.trim().equals(user.getPassword()) ? "exists" : "passwordsUnequal";
 				errorMessage = request.getSession().getAttribute(ROLE) == null ? errorMessage : "logOutFirst";
 				request.setAttribute(ERROR_MESSAGE, errorMessage);
 			}
-			request.getSession().setAttribute(LAST_COMMAND, INDEX);
-			request.getRequestDispatcher(INDEX).forward(request, response);
+
+			request.getSession().setAttribute(LAST_COMMAND, "index.jsp");
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {
 			throw new ControllerException(e);
 		}

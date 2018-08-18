@@ -35,7 +35,7 @@ public class ShowOrdersCommand implements Command {
             request.setAttribute("currentPage", currentPage);
             request.getSession().setAttribute(LAST_COMMAND,
                     "FrontController?command=showOrders&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE,
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE,
                     "FrontController?command=showOrders&page=");
 
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")

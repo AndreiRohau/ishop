@@ -61,8 +61,8 @@ public class DeleteUserCommand implements Command {
 			if (isDeleted && actualUser) {
 				reserveService.deleteAllReserved(userDTO.getId());
 				request.getSession().invalidate();
-				goToPage = INDEX;
-				lastCMD = GO_TO_PAGE_INDEX;
+				goToPage = "index.jsp";
+				lastCMD = "FrontController?command=goToPage&address=index.jsp";
 			}
 			if (isAdmin) {
 				userDTO.setId(userService.findUserDTOWithLogin(user).getId());

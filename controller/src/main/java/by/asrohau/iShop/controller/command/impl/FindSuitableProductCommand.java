@@ -62,7 +62,7 @@ public class FindSuitableProductCommand implements Command {
                     + "&type=" + type
                     + "&price=" + price
                     + "&page=";
-            request.getSession().setAttribute(LAST_COMMAND_PAGE, path);
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, path);
             request.getSession().setAttribute(LAST_COMMAND, path + currentPage);
 
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/main.jsp")

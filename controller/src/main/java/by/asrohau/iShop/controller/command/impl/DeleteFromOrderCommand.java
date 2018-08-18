@@ -27,7 +27,7 @@ public class DeleteFromOrderCommand implements Command{
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to DeleteFromOrderCommand");
         try {
-            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter("orderId"))));
+            Order order = orderService.findOrderById(Long.parseLong(request.getParameter("orderId")));
             String[] productIdsArray = order.getProductIds().split(",");
 
             int currentPage = Integer.parseInt(request.getParameter("currentPage"));

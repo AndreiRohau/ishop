@@ -26,7 +26,7 @@ public class AuthenticationFilter implements Filter {
 
             chain.doFilter(req, res);
         } else {
-            response.sendRedirect(INDEX);
+            response.sendRedirect("index.jsp");
         }
     }
 

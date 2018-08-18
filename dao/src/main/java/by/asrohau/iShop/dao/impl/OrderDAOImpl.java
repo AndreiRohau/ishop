@@ -279,7 +279,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     }
 
     @Override
-    public boolean deleteAllOrders(long userId) throws DAOException {
+    public boolean deleteUserOrders(long userId) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -366,15 +366,17 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     }
 
     @Override
-    public boolean update(Order order, String status) throws DAOException {
+    public boolean updateOrderStatus(long id, String status) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
             connection = getConnection();
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS_QUERY);
             preparedStatement.setString(1, status);
-            preparedStatement.setLong(2, order.getId());
+            preparedStatement.setLong(2, id);
             int result = preparedStatement.executeUpdate();
+            connection.commit();
             return (result > 0);
         } catch (SQLException e) {
             try {

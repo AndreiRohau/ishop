@@ -46,9 +46,6 @@
     <fmt:message bundle="${loc}" key="local.edit" var="edit" />
     <fmt:message bundle="${loc}" key="local.id" var="id" />
 
-    <c:set var="currentPage" value="${requestScope.currentPage}"/>
-    <c:set var="maxPage" value="${requestScope.maxPage}"/>
-
     <title>
         <c:out value="${requestScope.user.login}"/>
     </title>
@@ -266,13 +263,13 @@
                             </tbody>
                         </table>
                         <ul class="pagination pull-right">
-                            <c:forEach begin="1" end="${maxPage}" var="i">
-                                <c:if test="${i == currentPage}">
+                            <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
+                                <c:if test="${i == requestScope.page.currentPage}">
                                     <li class="active">
                                         <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
-                                <c:if test="${i != currentPage}">
+                                <c:if test="${i != requestScope.page.currentPage}">
                                     <li>
                                         <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
                                     </li>
