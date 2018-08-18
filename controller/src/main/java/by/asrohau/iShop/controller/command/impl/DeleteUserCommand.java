@@ -29,52 +29,62 @@ public class DeleteUserCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
 		logger.info(DELETE_USER_COMMAND);
 		try {
-			User user = new User(request.getParameter(LOGIN).trim(),
-								request.getParameter(PASSWORD).trim());
-			UserDTO userDTO = userService.findUserDTOWithLogin(user);
 			String goToPage;
 			String lastCMD;
-			boolean isDeleted = false;
+			boolean isUser = "user".equals(request.getSession().getAttribute(ROLE));
+			boolean isDeleted = userService.deleteUser(
+												new User(request.getParameter(LOGIN).trim(),
+														request.getParameter(PASSWORD).trim(),
+														request.getParameter(ID)),
+												isUser);
 
-			String userLogin = ((String) request.getSession().getAttribute(LOGIN));
-			boolean actualUser = userLogin.equals(user.getLogin());
-			boolean isAdmin = request.getSession().getAttribute(ROLE).equals(ADMIN);
-
-
-			if (!isAdmin) {
-				goToPage = "/WEB-INF/jsp/user/profile.jsp";
-				lastCMD = GO_TO_PAGE_PROFILE;
-				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
-			} else {
-				goToPage = "FrontController?command=userInfo&id=" + userDTO.getId();
-				lastCMD = "FrontController?command=userInfo&id=" + userDTO.getId();
-				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
-			}
-
-			if (actualUser) {
-				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
-				isDeleted = userService.deleteUser(user);
-				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
-				goToPage = "/WEB-INF/jsp/user/profile.jsp";
-				lastCMD = GO_TO_PAGE_PROFILE;
-			}
-			if (isDeleted && actualUser) {
-				reserveService.deleteAllReserved(userDTO.getId());
+			if(isDeleted && isUser){
 				request.getSession().invalidate();
 				goToPage = "index.jsp";
 				lastCMD = "FrontController?command=goToPage&address=index.jsp";
-			}
-			if (isAdmin) {
-				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
-				isDeleted = userService.deleteUser(user);
-			}
-			if (isDeleted && isAdmin) {
+			} else if (isDeleted) {
 				goToPage = "FrontController?command=showUsers&page=1";
 				lastCMD = "FrontController?command=showUsers&page=1";
-				reserveService.deleteAllReserved(userDTO.getId());
 				request.removeAttribute(ERROR_MESSAGE);
+			} else {
+				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
+				goToPage = (String) request.getSession().getAttribute(LAST_COMMAND);
+				lastCMD = goToPage;
 			}
 
+//			if (isUser) {// USER
+//				goToPage = "/WEB-INF/jsp/user/profile.jsp";
+//				lastCMD = GO_TO_PAGE_PROFILE;
+//				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
+//			} else { //ADMIN
+//				goToPage = "FrontController?command=userInfo&id=" + userDTO.getId();
+//				lastCMD = "FrontController?command=userInfo&id=" + userDTO.getId();
+//				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
+//			}
+//
+//			if (((String) request.getSession().getAttribute(LOGIN)).equals(user.getLogin())) { // USER
+//				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
+//				isDeleted = userService.deleteUser(user);
+//				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
+//				goToPage = "/WEB-INF/jsp/user/profile.jsp";
+//				lastCMD = GO_TO_PAGE_PROFILE;
+//			}
+//			if (isDeleted) { //USER
+//				reserveService.deleteAllReserved(userDTO.getId());
+////				request.getSession().invalidate();
+////				goToPage = "index.jsp";
+////				lastCMD = "FrontController?command=goToPage&address=index.jsp";
+//			}
+//			if (isAdmin) { //ADMIN
+//				userDTO.setId(userService.findUserDTOWithLogin(user).getId());
+//				isDeleted = userService.deleteUser(user);
+//			}
+//			if (isDeleted && isAdmin) {
+//				goToPage = "FrontController?command=showUsers&page=1";
+//				lastCMD = "FrontController?command=showUsers&page=1";
+//				reserveService.deleteAllReserved(userDTO.getId());
+//				request.removeAttribute(ERROR_MESSAGE);
+//			}
 			request.getSession().setAttribute(LAST_COMMAND, lastCMD);
 			request.getRequestDispatcher(goToPage).forward(request, response);
 		} catch (ServiceException | ServletException | IOException e) {

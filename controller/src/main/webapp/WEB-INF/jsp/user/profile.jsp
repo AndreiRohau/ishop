@@ -222,6 +222,7 @@
                 <div class="panel-body">
                     <form action="FrontController" method="post">
                         <input type="hidden" name="command" value="deleteUser"/><br/>
+                        <input type="hidden" name="id" value="${sessionScope.id}"/><br/>
                         <div class="form-group">
                             <label for="username">
                                 <c:out value="${login}" />:

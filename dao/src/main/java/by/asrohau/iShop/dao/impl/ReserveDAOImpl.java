@@ -41,6 +41,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
+            logger.info("Trying to save to reservatioin");
             connection = getConnection();
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
             preparedStatement.setLong(1, reserve.getRUserId());

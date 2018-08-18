@@ -71,15 +71,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deleteUser(User user) throws ServiceException {
+	public boolean deleteUser(User user, boolean isUser) throws ServiceException {
 		if (!validation(user)) {
 			return false;
 		}
 		try {
-			return userDAO.findOne(user.getId()) != null && userDAO.delete(user.getId());
+			if (isUser) {
+				User userCheck = userDAO.findOne(user.getId());
+				if (userCheck.getLogin().equals(user.getLogin()) && userCheck.getPassword().equals(user.getPassword())){
+					return userDAO.delete(user.getId());
+				}
+			} else {
+				return userDAO.delete(user.getId());
+			}
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
+		return false;
 	}
 
 	@Override

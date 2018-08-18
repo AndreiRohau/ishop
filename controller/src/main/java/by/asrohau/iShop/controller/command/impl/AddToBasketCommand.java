@@ -30,7 +30,7 @@ public class AddToBasketCommand implements Command {
         try {
             User user = new User((String) request.getSession().getAttribute(LOGIN));
             UserDTO userDTO = userService.findUserDTOWithLogin(user);
-            Reserve reserve = new Reserve(userDTO.getId(), Integer.parseInt(request.getParameter(ID)));
+            Reserve reserve = new Reserve(userDTO.getId(), Long.parseLong(request.getParameter(ID)));
 
             response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
                     + "&success=" + reserveService.saveReserve(reserve));

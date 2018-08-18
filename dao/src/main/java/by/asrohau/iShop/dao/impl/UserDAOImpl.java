@@ -32,6 +32,8 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	private static final String UPDATE_USER_BY_ID_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
 	private static final String UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
 	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ? AND role = 'user'"; //todo unreachable if role is admin
+	private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
+	private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
 
 	/*
 	save new User
@@ -189,7 +191,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	}
 
 	/*
-	delete User by id
+	delete User by id - all his reserved products and all orders
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {
@@ -198,6 +200,13 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID_QUERY);
+			preparedStatement.setLong(1, id);
+			preparedStatement.executeUpdate();
+
+			preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
+			preparedStatement.setLong(1, id);
+			preparedStatement.executeUpdate();
 
 			preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_QUERY);
 			preparedStatement.setLong(1, id);

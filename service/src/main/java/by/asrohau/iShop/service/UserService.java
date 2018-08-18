@@ -36,7 +36,7 @@ public interface UserService {
 	/*
 	deleting user
 	 */
-	boolean deleteUser(User user) throws ServiceException;
+	boolean deleteUser(User user, boolean isUser) throws ServiceException;
 
 
 	List<User> getAllUsers(int row) throws ServiceException; // ArrayList
