@@ -38,8 +38,18 @@ public interface UserService {
 	 */
 	boolean deleteUser(User user, boolean isUser) throws ServiceException;
 
+	/*
+	returns all users
+	 */
+	List<User> getUsers(int row) throws ServiceException;
 
-	List<User> getAllUsers(int row) throws ServiceException; // ArrayList
+	/*
+	amount of users at table shop.users
+	 */
 	long countUsers() throws ServiceException;
+
+	/*
+
+	 */
 	UserDTO findUserDTOWithLogin(User user) throws ServiceException;
 }

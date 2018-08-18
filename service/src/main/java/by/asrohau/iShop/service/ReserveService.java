@@ -9,7 +9,7 @@ import java.util.List;
 public interface ReserveService {
 
     boolean saveReserve(Reserve reserve) throws ServiceException;
-    List<Product> getAllReserved(long userId, int row) throws ServiceException; //ArrayList
+    List<Reserve> getAllReserved(long userId, int row) throws ServiceException; //ArrayList
     long countReserved(long userId) throws ServiceException;
     boolean deleteReserved(Reserve reserve) throws ServiceException;
     List<Long> getAllReservedIds(long userId) throws ServiceException; // LinkedList

@@ -52,17 +52,15 @@ public class OrderInfoCommand implements Command {
             int finArrlength = (page.getCurrentPage() < page.getMaxPage()) || reminder == 0 ?
                     MAX_ROWS_AT_PAGE : reminder;
 
-            int[] productIDs = new int[finArrlength];
+            long[] productIDs = new long[finArrlength];
             for(int i = 0; i < finArrlength; i++){
                 productIDs[i] = Integer.parseInt(productIdsArray[i + page.getRow()]);
             }
 
             //find each product. create an arraylist
             List<Product> products = new ArrayList<>();
-            for(int id : productIDs){
-                Product product = new Product();
-                product.setId(id);
-                product = productService.findProductWithId(product);
+            for(long id : productIDs){
+                Product product = productService.findProductWithId(id);
                 product.setOrderId(order.getId());
                 products.add(product);
             }

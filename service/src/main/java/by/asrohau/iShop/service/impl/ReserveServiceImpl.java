@@ -33,7 +33,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public List<Product> getAllReserved(long userId, int row) throws ServiceException { //ArrayList
+    public List<Reserve> getAllReserved(long userId, int row) throws ServiceException { //ArrayList
         try {
             return reserveDAO.findReservationsByUserId(userId, row);
         } catch (DAOException e) {

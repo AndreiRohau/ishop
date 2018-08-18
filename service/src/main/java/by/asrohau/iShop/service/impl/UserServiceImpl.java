@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getAllUsers(int row) throws ServiceException { // ArrayList
+	public List<User> getUsers(int row) throws ServiceException { // ArrayList
 		if (!validation(row)){
 			return null;
 		}

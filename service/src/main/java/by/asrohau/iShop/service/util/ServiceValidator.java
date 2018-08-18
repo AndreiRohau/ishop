@@ -22,7 +22,7 @@ public class ServiceValidator {
     }
 
     public static boolean validation(Reserve reserve) {
-        return reserve.getRUserId() > 0 && reserve.getRProductId() > 0;
+        return reserve.getUserId() > 0 && reserve.getProductId() > 0;
     }
 
     public static boolean validation(long id) {

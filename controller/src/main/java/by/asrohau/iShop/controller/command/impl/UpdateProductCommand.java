@@ -26,7 +26,7 @@ public class UpdateProductCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to EditProductCommand");
         try {
-            Product product = new Product(Integer.parseInt(request.getParameter("id")),
+            Product product = new Product(Long.parseLong(request.getParameter("id")),
                     request.getParameter("company"),
                     request.getParameter("name"),
                     request.getParameter("type"),
@@ -35,7 +35,7 @@ public class UpdateProductCommand implements Command {
 
             if(!productService.updateProduct(product)){
                 request.setAttribute("updateFailed", true);
-                product = productService.findProductWithId(product);
+                product = productService.findProductWithId(product.getId());
             }
 
             request.setAttribute("product", product);

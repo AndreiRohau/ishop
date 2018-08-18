@@ -9,7 +9,7 @@ public interface ProductService {
 
 	boolean addNewProduct(Product newProduct) throws ServiceException;
 	List<Product> getAllProducts(int row) throws ServiceException; //ArrayList
-	Product findProductWithId(Product product) throws ServiceException;
+	Product findProductWithId(long id) throws ServiceException;
 	boolean updateProduct(Product product) throws ServiceException;
 
 	Product findProduct(Product product) throws ServiceException;

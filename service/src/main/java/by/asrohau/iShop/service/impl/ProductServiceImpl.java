@@ -50,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product findProductWithId(Product product) throws ServiceException {
+	public Product findProductWithId(long id) throws ServiceException {
 		try {
-			return productDAO.findOne(product.getId());
+			return productDAO.findOne(id);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

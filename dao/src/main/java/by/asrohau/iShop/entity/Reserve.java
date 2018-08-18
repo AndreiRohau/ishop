@@ -2,8 +2,8 @@ package by.asrohau.iShop.entity;
 
 public class Reserve extends Base {
 
-    private long RUserId;
-    private long RProductId;
+    private long userId;
+    private long productId;
 
     public Reserve() {
     }
@@ -12,31 +12,31 @@ public class Reserve extends Base {
         super(id);
     }
 
-    public Reserve(long RUserId, long RProductId) {
-        this.RUserId = RUserId;
-        this.RProductId = RProductId;
+    public Reserve(long userId, long productId) {
+        this.userId = userId;
+        this.productId = productId;
     }
 
-    public Reserve(long id, long RUserId, long RProductId) {
+    public Reserve(long id, long userId, long productId) {
         super(id);
-        this.RUserId = RUserId;
-        this.RProductId = RProductId;
+        this.userId = userId;
+        this.productId = productId;
     }
 
-    public long getRUserId() {
-        return RUserId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setRUserId(long RUserId) {
-        this.RUserId = RUserId;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public long getRProductId() {
-        return RProductId;
+    public long getProductId() {
+        return productId;
     }
 
-    public void setRProductId(long RProductId) {
-        this.RProductId = RProductId;
+    public void setProductId(long productId) {
+        this.productId = productId;
     }
 
     @Override
@@ -47,15 +47,15 @@ public class Reserve extends Base {
 
         Reserve reserve = (Reserve) o;
 
-        if (RUserId != reserve.RUserId) return false;
-        return RProductId == reserve.RProductId;
+        if (userId != reserve.userId) return false;
+        return productId == reserve.productId;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (int) (RUserId ^ (RUserId >>> 32));
-        result = 31 * result + (int) (RProductId ^ (RProductId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (productId ^ (productId >>> 32));
         return result;
     }
 
@@ -63,8 +63,8 @@ public class Reserve extends Base {
     public String toString() {
         return "Reserve{" +
                 super.toString() +
-                "RUserId=" + RUserId +
-                ", RProductId=" + RProductId +
+                "userId=" + userId +
+                ", productId=" + productId +
                 '}';
     }
 }

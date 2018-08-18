@@ -1,6 +1,7 @@
 package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
@@ -40,11 +41,18 @@ public class ShowReservedCommand implements Command {
             int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
             int maxPage = (int) Math.ceil(((double) reserveService.countReserved(userId)) / MAX_ROWS_AT_PAGE);
 
-            List<Product> reservedIds = reserveService.getAllReserved(userId, row);
+            List<Reserve> reservations = reserveService.getAllReserved(userId, row);
             List<Product> products = new ArrayList<>();
-            for(Product p : reservedIds){
-                Product product = productService.findProductWithId(p);
-                product.setReserveId(p.getReserveId());
+
+            logger.info(reservations.toString());
+            logger.info("________________________________");
+            logger.info("________________________________");
+            for(Reserve reservation : reservations){
+                logger.info(reservation.toString());
+                Product product = productService.findProductWithId(reservation.getProductId());
+                logger.info(product.toString());
+
+                product.setReserveId(reservation.getId());
                 products.add(product);
                 product = new Product();
             }

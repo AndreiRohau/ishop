@@ -10,7 +10,7 @@ public interface ReserveDAO extends EntityFacadeFootprint<Reserve> {
     /*
     finds all reservations of a certain user, limit
      */
-    List<Product> findReservationsByUserId(long userId, int row) throws DAOException;
+    List<Reserve> findReservationsByUserId(long userId, int row) throws DAOException;
 
     /*
     finds reserved Product Ids of a certain user

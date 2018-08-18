@@ -26,9 +26,7 @@ public class ProductInfoCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ProductInfoCommand");
         try {
-            Product product  = new Product();
-            product.setId(Integer.parseInt(request.getParameter(ID)));
-            product = productService.findProductWithId(product);
+            Product product  = productService.findProductWithId(Long.parseLong(request.getParameter(ID)));
 
             if(product != null){
                 request.setAttribute("product", product);

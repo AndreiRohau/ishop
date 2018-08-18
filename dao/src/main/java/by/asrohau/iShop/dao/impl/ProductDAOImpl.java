@@ -77,7 +77,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = getConnection().prepareStatement(FIND_EQUAL_PRODUCT_QUERY);
+			preparedStatement = connection.prepareStatement(FIND_EQUAL_PRODUCT_QUERY);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
@@ -130,10 +130,10 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 				product.setDescription(resultSet.getString(6));
 			}
 
-			if (product.getName() != null) {
+			if (product.getId() != 0) {
 				return product;
 			}
-			logger.info("Can not identify Order by id");
+			logger.info("Can not identify Product by id");
 			return null;
 		} catch (SQLException e) {
 			throw new DAOException("Error in DAO method", e);
@@ -183,7 +183,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	/*
-	delete existing product by id
+	delete existing product by id todo: delete in all orders, and all reserves
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {

@@ -3,7 +3,6 @@ package by.asrohau.iShop.dao.impl;
 import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ReserveDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
-import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.entity.Reserve;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +43,8 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             logger.info("Trying to save to reservatioin");
             connection = getConnection();
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
-            preparedStatement.setLong(1, reserve.getRUserId());
-            preparedStatement.setLong(2, reserve.getRProductId());
+            preparedStatement.setLong(1, reserve.getUserId());
+            preparedStatement.setLong(2, reserve.getProductId());
 
             int result = preparedStatement.executeUpdate();
 
@@ -66,15 +65,15 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         try {
             connection = getConnection();
             preparedStatement = connection.prepareStatement(FIND_RESERVE_BY_USER_ID_AND_PRODUCT_ID_QUERY);
-            preparedStatement.setLong(1, reserve.getRUserId());
-            preparedStatement.setLong(2, reserve.getRProductId());
+            preparedStatement.setLong(1, reserve.getUserId());
+            preparedStatement.setLong(2, reserve.getProductId());
             resultSet = preparedStatement.executeQuery();
             reserve = new Reserve();
 
             while (resultSet.next()) {
                 reserve.setId(resultSet.getLong(1));
-                reserve.setRUserId(resultSet.getLong(2));
-                reserve.setRProductId(resultSet.getLong(3));
+                reserve.setUserId(resultSet.getLong(2));
+                reserve.setProductId(resultSet.getLong(3));
             }
 
             if (reserve.getId() != 0) {
@@ -105,8 +104,8 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             Reserve reserve = new Reserve();
             while (resultSet.next()) {
                 reserve.setId(resultSet.getLong(1));
-                reserve.setRUserId(resultSet.getLong(2));
-                reserve.setRProductId(resultSet.getLong(3));
+                reserve.setUserId(resultSet.getLong(2));
+                reserve.setProductId(resultSet.getLong(3));
             }
 
             if (reserve.getId() != 0) {
@@ -130,8 +129,8 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             connection = getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(UPDATE_RESERVE_BY_ID_QUERY);
-            preparedStatement.setLong(1, reserve.getRUserId());
-            preparedStatement.setLong(2, reserve.getRProductId());
+            preparedStatement.setLong(1, reserve.getUserId());
+            preparedStatement.setLong(2, reserve.getProductId());
             preparedStatement.setLong(3, reserve.getId());
 
             int result = preparedStatement.executeUpdate();
@@ -255,7 +254,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     }
 
     @Override
-    public List<Product> findReservationsByUserId(long userId, int row) throws DAOException {
+    public List<Reserve> findReservationsByUserId(long userId, int row) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         ResultSet resultSet = null;
@@ -265,18 +264,19 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             preparedStatement.setLong(1, userId);
             preparedStatement.setInt(2, row);
             preparedStatement.setInt(3, MAX_ROWS_AT_PAGE);
-            List<Product> productList = new ArrayList<>();
+            List<Reserve> reservations = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
             long reserveId;
             long productId;
-            Product product;
+            Reserve reserve;
             while (resultSet.next()) {
                 reserveId = resultSet.getLong(1);
                 productId = resultSet.getLong(3);
-                product = new Product(productId, reserveId);
-                productList.add(product);
+                reserve = new Reserve(reserveId, userId, productId);
+                reservations.add(reserve);
             }
-            return productList;
+            logger.info("["+reservations+"]");
+            return reservations;
         } catch (SQLException e) {
             throw new DAOException("Error in DAO method", e);
         } finally {
