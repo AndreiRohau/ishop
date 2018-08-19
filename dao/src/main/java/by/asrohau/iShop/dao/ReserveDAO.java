@@ -7,6 +7,7 @@ import by.asrohau.iShop.dao.exception.DAOException;
 import java.util.List;
 
 public interface ReserveDAO extends EntityFacadeFootprint<Reserve> {
+
     /*
     finds all reservations of a certain user, limit
      */

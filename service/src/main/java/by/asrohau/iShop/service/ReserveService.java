@@ -19,7 +19,7 @@ public interface ReserveService {
     List<Reserve> getReservations(long userId, int row) throws ServiceException;
 
     /*
-    counts reserved produts by userId
+    counts reserved products by userId
      */
     long countReserved(long userId) throws ServiceException;
 
@@ -29,7 +29,7 @@ public interface ReserveService {
     boolean deleteReserved(long id) throws ServiceException;
 
     /*
-
+    prepairs a
      */
     List<Long> getReservedProductIds(long userId) throws ServiceException;
 

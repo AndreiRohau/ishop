@@ -34,6 +34,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     private static final String UPDATE_RESERVE_BY_ID_QUERY = "UPDATE shop.reserve SET userId = ?, productId = ? WHERE id = ?";
     private static final String DELETE_RESERVATION_BY_ID_QUERY = "DELETE FROM shop.reserve WHERE id = ?";
 
+    /*
+    save reserve to reserve table
+     */
     @Override
     public boolean save(Reserve reserve) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -43,9 +46,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
             preparedStatement.setLong(1, reserve.getUserId());
             preparedStatement.setLong(2, reserve.getProductId());
-
             int result = preparedStatement.executeUpdate();
-
             return (result > 0);
         } catch (SQLException e) {
             throw new DAOException("Error in DAO method", e);
@@ -55,6 +56,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         }
     }
 
+    /*
+    finds reserve by user id and product id
+     */
     @Override
     public Reserve find(Reserve reserve) throws DAOException {
         Connection connection = null;
@@ -88,6 +92,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
     }
 
+    /*
+    finds reservation by id
+     */
     @Override
     public Reserve findOne(long id) throws DAOException {
         Connection connection = null;
@@ -119,6 +126,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         }
     }
 
+    /*
+    updates reservation by id
+     */
     @Override
     public boolean update(Reserve reserve) throws DAOException {
         Connection connection = null;
@@ -147,6 +157,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         }
     }
 
+    /*
+    delete reservation by id
+     */
     @Override
     public boolean delete(long id) throws DAOException {
         PreparedStatement preparedStatement = null;
@@ -173,6 +186,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         }
     }
 
+    /*
+    finds all reservations in table
+     */
     @Override
     public List<Reserve> findAll(int row) throws DAOException {
         Connection connection = null;
@@ -185,15 +201,11 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
             List<Reserve> reserves = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            Reserve reserve;
-            long id;
-            long userId;
-            long productId;
             while (resultSet.next()) {
-                id = resultSet.getLong(1);
-                userId = resultSet.getLong(2);
-                productId = resultSet.getLong(3);
-                reserve = new Reserve(id, userId, productId);
+                Reserve reserve = new Reserve(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getLong(3));
                 reserves.add(reserve);
             }
             return reserves;
@@ -205,6 +217,9 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         }
     }
 
+    /*
+    count all reservations in table
+     */
     @Override
     public long countAll() throws DAOException {
         Connection connection = null;
@@ -237,13 +252,11 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             preparedStatement.setInt(3, MAX_ROWS_AT_PAGE);
             List<Reserve> reservations = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            long reserveId;
-            long productId;
-            Reserve reserve;
             while (resultSet.next()) {
-                reserveId = resultSet.getLong(1);
-                productId = resultSet.getLong(3);
-                reserve = new Reserve(reserveId, userId, productId);
+                Reserve reserve = new Reserve(
+                        resultSet.getLong(1),
+                        userId,
+                        resultSet.getLong(3));
                 reservations.add(reserve);
             }
             return reservations;

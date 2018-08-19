@@ -16,9 +16,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     private final ReserveDAO reserveDAO = DAOFactory.getInstance().getReserveDAO();
 
-    public ReserveServiceImpl() {
-    }
-
+    public ReserveServiceImpl() {}
 
     @Override
     public boolean saveReserve(Reserve reserve) throws ServiceException {
@@ -40,7 +38,6 @@ public class ReserveServiceImpl implements ReserveService {
             throw new ServiceException(e);
         }
     }
-
 
     @Override
     public long countReserved(long userId) throws ServiceException {
