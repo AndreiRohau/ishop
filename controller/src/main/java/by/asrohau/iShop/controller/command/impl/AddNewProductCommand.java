@@ -31,15 +31,12 @@ public class AddNewProductCommand implements Command {
                     request.getParameter("price").trim(),
                     request.getParameter("description").trim());
 
-            if (productService.addNewProduct(newProduct)) {
-                request.setAttribute("isAdded", true);
-            } else {
-                request.setAttribute("isAdded", false);
-            }
+            boolean productAdded = productService.addNewProduct(newProduct);
 
-            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=goToPage&address=addProduct.jsp");
-            request.getRequestDispatcher("/WEB-INF/jsp/admin/addProduct.jsp").forward(request, response);
-        } catch (ServiceException | ServletException | IOException e) {
+            String lastCommand = "FrontController?command=goToPage&address=addProduct.jsp&message=" + productAdded;
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+            response.sendRedirect(lastCommand);
+        } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }
 

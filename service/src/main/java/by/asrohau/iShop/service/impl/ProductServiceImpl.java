@@ -32,7 +32,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public boolean addNewProduct(Product newProduct) throws ServiceException {
 		if (!validation(newProduct)) { return false;}
-
 		try {
 			return productDAO.save(newProduct);
 		} catch (DAOException e) {
@@ -41,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getAllProducts(int row) throws ServiceException { //ArrayList
+	public List<Product> getProducts(int row) throws ServiceException {
 		try {
 			return productDAO.findAll(row);
 		} catch (DAOException e) {

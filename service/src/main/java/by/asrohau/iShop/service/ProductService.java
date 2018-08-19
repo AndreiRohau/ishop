@@ -7,9 +7,23 @@ import java.util.List;
 
 public interface ProductService {
 
+	/*
+	saving new product to database
+	 */
 	boolean addNewProduct(Product newProduct) throws ServiceException;
-	List<Product> getAllProducts(int row) throws ServiceException; //ArrayList
+
+	/*
+	simple returning of all products, limit
+	 */
+	List<Product> getProducts(int row) throws ServiceException;
+
+	/*
+
+	 */
 	Product findProductWithId(long id) throws ServiceException;
+
+
+
 	boolean updateProduct(Product product) throws ServiceException;
 
 	Product findProduct(Product product) throws ServiceException;

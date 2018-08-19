@@ -36,22 +36,41 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	 */
 	@Override
 	public boolean save(Product product) throws DAOException {
-		if(find(product) != null){
-			return false;
-		}
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			int result = 0;
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(SAVE_PRODUCT_QUERY);
+
+			preparedStatement = connection.prepareStatement(FIND_EQUAL_PRODUCT_QUERY);
 			preparedStatement.setString(1, product.getCompany());
 			preparedStatement.setString(2, product.getName());
 			preparedStatement.setString(3, product.getType());
 			preparedStatement.setString(4, product.getPrice());
-			preparedStatement.setString(5, product.getDescription());
+			resultSet = preparedStatement.executeQuery();
+			Product foundProduct = new Product();
 
-			int result = preparedStatement.executeUpdate();
+			while (resultSet.next()) {
+				foundProduct.setId(resultSet.getInt(1));
+				foundProduct.setCompany(resultSet.getString(2));
+				foundProduct.setName(resultSet.getString(3));
+				foundProduct.setType(resultSet.getString(4));
+				foundProduct.setPrice(resultSet.getString(5));
+				foundProduct.setDescription(resultSet.getString(6));
+			}
+
+			if (foundProduct.getName() == null) {
+				preparedStatement = connection.prepareStatement(SAVE_PRODUCT_QUERY);
+				preparedStatement.setString(1, product.getCompany());
+				preparedStatement.setString(2, product.getName());
+				preparedStatement.setString(3, product.getType());
+				preparedStatement.setString(4, product.getPrice());
+				preparedStatement.setString(5, product.getDescription());
+				result = preparedStatement.executeUpdate();
+			}
+
 			connection.commit();
 			return (result != 0);
 		} catch (SQLException e) {
@@ -62,7 +81,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 			}
 			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(null, preparedStatement);
+			close(resultSet, preparedStatement);
 			returnConnection(connection);
 		}
 	}
