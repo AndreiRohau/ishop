@@ -22,6 +22,7 @@ public class AuthenticationFilter implements Filter {
                 request.getParameter(COMMAND).matches("logination") ||
                 request.getParameter(COMMAND).matches("registration") ||
                 request.getParameter(COMMAND).matches("changeLanguage") ||
+                request.getParameter(COMMAND).matches("goToPage") ||
                 request.getSession().getAttribute(ROLE) != null) {
 
             chain.doFilter(req, res);

@@ -17,13 +17,14 @@ public class GoToPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info(GO_TO_PAGE_COMMAND);
+        logger.info("We got to GoToPageCommand");
         try {
             String goToPage = "index.jsp".equals(request.getParameter(ADDRESS)) ? "index.jsp" :
                     "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
+            request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
             request.getSession().setAttribute(LAST_COMMAND,
-                    GO_TO_PAGE_ + request.getParameter(ADDRESS));
+                    "FrontController?command=goToPage&address=" + request.getParameter(ADDRESS));
             request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);

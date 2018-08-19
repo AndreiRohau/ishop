@@ -9,7 +9,6 @@ public class ControllerFinals {
      */
     public static final int MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
 
-
     public static final String PAGE = "page";
     public static final String STATUS = "status";
     public static final String NEW = "new";
@@ -21,28 +20,10 @@ public class ControllerFinals {
     public static final String PASSWORD_2 = "password2";
     public static final String NEW_PASSWORD = "newPassword";
     public static final String ROLE = "role";
-    public static final String ADMIN = "admin";
     public static final String LAST_COMMAND = "lastCMD";
     public static final String LAST_COMMAND_NEED_PAGE = "lastCMDneedPage";
     public static final String ADDRESS = "address";
-    public static final String ERROR_MESSAGE = "errorMessage";
-    public static final String IS_CHANGED = "isChanged";
     public static final String MESSAGE = "message";
-    public static final String NO_SUCH_USER = "noSuchUser";
-
-    /*
-    urls
-     */
-    public static final String ERROR = "error.jsp";
-    public static final String GO_TO_PAGE_ = "FrontController?command=goToPage&address=";
-    public static final String GO_TO_PAGE_PROFILE = "FrontController?command=goToPage&address=profile.jsp";
-
-    /*
-    Commands
-     */
     public static final String COMMAND = "command";
-    public static final String GO_TO_PAGE_COMMAND = "GoToPage command";
-    public static final String CHANGE_PASSWORD_COMMAND = "ChangePasswordCommand command";
-    public static final String DELETE_USER_COMMAND = "DeleteUserCommand command";
 
 }

@@ -25,23 +25,19 @@ public class ChangePasswordCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(CHANGE_PASSWORD_COMMAND);
+		logger.info("We got to ChangePasswordCommand");
 		try {
 			User user = new User(request.getParameter(LOGIN).trim(), request.getParameter(PASSWORD).trim());
 			String newPassword = request.getParameter(NEW_PASSWORD).trim();
+			String sessionLogin = (String) request.getSession().getAttribute(LOGIN);
 
-			boolean isChanged = request.getSession().getAttribute(LOGIN).equals(user.getLogin())
-					&& userService.changePassword(user, newPassword);
-			if (isChanged) {
-				request.setAttribute(IS_CHANGED, newPassword);
-			} else {
-				request.setAttribute(ERROR_MESSAGE, "changePasswordError");
-			}
+			boolean passwordChanged = userService.changePassword(user, newPassword, sessionLogin);
 
-			request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=goToPage&address=profile.jsp");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/user/profile.jsp");
-			dispatcher.forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) {
+			String lastCommand = "FrontController?command=goToPage&address=profile.jsp&message=" + passwordChanged;
+			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+			response.sendRedirect(lastCommand);
+
+		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
 		}
 	}

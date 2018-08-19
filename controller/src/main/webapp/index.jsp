@@ -220,7 +220,7 @@
 						</h3>
 					</div>
 					<div class="panel-body">
-						<c:if test="${requestScope.errorMessage == 'error'}">
+						<c:if test="${requestScope.message == 'error'}">
 							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>
@@ -238,7 +238,7 @@
 								</p>
 							</div>
 						</c:if>
-						<c:if test="${requestScope.isRegistered == true}">
+						<c:if test="${requestScope.message == 'true'}">
 							<div class="alert alert-success" role="alert">
 								<p>
 									<span>
@@ -247,7 +247,7 @@
 								</p>
 							</div>
 						</c:if>
-						<c:if test="${requestScope.errorMessage == 'exists'}">
+						<c:if test="${requestScope.message == 'exists'}">
 							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>
@@ -256,7 +256,7 @@
 								</p>
 							</div>
 						</c:if>
-						<c:if test="${requestScope.errorMessage == 'logOutFirst'}">
+						<c:if test="${requestScope.message == 'logOutFirst'}">
 							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>
@@ -265,7 +265,7 @@
 								</p>
 							</div>
 						</c:if>
-						<c:if test="${requestScope.errorMessage == 'noSuchUser'}">
+						<c:if test="${requestScope.message == 'noSuchUser'}">
 							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>
@@ -274,7 +274,7 @@
 								</p>
 							</div>
 						</c:if>
-						<c:if test="${requestScope.errorMessage == 'passwordsUnequal'}">
+						<c:if test="${requestScope.message == 'passwordsUnequal'}">
 							<div class="alert alert-danger" role="alert">
 								<p>
 									<span>

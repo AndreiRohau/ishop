@@ -32,23 +32,19 @@ public class LoginationCommand implements Command {
 
 			UserDTO userDTO = userService.logination(user);
 
-			String lastCMD;
-			String goToPage;
+			String lastCommand;
 			if (userDTO == null) {
-				goToPage = "index.jsp";
-				lastCMD = "FrontController?command=goToPage&address=index.jsp";
-				request.setAttribute(ERROR_MESSAGE, "noSuchUser");
+				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=noSuchUser";
 			} else {
-				goToPage = "/WEB-INF/jsp/" + userDTO.getRole() + "/main.jsp";
-				lastCMD = "FrontController?command=goToPage&address=main.jsp";
+				lastCommand = "FrontController?command=goToPage&address=main.jsp";
 				request.getSession(true).setAttribute(ID, userDTO.getId());
 				request.getSession().setAttribute(ROLE, userDTO.getRole());
 				request.getSession().setAttribute(LOGIN, userDTO.getLogin());
 			}
 
-			request.getSession(true).setAttribute(LAST_COMMAND, lastCMD);
-			request.getRequestDispatcher(goToPage).forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) { //
+			request.getSession(true).setAttribute(LAST_COMMAND, lastCommand);
+			response.sendRedirect(lastCommand);
+		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
 		}
 

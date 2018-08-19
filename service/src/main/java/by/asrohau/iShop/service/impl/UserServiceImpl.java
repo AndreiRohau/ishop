@@ -58,12 +58,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean changePassword(User user, String newPassword) throws ServiceException {
+	public boolean changePassword(User user, String newPassword, String sessionLogin) throws ServiceException {
 		if (!validation(user) || "".equals(newPassword)) {
 			return false;
 		}
 		try {
-			return userDAO.changeUserPassword(user,newPassword);
+			return sessionLogin.equals(user.getLogin()) && userDAO.changeUserPassword(user,newPassword);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

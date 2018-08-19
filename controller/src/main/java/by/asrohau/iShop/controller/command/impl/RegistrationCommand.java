@@ -31,18 +31,18 @@ public class RegistrationCommand implements Command {
 					String.valueOf(request.getSession().getAttribute(ROLE)));
 
 			String password2 = request.getParameter(PASSWORD_2).trim();
-
+			String lastCommand = "";
 			if (userService.registration(user, password2)) {
-				request.setAttribute("isRegistered", true);
+				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=true";
 			} else {
-				String errorMessage = password2.trim().equals(user.getPassword()) ? "exists" : "passwordsUnequal";
-				errorMessage = request.getSession().getAttribute(ROLE) == null ? errorMessage : "logOutFirst";
-				request.setAttribute(ERROR_MESSAGE, errorMessage);
+				String message = password2.equals(user.getPassword()) ? "exists" : "passwordsUnequal";
+				message = request.getSession().getAttribute(ROLE) == null ? message : "logOutFirst";
+				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=" + message;
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND, "index.jsp");
-			request.getRequestDispatcher("index.jsp").forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) {
+			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+			response.sendRedirect(lastCommand);
+		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
 		}
 	}

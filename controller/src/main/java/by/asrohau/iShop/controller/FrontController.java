@@ -38,7 +38,7 @@ public final class FrontController extends HttpServlet {
 			Command command = (Command) commandMap.get(request.getParameter(COMMAND));
 			command.execute(request, response);
 		} catch (ControllerException e) {
-			request.setAttribute(ERROR_MESSAGE, "error");
+			request.setAttribute(MESSAGE, "error");
 			request.getRequestDispatcher("/WEB-INF/errors/error.jsp").forward(request, response);
 		}
 	}

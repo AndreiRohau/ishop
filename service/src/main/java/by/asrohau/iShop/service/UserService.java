@@ -31,7 +31,7 @@ public interface UserService {
 	/*
 	change user's password
 	 */
-	boolean changePassword(User user, String newPassword) throws ServiceException;
+	boolean changePassword(User user, String newPassword, String sessionLogin) throws ServiceException;
 
 	/*
 	deleting user

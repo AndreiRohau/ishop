@@ -1,17 +1,14 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.User;
-import by.asrohau.iShop.entity.UserDTO;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import by.asrohau.iShop.service.ReserveService;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,14 +20,12 @@ public class DeleteUserCommand implements Command {
 	private static final Logger logger = LoggerFactory.getLogger(DeleteUserCommand.class);
 	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private UserService userService = serviceFactory.getUserService();
-	private ReserveService reserveService= serviceFactory.getReserveService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(DELETE_USER_COMMAND);
+		logger.info("We got to DeleteUserCommand");
 		try {
-			String goToPage;
-			String lastCMD;
+			String lastCommand;
 			boolean isUser = "user".equals(request.getSession().getAttribute(ROLE));
 			boolean isDeleted = userService.deleteUser(
 												new User(Long.parseLong(request.getParameter(ID)),
@@ -40,20 +35,16 @@ public class DeleteUserCommand implements Command {
 
 			if(isDeleted && isUser){
 				request.getSession().invalidate();
-				goToPage = "index.jsp";
-				lastCMD = "FrontController?command=goToPage&address=index.jsp";
+				lastCommand = "FrontController?command=goToPage&address=index.jsp";
 			} else if (isDeleted) {
-				goToPage = "FrontController?command=showUsers&page=1";
-				lastCMD = "FrontController?command=showUsers&page=1";
+				lastCommand = "FrontController?command=showUsers&page=1";
 			} else {
-				request.setAttribute(ERROR_MESSAGE, "deleteUserError");
-				goToPage = (String) request.getSession().getAttribute(LAST_COMMAND);
-				lastCMD = goToPage;
+				lastCommand = (String) request.getSession().getAttribute(LAST_COMMAND) + "&message=deleteUserError";
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND, lastCMD);
-			request.getRequestDispatcher(goToPage).forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) {
+			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+			response.sendRedirect(lastCommand);
+		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
 		}
 	}

@@ -37,7 +37,9 @@ public class ShowUsersCommand implements Command {
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
             request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
 
-            request.getRequestDispatcher("/WEB-INF/jsp/admin/users.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/" +
+                    request.getSession().getAttribute(ROLE) +
+                    "/users.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

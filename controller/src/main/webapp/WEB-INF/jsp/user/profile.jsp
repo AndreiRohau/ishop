@@ -39,6 +39,7 @@
     <fmt:message bundle="${loc}" key="local.changePasswordText" var="changePasswordText" />
     <fmt:message bundle="${loc}" key="local.deleteAccountText" var="deleteAccountText" />
     <fmt:message bundle="${loc}" key="local.nothingHappened" var="nothingHappened" />
+    <fmt:message bundle="${loc}" key="local.success" var="success" />
 
     <title>
         <c:out value="${profile}"/>
@@ -190,7 +191,7 @@
                         <input type="submit" class="btn btn-default" name="change" value="${change}"/>
                     </form>
 
-                    <c:if test="${requestScope.errorMessage == 'changePasswordError'}">
+                    <c:if test="${requestScope.message == 'false'}">
                         <div class="alert alert-danger" role="alert">
                             <p>
                                 <span>
@@ -199,11 +200,11 @@
                             </p>
                         </div>
                     </c:if>
-                    <c:if test="${requestScope.isChanged != null}">
+                    <c:if test="${requestScope.message == 'true'}">
                         <div class="alert alert-info" role="alert">
                             <p>
                                 <span>
-                                    New password is [<c:out value="${requestScope.isChanged}"/>].
+                                    <c:out value="${success}"/>
                                 </span>
                             </p>
                         </div>
@@ -238,7 +239,7 @@
                         <input type="submit" class="btn btn-default" name="delete" value="${delete}"/>
                     </form>
 
-                    <c:if test="${requestScope.errorMessage == 'deleteUserError'}">
+                    <c:if test="${requestScope.message == 'deleteUserError'}">
                         <div class="alert alert-info" role="alert">
                             <span>
                                 <c:out value="${nothingHappened}"/>
