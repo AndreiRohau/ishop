@@ -35,6 +35,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     private static final String UPDATE_ORDER_PRODUCTS_QUERY = "UPDATE shop.orders SET products = ? WHERE id = ?";
     private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
     private static final String DELETE_ORDER_BY_ID_QUERY = "DELETE FROM shop.orders WHERE id = ?";
+    private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
 
     /*
     create new Order - this is a transactional method with roleback
@@ -47,6 +48,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
+
             preparedStatement = connection.prepareStatement(SAVE_NEW_ORDER_QUERY);
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getProductIds());
@@ -56,12 +58,11 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setDate(6, order.getDateCreated());
             int result = preparedStatement.executeUpdate();
 
-            preparedStatement2 = connection.prepareStatement("DELETE FROM shop.reserve WHERE userId = ?");
+            preparedStatement2 = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
             preparedStatement2.setLong(1, order.getUserId());
             int result2 = preparedStatement2.executeUpdate();
 
             connection.commit();
-
             return (result > 0) && (result2 > 0);
         } catch (SQLException e) {
             try {

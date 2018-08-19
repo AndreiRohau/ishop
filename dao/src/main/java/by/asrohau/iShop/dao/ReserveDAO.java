@@ -22,8 +22,4 @@ public interface ReserveDAO extends EntityFacadeFootprint<Reserve> {
      */
     long countReservationsByUserId(long userId) throws DAOException;
 
-    /*
-    deletes all reservations of a certain user
-     */
-    boolean deleteReservationsByUserId(long userId) throws DAOException;
 }

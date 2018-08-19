@@ -1,6 +1,7 @@
 package by.asrohau.iShop.service;
 
 import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.List;
@@ -26,6 +27,11 @@ public interface ProductService {
 	finds product by Id
 	 */
 	Product findProductWithId(long id) throws ServiceException;
+
+	/*
+	finds products by Ids
+	 */
+	List<Product> findProductsWithIds(List<Reserve> reservations) throws ServiceException;
 
 	/*
 	admin can change product information with this method

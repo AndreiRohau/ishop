@@ -16,8 +16,7 @@ public class OrderServiceImpl implements OrderService{
 
     private final OrderDAO orderDAO = DAOFactory.getInstance().getOrderDAO();
 
-    public OrderServiceImpl() {
-    }
+    public OrderServiceImpl() {}
 
     @Override
     public boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException {

@@ -25,12 +25,9 @@ public class DeleteReserveCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to DeleteReserveCommand");
         try {
-            boolean deleted = reserveService
-                    .deleteReserved(new Reserve(Long.parseLong(request.getParameter("reserveId"))));
+            boolean deleted = reserveService.deleteReserved(Long.parseLong(request.getParameter("reserveId")));
 
-            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
-                    + "&deleted=" + deleted);
-
+            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND)) + "&deleted=" + deleted);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }

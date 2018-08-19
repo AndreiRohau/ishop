@@ -3,11 +3,9 @@ package by.asrohau.iShop.controller.command.impl;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Order;
-import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
-import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
@@ -31,7 +29,7 @@ public class CreateOrderCommand implements Command {
         logger.info("We got to CreateOrderCommand");
         try{
             long userId = (Long) request.getSession().getAttribute(ID);
-            List<Long> reservedProductIds = reserveService.getAllReservedIds(userId);
+            List<Long> reservedProductIds = reserveService.getReservedProductIds(userId);
             Order order = new Order(userId, request.getParameter("userAddress"), request.getParameter("userPhone"));
             boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 

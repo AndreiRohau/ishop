@@ -33,14 +33,12 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     private static final String COUNT_RESERVED_BY_USER_ID_QUERY = "SELECT COUNT(*) FROM shop.reserve WHERE userId = ?";
     private static final String UPDATE_RESERVE_BY_ID_QUERY = "UPDATE shop.reserve SET userId = ?, productId = ? WHERE id = ?";
     private static final String DELETE_RESERVATION_BY_ID_QUERY = "DELETE FROM shop.reserve WHERE id = ?";
-    private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
-    
+
     @Override
     public boolean save(Reserve reserve) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            logger.info("Trying to save to reservatioin");
             connection = getConnection();
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
             preparedStatement.setLong(1, reserve.getUserId());
@@ -158,33 +156,6 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(DELETE_RESERVATION_BY_ID_QUERY);
             preparedStatement.setLong(1, id);
-
-            int result = preparedStatement.executeUpdate();
-            connection.commit();
-            return (result != 0);
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new DAOException("Error during rollback", ex);
-            }
-            throw new DAOException("Error in DAO method", e);
-        } finally {
-            close(null, preparedStatement);
-            returnConnection(connection);
-        }
-    }
-
-    @Override
-    public boolean deleteReservationsByUserId(long userId) throws DAOException {
-        PreparedStatement preparedStatement = null;
-        Connection connection = null;
-        try {
-            connection = getConnection();
-            connection.setAutoCommit(false);
-
-            preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
-            preparedStatement.setLong(1, userId);
 
             int result = preparedStatement.executeUpdate();
             connection.commit();

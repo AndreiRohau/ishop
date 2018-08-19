@@ -22,7 +22,6 @@ public class AddToBasketCommand implements Command {
     private static final Logger logger = LoggerFactory.getLogger(AddToBasketCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private ReserveService reserveService= serviceFactory.getReserveService();
-    private UserService userService = serviceFactory.getUserService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
