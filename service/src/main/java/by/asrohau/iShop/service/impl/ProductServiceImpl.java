@@ -18,18 +18,6 @@ public class ProductServiceImpl implements ProductService {
 	public ProductServiceImpl(){}
 
 	@Override
-	public Product findProduct(Product product) throws ServiceException {
-		if (!validation(product)) {
-			return null;
-		}
-		try {
-			return productDAO.find(product);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
-	}
-
-	@Override
 	public boolean addNewProduct(Product newProduct) throws ServiceException {
 		if (!validation(newProduct)) { return false;}
 		try {
@@ -43,6 +31,15 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> getProducts(int row) throws ServiceException {
 		try {
 			return productDAO.findAll(row);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public long countProducts() throws ServiceException {
+		try {
+			return productDAO.countAll();
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -70,39 +67,30 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public boolean deleteProduct(Product product) throws ServiceException {
-		if(!validation(product)){
+	public boolean deleteProduct(long id) throws ServiceException {
+		if(!validation(id)){
 			return false;
 		}
 		try {
-			return productDAO.delete(product.getId());
+			return productDAO.delete(id);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
-	public long countProducts() throws ServiceException {
+	public long countProductsLike(Product product) throws ServiceException {
 		try {
-			return productDAO.countAll();
+			return productDAO.countProductsLike(product);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
 	}
 
 	@Override
-	public long countProductsComprehensive(Product product) throws ServiceException {
+	public List<Product> getProductsLike(Product product, int row) throws ServiceException { //ArrayList
 		try {
-			return productDAO.countProductsComprehensive(product);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
-	}
-
-	@Override
-	public List<Product> findProductsComprehensive(Product product, int row) throws ServiceException { //ArrayList
-		try {
-			return productDAO.findProductsComprehensive(product, row);
+			return productDAO.findProductsLike(product, row);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

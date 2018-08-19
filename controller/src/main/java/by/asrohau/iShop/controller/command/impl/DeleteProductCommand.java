@@ -1,6 +1,5 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
@@ -26,14 +25,14 @@ public class DeleteProductCommand implements Command {
         logger.info("We got to delete PRODUCT Command");
         try {
             String lastCommand = "";
-            Product product = new Product(Long.parseLong(request.getParameter(ID)));
+            long productId = Long.parseLong(request.getParameter(ID));
 
-            if (productService.deleteProduct(product)) {
+            if (productService.deleteProduct(productId)) {
                 lastCommand = "FrontController?command=goToPage&address=main.jsp";
             } else {
-                lastCommand = "FrontController?command=productInfo&productId=" + product.getId();
-                request.setAttribute("updateFailed", true);
+                lastCommand = "FrontController?command=productInfo&productId=" + productId + "&message=false";
             }
+
             request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {

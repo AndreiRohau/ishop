@@ -39,9 +39,7 @@
     <fmt:message bundle="${loc}" key="local.manageOrders" var="manageOrders" />
     <fmt:message bundle="${loc}" key="local.cannotFindProduct" var="cannotFindProduct" />
     <fmt:message bundle="${loc}" key="local.nothingHappened" var="nothingHappened" />
-
-    <c:set var="currentPage" value="${requestScope.currentPage}"/>
-    <c:set var="maxPage" value="${requestScope.maxPage}"/>
+    <fmt:message bundle="${loc}" key="local.success" var="success" />
 
     <title>
         <c:out value="${requestScope.product.name}"/>
@@ -170,10 +168,17 @@
             </div>
         </div>
     </c:if>
-    <c:if test="${requestScope.updateFailed == true}">
+    <c:if test="${requestScope.message == 'false'}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${nothingHappened}"/></h3>
+            </div>
+        </div>
+    </c:if>
+    <c:if test="${requestScope.message == 'true'}">
+        <div class="panel-body">
+            <div class="alert alert-info" role="alert" style="padding:15px">
+                <h3><c:out value="${success}"/></h3>
             </div>
         </div>
     </c:if>

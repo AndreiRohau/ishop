@@ -36,4 +36,33 @@ public class Page {
     private int calculateRow(int currentPage, int _MAX_ROWS_AT_PAGE) {
         return (currentPage - 1) * _MAX_ROWS_AT_PAGE;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Page page = (Page) o;
+
+        if (currentPage != page.currentPage) return false;
+        if (maxPage != page.maxPage) return false;
+        return row == page.row;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = currentPage;
+        result = 31 * result + maxPage;
+        result = 31 * result + row;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "currentPage=" + currentPage +
+                ", maxPage=" + maxPage +
+                ", row=" + row +
+                '}';
+    }
 }

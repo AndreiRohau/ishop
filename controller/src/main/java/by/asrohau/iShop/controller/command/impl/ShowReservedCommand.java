@@ -28,7 +28,7 @@ public class ShowReservedCommand implements Command {
     private static final Logger logger = LoggerFactory.getLogger(ShowReservedCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private ReserveService reserveService= serviceFactory.getReserveService();
-    private UserService userService = serviceFactory.getUserService();
+//    private UserService userService = serviceFactory.getUserService();
     private ProductService productService = serviceFactory.getProductService();
 
     @Override

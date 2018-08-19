@@ -1,20 +1,20 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+import static by.asrohau.iShop.controller.ControllerFinals.ID;
+import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
 
 public class UpdateProductCommand implements Command {
 
@@ -24,7 +24,7 @@ public class UpdateProductCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info("We got to EditProductCommand");
+        logger.info("We got to UpdateProductCommand");
         try {
             Product product = new Product(Long.parseLong(request.getParameter("id")),
                     request.getParameter("company"),
@@ -32,16 +32,13 @@ public class UpdateProductCommand implements Command {
                     request.getParameter("type"),
                     request.getParameter("price"),
                     request.getParameter("description"));
+            boolean productUpdated = productService.updateProduct(product);
 
-            if(!productService.updateProduct(product)){
-                request.setAttribute("updateFailed", true);
-                product = productService.findProductWithId(product.getId());
-            }
+            String lastCommand = "FrontController?command=productInfo&id=" + request.getParameter(ID) +"&message=" + productUpdated;
 
-            request.setAttribute("product", product);
-            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=productInfo&id=" + request.getParameter(ID));
-            request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp").forward(request, response);
-        } catch (ServiceException | ServletException | IOException e) {
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+            response.sendRedirect(lastCommand);
+        } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }
     }

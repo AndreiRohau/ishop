@@ -1,8 +1,8 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -30,12 +30,12 @@ public class ProductInfoCommand implements Command {
 
             if(product != null){
                 request.setAttribute("product", product);
-                request.getSession().setAttribute(LAST_COMMAND,
-                        "FrontController?command=productInfo&id=" + request.getParameter(ID));
+                request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=productInfo&id=" + product.getId());
             } else {
                 request.setAttribute("cannotFindProduct", true);
             }
 
+            request.setAttribute("message", request.getParameter(MESSAGE));
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {

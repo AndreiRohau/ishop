@@ -8,12 +8,12 @@ import java.util.List;
 public interface ProductDAO extends EntityFacadeFootprint<Product> {
 
 	/*
-	find products
+	find products like parameter product
 	 */
-	List<Product> findProductsComprehensive(Product product, int row) throws DAOException;
+	List<Product> findProductsLike(Product product, int row) throws DAOException;
 
 	/*
-	count products
+	count products like parameter product
 	 */
-	long countProductsComprehensive(Product product) throws DAOException;
+	long countProductsLike(Product product) throws DAOException;
 }
