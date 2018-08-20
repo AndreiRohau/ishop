@@ -166,14 +166,14 @@
             </div>
         </div>
     </c:if>
-    <c:if test="${requestScope.orderCreated == true}">
+    <c:if test="${requestScope.message == true}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${orderCreated}"/></h3>
             </div>
         </div>
     </c:if>
-    <c:if test="${requestScope.orderCreated == false}">
+    <c:if test="${requestScope.message == false}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${orderNotCreated}"/></h3>

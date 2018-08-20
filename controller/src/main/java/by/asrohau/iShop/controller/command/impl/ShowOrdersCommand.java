@@ -2,6 +2,7 @@ package by.asrohau.iShop.controller.command.impl;
 
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -24,19 +25,14 @@ public class ShowOrdersCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowOrdersCommand");
+        try {
+            Page page = new Page(request.getParameter(PAGE), orderService.countOrders());
 
-        try{
-            int currentPage = Integer.parseInt(request.getParameter(PAGE));
-            int maxPage = (int) Math.ceil(((double) orderService.countOrders()) / MAX_ROWS_AT_PAGE);
-            int row = (currentPage - 1) * MAX_ROWS_AT_PAGE;
-
-            request.setAttribute("orders", orderService.getOrders(row));
-            request.setAttribute("maxPage", maxPage);
-            request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND,
-                    "FrontController?command=showOrders&page=" + currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE,
-                    "FrontController?command=showOrders&page=");
+            request.setAttribute("orders", orderService.getOrders(page.getRow()));
+            request.setAttribute("page", page);
+            String lastCommand = "FrontController?command=showOrders&page=";
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
 
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/orders.jsp")
                     .forward(request, response);

@@ -1,10 +1,9 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Order;
-import by.asrohau.iShop.entity.Page;
-import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.Page;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
@@ -30,19 +29,17 @@ public class ShowUserOrdersCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowUserOrdersCommand");
         try {
-            User user;
-            if (request.getSession().getAttribute(ROLE).equals("user")) {
-                user = userService.findUserWithId((Long) request.getSession().getAttribute(ID));
-            } else {
-                user = userService.findUserWithId(Long.parseLong(request.getParameter(ID)));
-            }
+            long userId = "admin".equals(request.getSession().getAttribute(ROLE)) ?
+                    Long.parseLong(request.getParameter(ID)) : (Long) request.getSession().getAttribute(ID);
 
+            User user = userService.findUserWithId(userId);
             Page page = new Page(request.getParameter(PAGE), orderService.countUserOrders(user.getId()));
 
             request.setAttribute("orders", orderService.getUserOrders(page.getRow(), user.getId()));
             request.setAttribute("user", user);
             request.setAttribute("page", page);
-            String lastCommandNeedPage = "FrontController?command=showUserOrders" +
+            String lastCommandNeedPage = "FrontController?" +
+                    "command=showUserOrders" +
                     "&id=" + user.getId() +
                     "&login=" + user.getLogin() +
                     "&page=";

@@ -21,8 +21,8 @@ public class CreateOrderCommand implements Command {
 
     private static final Logger logger = Logger.getLogger(CreateOrderCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    private OrderService orderService = serviceFactory.getOrderService();
     private ReserveService reserveService= serviceFactory.getReserveService();
+    private OrderService orderService = serviceFactory.getOrderService();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
@@ -34,7 +34,7 @@ public class CreateOrderCommand implements Command {
             boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 
             request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showReserved&page=1&orderCreated=" + orderCreated);
-            response.sendRedirect("FrontController?command=showReserved&page=1&orderCreated=" + orderCreated);
+            response.sendRedirect("FrontController?command=showReserved&page=1&message=" + orderCreated);
         } catch (ServiceException  | IOException e) {
             throw new ControllerException(e);
         }

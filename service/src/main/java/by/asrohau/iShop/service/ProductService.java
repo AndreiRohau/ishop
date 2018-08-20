@@ -1,5 +1,7 @@
 package by.asrohau.iShop.service;
 
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -32,6 +34,11 @@ public interface ProductService {
 	finds products by Ids
 	 */
 	List<Product> findProductsWithIds(List<Reserve> reservations) throws ServiceException;
+
+	/*
+	finds products by Ids
+	 */
+	List<Product> findProductsWithIds(Order order, int currentPage) throws ServiceException;
 
 	/*
 	admin can change product information with this method

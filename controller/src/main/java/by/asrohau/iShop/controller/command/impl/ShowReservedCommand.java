@@ -38,7 +38,7 @@ public class ShowReservedCommand implements Command {
 
             request.setAttribute("products", products);
             request.setAttribute("page", page);
-            request.setAttribute("orderCreated", request.getParameter("orderCreated"));
+            request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
             String lastCommand = "FrontController?command=showReserved&page=";
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);

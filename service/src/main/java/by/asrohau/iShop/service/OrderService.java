@@ -7,19 +7,70 @@ import java.util.List;
 
 public interface OrderService {
 
-    boolean deleteAllOrdersWithUserId(long userId) throws ServiceException;
+    /*
+    creates (status:) new order, saving reserved products as a string
+     */
     boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException;
-    boolean orderSetStatus(long id, String status) throws ServiceException;
-    List<Order> getOrders(int row) throws ServiceException; // ArrayList
-    List<Order> getOrdersByStatus(int row, String status) throws ServiceException; // ArrayList
-    List<Order> getUserOrders(int row, long userId) throws ServiceException; // ArrayList
-    List<Order> getUserOrdersByStatus(int row, Order order) throws ServiceException; // ArrayList
+
+    /*
+
+     */
+    Order findOrderById(long id) throws ServiceException;
+
+    /*
+    returns list of all Orders at table orders, limit
+     */
+    List<Order> getOrders(int row) throws ServiceException;
+
+    /*
+    returns list of Orders by Status at table orders, limit
+     */
+    List<Order> getOrdersByStatus(int row, String status) throws ServiceException;
+
+    /*
+    returns certain user's orders, limit
+     */
+    List<Order> getUserOrders(int row, long userId) throws ServiceException;
+
+    /*
+    returns orders by user Id and status , limit
+     */
+    List<Order> getUserOrdersByStatus(int row, Order order) throws ServiceException;
+
+    /*
+    counts amount of Orders at table orders
+     */
     long countOrders() throws ServiceException;
+
+    /*
+    counts amount of Orders by Status at table orders
+     */
     long countOrdersByStatus(String status) throws ServiceException;
+
+    /*
+    counts amount of orders by user Id and status
+     */
     long countUserOrders(long userId) throws ServiceException;
+
+    /*
+    counts amount of orders by user Id and status
+     */
     long countUserOrdersByStatus(Order order) throws ServiceException;
 
-    Order findOrderById(long id) throws ServiceException;
-    boolean deleteOrder(Order order) throws ServiceException;
+    /*
+    changes order status
+     */
+    boolean orderSetStatus(long id, String status) throws ServiceException;
+
+    /*
+
+     */
     boolean deleteProductFromOrder(Order order) throws ServiceException;
+
+    /*
+
+     */
+    boolean deleteOrder(long id) throws ServiceException;
+
+    //boolean deleteAllOrdersWithUserId(long userId) throws ServiceException;
 }

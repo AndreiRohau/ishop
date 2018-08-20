@@ -16,4 +16,9 @@ public interface ProductDAO extends EntityFacadeFootprint<Product> {
 	count products like parameter product
 	 */
 	long countProductsLike(Product product) throws DAOException;
+
+	/*
+	find products by string of ids
+	 */
+	List<Product> findProductsByIds(String productIds) throws DAOException;
 }

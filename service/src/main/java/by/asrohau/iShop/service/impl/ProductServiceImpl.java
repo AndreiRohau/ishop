@@ -1,5 +1,8 @@
 package by.asrohau.iShop.service.impl;
 
+import by.asrohau.iShop.dao.util.DAOFinals;
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.DAOFactory;
@@ -65,6 +68,62 @@ public class ProductServiceImpl implements ProductService {
 				product.setReserveId(reservation.getId());
 				products.add(product);
 			}
+			return products;
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public List<Product> findProductsWithIds(Order order, int currentPage) throws ServiceException {
+		try {
+			/*
+			getting string of products
+			*/
+			String productIds = order.getProductIds();
+			String [] productIdsArray = productIds.split(",");
+			/*
+			getting all types of products according to the the order's products ids field
+			 */
+			List<Product> allProducts = productDAO.findProductsByIds(productIds);
+
+			//Page page = new Page(String.valueOf(currentPage), productIdsArray.length);
+
+			/*
+			add products that matches productIdsArray Id
+			 */
+			List<Product> products = new ArrayList<>();
+			for (int i = 0; i > productIdsArray.length; i++) {
+				Product specificProduct = allProducts.get(i);
+				if (Long.valueOf(productIdsArray[i]) == specificProduct.getId()) {
+					products.add(specificProduct);
+				}
+			}
+
+////////////////////////////////
+//			String[] productIdsArray = order.getProductIds().split(",");
+//
+//			//due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45] - if(4)[46-48]...
+//			int reminder = productIdsArray.length % page.getMaxRowsAtPage();
+//			int finArrlength = (page.getCurrentPage() < page.getMaxPage()) || reminder == 0 ?
+//					page.getMaxRowsAtPage() : reminder;
+//
+//			long[] productIDs = new long[finArrlength];
+//			for(int i = 0; i < finArrlength; i++){
+//				productIDs[i] = Integer.parseInt(productIdsArray[i + page.getRow()]);
+//			}
+//
+//			//find each product. create an arraylist
+//			List<Product> products_ = new ArrayList<>();
+//			for(long id : productIDs){
+//				Product product = productDAO.findOne(id);
+//				if (product != null) {
+//					product.setOrderId(order.getId());
+//					products_.add(product);
+//				}
+//			}
+//////////////////////////////////////
+
 			return products;
 		} catch (DAOException e) {
 			throw new ServiceException(e);

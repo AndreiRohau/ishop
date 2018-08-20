@@ -1,10 +1,10 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.User;
-import by.asrohau.iShop.controller.command.Command;
-import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
@@ -31,20 +31,18 @@ public class ShowUserOrdersByStatusCommand implements Command {
         logger.info("We got to ShowUserOrdersByStatusCommand");
         try {
             String status = request.getParameter(STATUS);
-            User user;
-            if (request.getSession().getAttribute(ROLE).equals("user")) {
-                user = userService.findUserWithId((Long) request.getSession().getAttribute(ID));
-            } else {
-                user = userService.findUserWithId(Long.parseLong(request.getParameter(ID)));
-            }
+            long userId = "admin".equals(request.getSession().getAttribute(ROLE)) ?
+                    Long.parseLong(request.getParameter(ID)) : (Long) request.getSession().getAttribute(ID);
 
+            User user = userService.findUserWithId(userId);
             Order order = new Order(user.getId(), status);
             Page page = new Page(request.getParameter(PAGE), orderService.countUserOrdersByStatus(order));
 
             request.setAttribute("orders", orderService.getUserOrdersByStatus(page.getRow(), order));
             request.setAttribute("user", user);
             request.setAttribute("page", page);
-            String lastCommandNeedPage = "FrontController?command=showUserOrdersByStatus" +
+            String lastCommandNeedPage = "FrontController?" +
+                    "command=showUserOrdersByStatus" +
                     "&id=" + user.getId() +
                     "&login=" + user.getLogin() +
                     "&status=" + status +

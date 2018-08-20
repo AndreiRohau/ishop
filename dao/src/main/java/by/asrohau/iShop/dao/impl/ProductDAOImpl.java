@@ -220,7 +220,7 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	/*
-	delete existing product by id todo: delete in all orders
+	delete existing product by id
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {
@@ -356,6 +356,37 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			return resultSet.getLong(1);
+		} catch (SQLException e) {
+			throw new DAOException("Error in DAO method", e);
+		} finally {
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
+		}
+	}
+
+	@Override
+	public List<Product> findProductsByIds(String productIds) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement("SELECT * FROM shop.products WHERE id LIKE ?");
+			preparedStatement.setString(1, "^(" + productIds.replaceAll(",", "|") + ")$");
+			resultSet = preparedStatement.executeQuery();
+
+			List<Product> products = new ArrayList<>();
+			while (resultSet.next()) {
+				Product productFound = new Product(resultSet.getLong(1),
+						resultSet.getString(2),
+						resultSet.getString(3),
+						resultSet.getString(4),
+						resultSet.getString(5),
+						resultSet.getString(6));
+				products.add(productFound);
+			}
+			return products;
 		} catch (SQLException e) {
 			throw new DAOException("Error in DAO method", e);
 		} finally {

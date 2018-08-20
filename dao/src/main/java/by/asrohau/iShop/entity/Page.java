@@ -3,7 +3,7 @@ package by.asrohau.iShop.entity;
 import by.asrohau.iShop.dao.util.DAOFinals;
 
 public class Page {
-
+    private static final int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
     private int currentPage;
     private int maxPage;
     private int row;
@@ -11,10 +11,13 @@ public class Page {
     public Page(){}
 
     public Page(String currentPage, long countItems){
-        int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
         this.currentPage = Integer.parseInt(currentPage);
         this.maxPage = calculateMaxPage(countItems, _MAX_ROWS_AT_PAGE);
         this.row = calculateRow(this.currentPage, _MAX_ROWS_AT_PAGE);
+    }
+
+    public int getMaxRowsAtPage() {
+        return _MAX_ROWS_AT_PAGE;
     }
 
     public int getCurrentPage() {

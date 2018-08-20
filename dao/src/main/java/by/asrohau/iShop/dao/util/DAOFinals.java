@@ -5,7 +5,7 @@ public class DAOFinals {
     /*
     simple finals
      */
-    public static final int MAX_ROWS_AT_PAGE = 15;
+    public static final int MAX_ROWS_AT_PAGE = 7;
 
     /*
     Database config finals

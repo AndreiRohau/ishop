@@ -43,7 +43,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     @Override
     public boolean save(Order order) throws DAOException {
         PreparedStatement preparedStatement = null;
-        PreparedStatement preparedStatement2 = null;
         Connection connection = null;
         try {
             connection = getConnection();
@@ -58,12 +57,12 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setDate(6, order.getDateCreated());
             int result = preparedStatement.executeUpdate();
 
-            preparedStatement2 = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
-            preparedStatement2.setLong(1, order.getUserId());
-            int result2 = preparedStatement2.executeUpdate();
+            preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
+            preparedStatement.setLong(1, order.getUserId());
+            int res = preparedStatement.executeUpdate();
 
             connection.commit();
-            return (result > 0) && (result2 > 0);
+            return (result > 0) && (res > 0);
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -73,7 +72,6 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            close(null, preparedStatement2);
             returnConnection(connection);
         }
     }
@@ -229,23 +227,17 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
             List<Order> productList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            long orderId;
-            long userId;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String foundStatus;
-            Date dateCreated;
-            Order order;
+
             while (resultSet.next()) {
-                orderId = resultSet.getLong(1);
-                userId = resultSet.getLong(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                foundStatus =  resultSet.getString(6);
-                dateCreated =  resultSet.getDate(7);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
+                Order order = new Order(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getDate(7));
+
                 productList.add(order);
             }
             return productList;
@@ -338,23 +330,15 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setInt(3, MAX_ROWS_AT_PAGE);
             List<Order> productList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            long orderId;
-            long userId;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String foundStatus;
-            Date dateCreated;
-            Order order;
             while (resultSet.next()) {
-                orderId = resultSet.getLong(1);
-                userId = resultSet.getLong(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                foundStatus =  resultSet.getString(6);
-                dateCreated =  resultSet.getDate(7);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, foundStatus, dateCreated);
+                Order order = new Order(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getDate(7));
                 productList.add(order);
             }
             return productList;
@@ -447,23 +431,15 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setInt(3, MAX_ROWS_AT_PAGE);
             List<Order> orderList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            long orderId;
-            userId = 0;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String status;
-            Date dateCreated;
-            Order order;
             while (resultSet.next()) {
-                orderId = resultSet.getLong(1);
-                userId = resultSet.getLong(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                status =  resultSet.getString(6);
-                dateCreated = resultSet.getDate(7);
-                order = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
+                Order order = new Order(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getDate(7));
                 orderList.add(order);
             }
             return orderList;
@@ -489,23 +465,15 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             preparedStatement.setInt(4, MAX_ROWS_AT_PAGE);
             List<Order> orderList = new ArrayList<>();
             resultSet = preparedStatement.executeQuery();
-            long orderId;
-            long userId = 0;
-            String productIds;
-            String userAddress;
-            String userPhone;
-            String status;
-            Date dateCreated;
-            Order foundOrder;
             while (resultSet.next()) {
-                orderId = resultSet.getLong(1);
-                userId = resultSet.getLong(2);
-                productIds = resultSet.getString(3);
-                userAddress =  resultSet.getString(4);
-                userPhone =  resultSet.getString(5);
-                status =  resultSet.getString(6);
-                dateCreated = resultSet.getDate(7);
-                foundOrder = new Order(orderId, userId, productIds, userAddress, userPhone, status, dateCreated);
+                Order foundOrder = new Order(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getDate(7));
                 orderList.add(foundOrder);
             }
             return orderList;

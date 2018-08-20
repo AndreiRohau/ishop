@@ -38,45 +38,50 @@ public class OrderInfoCommand implements Command {
         logger.info("We got to OrderInfoCommand");
         try {
             Order order = orderService.findOrderById(Long.parseLong(request.getParameter(ID)));
-            User user = userService.findUserWithId(order.getUserId());
+            List<Product> products = productService.findProductsWithIds(order, Integer.parseInt(request.getParameter(PAGE)));
+            Page page = new Page(request.getParameter(PAGE), products.size());
 
-            // find and get all product ids from order;
-            // put into  String[] as [x0, x1, x2 ...];
-            String[] productIdsArray = order.getProductIds().split(",");
-
-            //finding maxPage
-            Page page = new Page(request.getParameter(PAGE), productIdsArray.length);
-
-            //due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45] - if(4)[46-48]...
-            int reminder = productIdsArray.length % MAX_ROWS_AT_PAGE;
-            int finArrlength = (page.getCurrentPage() < page.getMaxPage()) || reminder == 0 ?
-                    MAX_ROWS_AT_PAGE : reminder;
-
-            long[] productIDs = new long[finArrlength];
-            for(int i = 0; i < finArrlength; i++){
-                productIDs[i] = Integer.parseInt(productIdsArray[i + page.getRow()]);
+            int fromIndex = page.getCurrentPage() == 1 ? 0 : (page.getCurrentPage() - 1) * page.getMaxRowsAtPage();
+            int toIndex = fromIndex + page.getMaxRowsAtPage() - 1;
+            products = products.subList(fromIndex, toIndex);
+            for (Product p : products) {
+                System.out.println(p.toString());
             }
-
-            //find each product. create an arraylist
-            List<Product> products = new ArrayList<>();
-            for(long id : productIDs){
-                Product product = productService.findProductWithId(id);
-                product.setOrderId(order.getId());
-                products.add(product);
-            }
+//
+//            // find and get all product ids from order;
+//            // put into  String[] as [x0, x1, x2 ...];
+//            String[] productIdsArray = order.getProductIds().split(",");
+//
+//            //due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45] - if(4)[46-48]...
+//            int reminder = productIdsArray.length % MAX_ROWS_AT_PAGE;
+//            int finArrlength = (page.getCurrentPage() < page.getMaxPage()) || reminder == 0 ?
+//                    MAX_ROWS_AT_PAGE : reminder;
+//
+//            long[] productIDs = new long[finArrlength];
+//            for(int i = 0; i < finArrlength; i++){
+//                productIDs[i] = Integer.parseInt(productIdsArray[i + page.getRow()]);
+//            }
+//
+//            //find each product. create an arraylist
+//            List<Product> products = new ArrayList<>();
+//            for(long id : productIDs){
+//                Product product = productService.findProductWithId(id);
+//                product.setOrderId(order.getId());
+//                products.add(product);
+//            }
 
             request.setAttribute("order", order);
             request.setAttribute("products", products);
-            request.setAttribute("user", user);
+            request.setAttribute("user", userService.findUserWithId(order.getUserId()));
             request.setAttribute("page", page);
-            String lastCommandNeedPage = "FrontController?command=orderInfo"
+            String lastCommand = "FrontController?command=orderInfo"
                     + "&id=" + order.getId()
                     + "&userId=" + order.getUserId()
                     + "&address=" + order.getUserAddress()
                     + "&phone=" + order.getUserPhone()
                     + "&page=";
-            request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
-            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
 
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/orderInfo.jsp")
                     .forward(request, response);
