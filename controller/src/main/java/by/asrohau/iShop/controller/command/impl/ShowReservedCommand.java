@@ -30,6 +30,7 @@ public class ShowReservedCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowReservedCommand");
+        //todo errors occupies
         try {
             long userId = (Long) request.getSession().getAttribute(ID);
             Page page = new Page(request.getParameter(PAGE), reserveService.countReserved(userId));

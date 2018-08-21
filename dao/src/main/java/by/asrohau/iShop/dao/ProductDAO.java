@@ -1,5 +1,6 @@
 package by.asrohau.iShop.dao;
 
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.dao.exception.DAOException;
 
@@ -20,5 +21,10 @@ public interface ProductDAO extends EntityFacadeFootprint<Product> {
 	/*
 	find products by string of ids
 	 */
-	List<Product> findProductsByIds(String productIds) throws DAOException;
+	List<Product> findProductsByIds(long [] ids) throws DAOException;
+
+	/*
+	updates products in order to a latest (used in cases when products not exists in the shop though are in order)
+	 */
+	void updateProductsInOrder(Order order) throws DAOException;
 }

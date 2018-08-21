@@ -202,8 +202,8 @@
                     </form>
                 </div>
                 <div class="panel-body">
-                    <h3><c:out value="${productsInTheBasket}"/></h3>
-                    <hr/>
+                    <p><c:out value="${productsInTheBasket}"/></p>
+                    <%--<hr/>--%>
                     <table class="table table-hover" >
                         <thead style="color: #464a4c;background-color: #eceeef;">
                         <tr style="text-align: center;">

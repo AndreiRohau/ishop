@@ -3,6 +3,7 @@ package by.asrohau.iShop.dao.impl;
 import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,6 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	private static final String DELETE_RESERVATIONS_BY_PRODUCT_ID_QUERY = "DELETE FROM shop.reserve WHERE productId = ?";
 	private static final String FIND_PRODUCTS_LIMIT_QUERY = "SELECT * FROM shop.products LIMIT ?, ?";
 	private static final String COUNT_PRODUCTS_QUERY = "SELECT COUNT(*) FROM shop.products";
-	private static final String COUNT_PRODUCTS_COMPREHENSIVE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE id";
-	private static final String FIND_PRODUCTS_BY_ID_COMPREHENSIVE_QUERY = "SELECT * FROM shop.products WHERE id";
 	private static final String COUNT_PRODUCTS_LIKE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE company LIKE ? AND name LIKE ? AND type LIKE ? AND price LIKE ?";
 	private static final String FIND_PRODUCTS_LIKE_QUERY = "SELECT * FROM shop.products WHERE company LIKE ? AND name LIKE ? AND type LIKE ? AND price LIKE ? LIMIT ?,?";
 
@@ -231,12 +230,12 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_BY_PRODUCT_ID_QUERY);
 			preparedStatement.setLong(1, id);
-			int res = preparedStatement.executeUpdate();
+			preparedStatement.executeUpdate();
 			preparedStatement = connection.prepareStatement(DELETE_PRODUCT_BY_ID_QUERY);
 			preparedStatement.setLong(1, id);
 			int result = preparedStatement.executeUpdate();
 			connection.commit();
-			return (result != 0) & (res != 0);
+			return (result != 0);
 		} catch (SQLException e) {
 			try {
 				connection.rollback();
@@ -365,27 +364,30 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	}
 
 	@Override
-	public List<Product> findProductsByIds(String productIds) throws DAOException {
+	public List<Product> findProductsByIds(long [] ids) throws DAOException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement("SELECT * FROM shop.products WHERE id LIKE ?");
-			preparedStatement.setString(1, "^(" + productIds.replaceAll(",", "|") + ")$");
-			resultSet = preparedStatement.executeQuery();
-
+			connection.setAutoCommit(false);
 			List<Product> products = new ArrayList<>();
-			while (resultSet.next()) {
-				Product productFound = new Product(resultSet.getLong(1),
-						resultSet.getString(2),
-						resultSet.getString(3),
-						resultSet.getString(4),
-						resultSet.getString(5),
-						resultSet.getString(6));
-				products.add(productFound);
+			for (long id : ids) {
+				preparedStatement = connection.prepareStatement(FIND_PRODUCT_BY_ID_QUERY);
+				preparedStatement.setLong(1, id);
+				resultSet = preparedStatement.executeQuery();
+
+				while (resultSet.next()) {
+					Product productFound = new Product(resultSet.getLong(1),
+							resultSet.getString(2),
+							resultSet.getString(3),
+							resultSet.getString(4),
+							resultSet.getString(5),
+							resultSet.getString(6));
+					products.add(productFound);
+				}
 			}
+			connection.commit();
 			return products;
 		} catch (SQLException e) {
 			throw new DAOException("Error in DAO method", e);
@@ -395,4 +397,28 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 		}
 	}
 
+	@Override
+	public void updateProductsInOrder(Order order) throws DAOException {
+		PreparedStatement preparedStatement = null;
+		Connection connection = null;
+		try {
+			connection = getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement("UPDATE shop.orders SET products = ? WHERE id = ?");
+			preparedStatement.setString(1, order.getProductIds());
+			preparedStatement.setLong(2, order.getId());
+			preparedStatement.executeUpdate();
+			connection.commit();
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				throw new DAOException("Error during rollback", ex);
+			}
+			throw new DAOException("Error in DAO method", e);
+		} finally {
+			close(null, preparedStatement);
+			returnConnection(connection);
+		}
+	}
 }

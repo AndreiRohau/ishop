@@ -1,5 +1,6 @@
 package by.asrohau.iShop.service.impl;
 
+import by.asrohau.iShop.dao.util.DAOFinals;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.exception.DAOException;
@@ -138,6 +139,30 @@ public class OrderServiceImpl implements OrderService{
             return false;
         }
         try {
+            return orderDAO.update(order);
+        } catch(DAOException e){
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean removeProductFromOrder(Order order, String currentPage, String indexRemovingProduct) throws ServiceException {
+        if (!validation(order)) {
+            return false;
+        }
+        try {
+            String[] productIdsArray = order.getProductIds().split(",");
+            int cp = Integer.parseInt(currentPage);
+            int iRemovingProduct = (cp - 1) * DAOFinals.MAX_ROWS_AT_PAGE + Integer.parseInt(indexRemovingProduct);
+
+            StringBuilder finalIds = new StringBuilder();
+            for(int i = 1; i <= productIdsArray.length; i++) {
+                if(i != iRemovingProduct) {
+                    finalIds.append(productIdsArray[i - 1]).append(",");
+                }
+            }
+            order.setProductIds(finalIds.toString());
+
             return orderDAO.update(order);
         } catch(DAOException e){
             throw new ServiceException(e);

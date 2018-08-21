@@ -14,8 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
-import static by.asrohau.iShop.controller.ControllerFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class DeleteFromOrderCommand implements Command{
 
@@ -27,33 +26,20 @@ public class DeleteFromOrderCommand implements Command{
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to DeleteFromOrderCommand");
         try {
-            //todo
             Order order = orderService.findOrderById(Long.parseLong(request.getParameter("orderId")));
-            String[] productIdsArray = order.getProductIds().split(",");
-
-            int currentPage = Integer.parseInt(request.getParameter("currentPage"));
-            int indexRemovingProduct = (currentPage - 1) * MAX_ROWS_AT_PAGE
-                    + Integer.parseInt(request.getParameter("indexRemovingProduct"));
-
-            StringBuilder finalIds = new StringBuilder();
-
-            for(int i = 1; i <= productIdsArray.length; i++) {
-                if(i != indexRemovingProduct) {
-                    finalIds.append(productIdsArray[i - 1]).append(",");
-                }
-            }
-
-            order.setProductIds(finalIds.toString());
+            boolean productRemoved = orderService.removeProductFromOrder(
+                    order,
+                    request.getParameter("currentPage"),
+                    request.getParameter("indexRemovingProduct"));
 
             if("".equals(order.getProductIds()) && orderService.deleteOrder(order.getId())) {
-                //orderService.deleteOrder(order) // went up ^^^^
-                request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showOrders&page=1");
-                request.getRequestDispatcher("FrontController?command=showOrders&page=1").forward(request, response);
+                //request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showOrders&page=1");
+                response.sendRedirect("FrontController?command=showUserOrders&page=1");
             }else {
                 response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
-                        + "&productDeleted=" + orderService.deleteProductFromOrder(order) + "&orderId=" + order.getId());
+                        + "&productDeleted=" + productRemoved + "&orderId=" + order.getId());
             }
-        } catch (ServiceException | ServletException | IOException e) {
+        } catch (ServiceException | IOException e) { // | ServletException
             throw new ControllerException(e);
         }
     }

@@ -38,7 +38,12 @@ public interface ProductService {
 	/*
 	finds products by Ids
 	 */
-	List<Product> findProductsWithIds(Order order, int currentPage) throws ServiceException;
+	List<Product> findProductsByOrder(Order order) throws ServiceException;
+
+	/*
+	choose appropriate part of products according to page
+	 */
+	List<Product> subList(List<Product> products, Page page) throws ServiceException;
 
 	/*
 	admin can change product information with this method

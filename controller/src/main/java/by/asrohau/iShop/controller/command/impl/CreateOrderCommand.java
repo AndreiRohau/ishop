@@ -30,6 +30,8 @@ public class CreateOrderCommand implements Command {
         try{
             long userId = (Long) request.getSession().getAttribute(ID);
             List<Long> reservedProductIds = reserveService.getReservedProductIds(userId);
+            logger.info(reservedProductIds.size());
+            logger.info(reservedProductIds);
             Order order = new Order(userId, request.getParameter("userAddress"), request.getParameter("userPhone"));
             boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 

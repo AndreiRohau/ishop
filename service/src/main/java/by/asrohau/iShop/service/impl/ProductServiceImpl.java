@@ -13,6 +13,8 @@ import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static by.asrohau.iShop.service.util.ServiceValidator.validation;
 
@@ -75,57 +77,42 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> findProductsWithIds(Order order, int currentPage) throws ServiceException {
+	public List<Product> findProductsByOrder(Order order) throws ServiceException {
 		try {
-			/*
-			getting string of products
-			*/
-			String productIds = order.getProductIds();
-			String [] productIdsArray = productIds.split(",");
+			long [] ids = Stream
+					.of(order.getProductIds().split(","))
+					.mapToLong(Long::parseLong)
+					.toArray();
 			/*
 			getting all types of products according to the the order's products ids field
 			 */
-			List<Product> allProducts = productDAO.findProductsByIds(productIds);
-
-			//Page page = new Page(String.valueOf(currentPage), productIdsArray.length);
-
+			List<Product> products = productDAO.findProductsByIds(ids);
 			/*
-			add products that matches productIdsArray Id
+			check if the ids[] equals to the products, that was found
+			when true, order's field productIds requires to be updated
 			 */
-			List<Product> products = new ArrayList<>();
-			for (int i = 0; i > productIdsArray.length; i++) {
-				Product specificProduct = allProducts.get(i);
-				if (Long.valueOf(productIdsArray[i]) == specificProduct.getId()) {
-					products.add(specificProduct);
-				}
+			if (ids.length != products.size()) {
+				List<Long> idsList = products
+						.stream()
+						.map(Product::getId)
+						.collect(Collectors.toList());
+				String id_s = idsList.toString().replaceAll("\\[|\\]| ", "");
+				order.setProductIds(id_s);
+				productDAO.updateProductsInOrder(order);
 			}
-
-////////////////////////////////
-//			String[] productIdsArray = order.getProductIds().split(",");
-//
-//			//due to currentPage get productIDsArray part if(1)[1-15] - if(2)[16-30] - if(3)[31-45] - if(4)[46-48]...
-//			int reminder = productIdsArray.length % page.getMaxRowsAtPage();
-//			int finArrlength = (page.getCurrentPage() < page.getMaxPage()) || reminder == 0 ?
-//					page.getMaxRowsAtPage() : reminder;
-//
-//			long[] productIDs = new long[finArrlength];
-//			for(int i = 0; i < finArrlength; i++){
-//				productIDs[i] = Integer.parseInt(productIdsArray[i + page.getRow()]);
-//			}
-//
-//			//find each product. create an arraylist
-//			List<Product> products_ = new ArrayList<>();
-//			for(long id : productIDs){
-//				Product product = productDAO.findOne(id);
-//				if (product != null) {
-//					product.setOrderId(order.getId());
-//					products_.add(product);
-//				}
-//			}
-//////////////////////////////////////
-
 			return products;
 		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public List<Product> subList(List<Product> products, Page page) throws ServiceException {
+		try {
+			int fromIndex = (page.getCurrentPage() - 1) * page.getMaxRowsAtPage();
+			int toIndex = page.getCurrentPage() == page.getMaxPage() ? products.size() : fromIndex + page.getMaxRowsAtPage();
+			return products.subList(fromIndex, toIndex);
+		} catch (Exception e) {
 			throw new ServiceException(e);
 		}
 	}

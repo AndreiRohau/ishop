@@ -13,7 +13,7 @@ public interface OrderService {
     boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException;
 
     /*
-
+    returns Order according to given id
      */
     Order findOrderById(long id) throws ServiceException;
 
@@ -66,9 +66,10 @@ public interface OrderService {
 
      */
     boolean deleteProductFromOrder(Order order) throws ServiceException;
+    boolean removeProductFromOrder(Order order, String currentPage, String indexRemovingProduct) throws ServiceException;
 
     /*
-
+    deletes order when there is now product in it
      */
     boolean deleteOrder(long id) throws ServiceException;
 

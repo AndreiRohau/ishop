@@ -159,7 +159,7 @@
                 </a>
             </li>
             <li role="presentation">
-                <a href="FrontController?command=showUserOrders&id=${requestScope.user.id}&login=${requestScope.user.login}&page=1">
+                <a href="FrontController?command=showUserOrders&id=${requestScope.order.userId}&page=1">
                     <c:out value="${orders}"/>
                 </a>
             </li>
