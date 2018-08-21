@@ -10,7 +10,6 @@ import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
-import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,6 @@ public class OrderInfoCommand implements Command {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
-   // private UserService userService = serviceFactory.getUserService();
     private ProductService productService = serviceFactory.getProductService();
     private OrderService orderService = serviceFactory.getOrderService();
 
@@ -45,7 +43,6 @@ public class OrderInfoCommand implements Command {
             } else {
                 request.setAttribute("order", order);
                 request.setAttribute("products", productService.subList(AllProducts, page));
-                //request.setAttribute("user", userService.findUserWithId(order.getUserId()));
                 request.setAttribute("page", page);
                 String lastCommand = "FrontController?command=orderInfo"
                         + "&id=" + order.getId()

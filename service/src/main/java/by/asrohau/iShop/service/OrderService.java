@@ -63,15 +63,12 @@ public interface OrderService {
     boolean orderSetStatus(long id, String status) throws ServiceException;
 
     /*
-
+    removes product from order
      */
-    boolean deleteProductFromOrder(Order order) throws ServiceException;
     boolean removeProductFromOrder(Order order, String currentPage, String indexRemovingProduct) throws ServiceException;
 
     /*
     deletes order when there is now product in it
      */
     boolean deleteOrder(long id) throws ServiceException;
-
-    //boolean deleteAllOrdersWithUserId(long userId) throws ServiceException;
 }

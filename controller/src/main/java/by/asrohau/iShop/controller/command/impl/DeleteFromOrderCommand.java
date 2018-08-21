@@ -33,7 +33,6 @@ public class DeleteFromOrderCommand implements Command{
                     request.getParameter("indexRemovingProduct"));
 
             if("".equals(order.getProductIds()) && orderService.deleteOrder(order.getId())) {
-                //request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showOrders&page=1");
                 response.sendRedirect("FrontController?command=showUserOrders&page=1");
             }else {
                 response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))

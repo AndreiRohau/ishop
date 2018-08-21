@@ -9,7 +9,6 @@ import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.List;
 
 import static by.asrohau.iShop.service.util.ServiceValidator.validation;
@@ -31,16 +30,6 @@ public class OrderServiceImpl implements OrderService{
             throw new ServiceException(e);
         }
     }
-
-
-//    @Override
-//    public boolean deleteAllOrdersWithUserId(long userId) throws ServiceException {
-//        try {
-//            return orderDAO.deleteUserOrders(userId);
-//        } catch(DAOException e){
-//            throw new ServiceException(e);
-//        }
-//    }
 
     @Override
     public long countOrders() throws ServiceException {
@@ -127,19 +116,6 @@ public class OrderServiceImpl implements OrderService{
         }
         try {
             return orderDAO.findOne(id);
-        } catch(DAOException e){
-            throw new ServiceException(e);
-        }
-    }
-
-    //update list of products in Order
-    @Override
-    public boolean deleteProductFromOrder(Order order) throws ServiceException {
-        if (!validation(order)) {
-            return false;
-        }
-        try {
-            return orderDAO.update(order);
         } catch(DAOException e){
             throw new ServiceException(e);
         }

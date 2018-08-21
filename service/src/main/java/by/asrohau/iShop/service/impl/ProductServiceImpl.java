@@ -1,12 +1,11 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.dao.util.DAOFinals;
+import by.asrohau.iShop.dao.DAOFactory;
+import by.asrohau.iShop.dao.ProductDAO;
+import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
-import by.asrohau.iShop.dao.ProductDAO;
-import by.asrohau.iShop.dao.DAOFactory;
-import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.exception.ServiceException;
