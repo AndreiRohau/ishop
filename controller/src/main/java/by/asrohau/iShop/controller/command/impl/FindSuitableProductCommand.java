@@ -1,8 +1,8 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.controller.command.CommandAbstract;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
-import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
@@ -18,7 +18,8 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class FindSuitableProductCommand implements Command {
+//public class FindSuitableProductCommand implements Command {
+public class FindSuitableProductCommand extends CommandAbstract {
 
     private static final Logger logger = LoggerFactory.getLogger(FindSuitableProductCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -46,6 +47,9 @@ public class FindSuitableProductCommand implements Command {
                     "&type=" + product.getType() +
                     "&price=" + product.getPrice() +
                     "&page=";
+            logger.info(lastCommand);
+            logger.info(defindCommand(request, true));
+            logger.info(defindCommand(request, false));
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
 

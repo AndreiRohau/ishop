@@ -157,12 +157,12 @@
                 <form action="FrontController" method="post">
                     <div class="form-inline">
                         <input class="form-control" type="hidden" name="command" value="findSuitableProduct"/>
-                        <input class="form-control" type="hidden" name="page" value="1"/>
                         <input class="form-control" type="text" name="company" value="" placeholder="${company}"/>
                         <input class="form-control" type="text" name="name" value="" placeholder="${name}"/>
                         <input class="form-control" type="text" name="type" value="" placeholder="${type}"/>
                         <input class="form-control" type="text" name="price" value="" placeholder="${price}"/>
-                        <input class="btn btn-default" type="submit" name="getProducts" value="${find}!"/>
+                        <input class="form-control" type="hidden" name="page" value="1"/>
+                        <button class="btn btn-default" type="submit">${find}!</button>
                     </div>
                 </form>
             </div>
