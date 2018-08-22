@@ -1,6 +1,7 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.bean.Order;
+import by.asrohau.iShop.dao.util.DAOFinals;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.OrderDAO;
@@ -16,24 +17,15 @@ public class OrderServiceImpl implements OrderService{
 
     private final OrderDAO orderDAO = DAOFactory.getInstance().getOrderDAO();
 
-    public OrderServiceImpl() {
-    }
+    public OrderServiceImpl() {}
 
     @Override
-    public boolean saveNewOrder(Order order) throws ServiceException {
+    public boolean saveNewOrder(Order order, List<Long> reservedProductIds) throws ServiceException {
         try {
+            order.setProductIds(reservedProductIds.toString().replaceAll("\\[|\\]| ", ""));
+            order.setStatus("new");
             order.setDateCreated(new Date(System.currentTimeMillis()));
             return orderDAO.save(order);
-        } catch(DAOException e){
-            throw new ServiceException(e);
-        }
-    }
-
-
-    @Override
-    public boolean deleteAllOrdersWithUserId(long userId) throws ServiceException {
-        try {
-            return orderDAO.deleteAllOrders(userId);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
@@ -42,7 +34,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public long countOrders() throws ServiceException {
         try {
-            return (int) orderDAO.countAll();
+            return orderDAO.countAll();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -50,6 +42,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public long countOrdersByStatus(String status) throws ServiceException {
+        if (!validation(status)) {
+            return 0;
+        }
         try {
             return orderDAO.countOrders(status);
         } catch (DAOException e) {
@@ -59,6 +54,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> getOrders(int row)  throws ServiceException{ // ArrayList
+        if (!validation(row)) {
+            return null;
+        }
         try {
             return orderDAO.findAll(row);
         } catch (DAOException e) {
@@ -68,44 +66,79 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> getOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
+        if (!validation(row)) {
+            return null;
+        }
         try {
-            return orderDAO.findAllOrders(row, status);
+            return orderDAO.findOrders(row, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public boolean deleteOrder(Order order) throws ServiceException {
+    public boolean deleteOrder(long id) throws ServiceException {
+        if (!validation(id)) {
+            return false;
+        }
         try {
-            return orderDAO.delete(order);
+            return orderDAO.delete(id);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public boolean orderSetStatus(Order order, String status) throws ServiceException {
+    public boolean orderSetStatus(long id, String status) throws ServiceException {
+        if (!validation(id)) {
+            return false;
+        }
         try {
-            return orderDAO.update(order, status);
+            String newStatus = "";
+            switch (status) {
+                case "new": newStatus = "active";
+                    break;
+                case "active": newStatus = "closed";
+                    break;
+                case "closed": newStatus = "new";
+                    break;
+            }
+            return orderDAO.updateOrderStatus(id, newStatus);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public Order findOrderWithID(Order order)  throws ServiceException{
+    public Order findOrderById(long id)  throws ServiceException{
+        if (!validation(id)) {
+            return null;
+        }
         try {
-            return orderDAO.find(order);
+            return orderDAO.findOne(id);
         } catch(DAOException e){
             throw new ServiceException(e);
         }
     }
 
-    //update list of products in Order
     @Override
-    public boolean deleteProductFromOrder(Order order) throws ServiceException {
+    public boolean removeProductFromOrder(Order order, String currentPage, String indexRemovingProduct) throws ServiceException {
+        if (!validation(order)) {
+            return false;
+        }
         try {
+            String[] productIdsArray = order.getProductIds().split(",");
+            int cp = Integer.parseInt(currentPage);
+            int iRemovingProduct = (cp - 1) * DAOFinals.MAX_ROWS_AT_PAGE + Integer.parseInt(indexRemovingProduct);
+
+            StringBuilder finalIds = new StringBuilder();
+            for(int i = 1; i <= productIdsArray.length; i++) {
+                if(i != iRemovingProduct) {
+                    finalIds.append(productIdsArray[i - 1]).append(",");
+                }
+            }
+            order.setProductIds(finalIds.toString());
+
             return orderDAO.update(order);
         } catch(DAOException e){
             throw new ServiceException(e);
@@ -113,18 +146,24 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getUserOrders(int row, Order order) throws ServiceException { // ArrayList
+    public List<Order> getUserOrders(int row, long userId) throws ServiceException { // ArrayList
+        if (!validation(userId) || !validation(row)) {
+            return null;
+        }
         try {
-            return orderDAO.findUserOrders(row, order.getUserId());
+            return orderDAO.findUserOrders(row, userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public long countUserOrders(Order order) throws ServiceException {
+    public long countUserOrders(long userId) throws ServiceException {
+        if (!validation(userId)) {
+            return 0;
+        }
         try {
-            return orderDAO.countUserOrders(order.getUserId());
+            return orderDAO.countUserOrders(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -132,6 +171,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<Order> getUserOrdersByStatus(int row, Order order) throws ServiceException { // ArrayList
+        if (!validation(row)) {
+            return null;
+        }
         try {
             return orderDAO.findUserOrdersByStatus(row, order);
         } catch (DAOException e) {
@@ -141,12 +183,14 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public long countUserOrdersByStatus(Order order) throws ServiceException {
+        if (!validation(order)) {
+            return 0;
+        }
         try {
             return orderDAO.countUserOrdersByStatus(order);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
-
 
 }

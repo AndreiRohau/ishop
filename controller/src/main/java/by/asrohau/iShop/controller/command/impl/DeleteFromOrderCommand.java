@@ -1,12 +1,13 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.Order;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class DeleteFromOrderCommand implements Command{
 
-    private static final Logger logger = Logger.getLogger(DeleteFromOrderCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeleteFromOrderCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private OrderService orderService = serviceFactory.getOrderService();
 
@@ -25,32 +26,19 @@ public class DeleteFromOrderCommand implements Command{
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to DeleteFromOrderCommand");
         try {
-            Order order = orderService.findOrderWithID(new Order(Integer.parseInt(request.getParameter("orderId"))));
-            String[] productIdsArray = order.getProductIds().split(",");
+            Order order = orderService.findOrderById(Long.parseLong(request.getParameter("orderId")));
+            boolean productRemoved = orderService.removeProductFromOrder(
+                    order,
+                    request.getParameter("currentPage"),
+                    request.getParameter("indexRemovingProduct"));
 
-            int currentPage = Integer.parseInt(request.getParameter("currentPage"));
-            int indexRemovingProduct = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString)
-                    + Integer.parseInt(request.getParameter("indexRemovingProduct"));
-
-            StringBuilder finalIds = new StringBuilder();
-
-            for(int i = 1; i <= productIdsArray.length; i++) {
-                if(i != indexRemovingProduct) {
-                    finalIds.append(productIdsArray[i - 1]).append(",");
-                }
-            }
-
-            order.setProductIds(finalIds.toString());
-
-            if("".equals(order.getProductIds())) {
-                orderService.deleteOrder(order);
-                request.getSession().setAttribute(LAST_COMMAND.inString, "FrontController?command=showOrders&page=1");
-                request.getRequestDispatcher("FrontController?command=showOrders&page=1").forward(request, response);
+            if("".equals(order.getProductIds()) && orderService.deleteOrder(order.getId())) {
+                response.sendRedirect("FrontController?command=showUserOrders&page=1");
             }else {
-                response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND.inString))
-                        + "&productDeleted=" + orderService.deleteProductFromOrder(order) + "&orderId=" + order.getId());
+                response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND))
+                        + "&productDeleted=" + productRemoved + "&orderId=" + order.getId());
             }
-        } catch (ServiceException | ServletException | IOException e) {
+        } catch (ServiceException | IOException e) { // | ServletException
             throw new ControllerException(e);
         }
     }

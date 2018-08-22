@@ -1,9 +1,10 @@
 package by.asrohau.iShop.controller.exception;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ControllerException extends Exception {
-	private final static Logger logger = Logger.getLogger(ControllerException.class);
+	private final static Logger logger = LoggerFactory.getLogger(ControllerException.class);
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,13 +20,12 @@ public class ControllerException extends Exception {
 	
 	public ControllerException(Exception e) {
 		super(e);
-		logger.error(e);
+		logger.error(e.toString());
 	}
 	
 	public ControllerException(String message, Exception e) {
 		super(message, e);
-		logger.error(message);
-		logger.error(e);
+		logger.error(message, e);
 
 	}
 	

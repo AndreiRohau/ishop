@@ -1,10 +1,11 @@
 package by.asrohau.iShop.service.exception;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServiceException extends Exception{
 
-	final static Logger logger = Logger.getLogger(ServiceException.class);
+	final static Logger logger = LoggerFactory.getLogger(ServiceException.class);
 
 	private static final long serialVersionUID = 6765533323601079474L;
 
@@ -15,8 +16,7 @@ public class ServiceException extends Exception{
 
 	public ServiceException(String message, Exception e) {
 		super(message, e);
-		logger.error(message);
-		logger.error(e);
+		logger.error(message, e);
 	}
 
 	public ServiceException(String message) {
@@ -26,7 +26,7 @@ public class ServiceException extends Exception{
 
 	public ServiceException(Exception e) {
 		super(e);
-		logger.error(e);
+		logger.error(e.toString());
 	}
 	
 	

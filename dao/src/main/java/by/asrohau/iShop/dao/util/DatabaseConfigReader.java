@@ -21,12 +21,12 @@ public class DatabaseConfigReader {
 	}
 
 	private void load() throws DAOException {
-		try (InputStream is = DatabaseConfigReader.class.getClassLoader().getResourceAsStream(DATABASE_SETTINGS_PATH.inString)) {
+		try (InputStream is = DatabaseConfigReader.class.getClassLoader().getResourceAsStream(DATABASE_SETTINGS_PATH)) {
 			properties = new Properties();
 			properties.load(is);
 			is.close();
 		} catch (IOException e) {
-			throw new DAOException(DATABASE_CONFIG_INIT_ERROR.inString, e);
+			throw new DAOException("Error while initializing DatabaseConfigReader", e);
 		}
 	}
 

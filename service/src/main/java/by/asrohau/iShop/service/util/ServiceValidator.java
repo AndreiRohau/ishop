@@ -1,16 +1,18 @@
 package by.asrohau.iShop.service.util;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
-import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.entity.Order;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
+import by.asrohau.iShop.entity.User;
 
 public class ServiceValidator {
 
-    public static boolean validation(User user) {
-        return !"".equals(user.getLogin()) && !"".equals(user.getPassword());
-    }
     public static boolean validation(String login) {
         return !"".equals(login);
+    }
+
+    public static boolean validation(User user) {
+        return !"".equals(user.getLogin()) && !"".equals(user.getPassword());
     }
 
     public static boolean validation(Product product) {
@@ -21,16 +23,19 @@ public class ServiceValidator {
     }
 
     public static boolean validation(Reserve reserve) {
-        return reserve.getrUserId() != 0 && reserve.getrProductId() != 0;
+        return reserve.getUserId() > 0 && reserve.getProductId() > 0;
+    }
+
+    public static boolean validation(Order order) {
+        return order != null;
     }
 
     public static boolean validation(long id) {
-        return id >= 0;
+        return id > 0;
     }
 
     public static boolean validation(int row) {
         return row >= 0;
     }
-
 
 }

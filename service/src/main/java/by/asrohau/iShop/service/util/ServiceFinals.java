@@ -1,15 +1,12 @@
 package by.asrohau.iShop.service.util;
 
-public enum ServiceFinals {
+public class ServiceFinals {
 
         /*
         Messages for logs
          */
-        SERVICE("service");
+        private static final String SERVICE = "service";
 
-        public String inString;
-        ServiceFinals(String inString){
-            this.inString = inString;
-        }
+
     }
 

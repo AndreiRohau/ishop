@@ -1,16 +1,26 @@
 package by.asrohau.iShop.dao;
 
-import by.asrohau.iShop.bean.Product;
-import by.asrohau.iShop.bean.Reserve;
+import by.asrohau.iShop.entity.Product;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.dao.exception.DAOException;
 
 import java.util.List;
 
-public interface ReserveDAO extends AbstractDAO<Reserve> {
+public interface ReserveDAO extends EntityFacadeFootprint<Reserve> {
 
-    List<Product> findAllReserved(long userId, int row) throws DAOException;
-    List<Long> findAllReservedIds(long userId) throws DAOException;
-    long countReservedByUserId(long userId) throws DAOException;
-    boolean deleteAllReserved(long userId) throws DAOException;
+    /*
+    finds all reservations of a certain user, limit
+     */
+    List<Reserve> findReservationsByUserId(long userId, int row) throws DAOException;
+
+    /*
+    finds reserved Product Ids of a certain user
+     */
+    List<Long> findReservedProductIdsByUserId(long userId) throws DAOException;
+
+    /*
+    returns the number of all reservations of a certain user
+     */
+    long countReservationsByUserId(long userId) throws DAOException;
 
 }

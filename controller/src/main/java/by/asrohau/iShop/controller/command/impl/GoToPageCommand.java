@@ -1,11 +1,10 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.ControllerFinals;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,17 +13,18 @@ import java.io.IOException;
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class GoToPageCommand implements Command {
-    private final static Logger logger = Logger.getLogger(GoToPageCommand.class);
+    private final static Logger logger = LoggerFactory.getLogger(GoToPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-        logger.info(GO_TO_PAGE_COMMAND.inString);
+        logger.info("We got to GoToPageCommand");
         try {
-            String goToPage = INDEX.inString.equals(request.getParameter(ADDRESS.inString)) ? INDEX.inString :
-                    "/jsp/" + request.getSession().getAttribute(ROLE.inString) + "/" + request.getParameter(ADDRESS.inString);
+            String goToPage = "index.jsp".equals(request.getParameter(ADDRESS)) ? "index.jsp" :
+                    "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
-            request.getSession().setAttribute(LAST_COMMAND.inString,
-                    GO_TO_PAGE_.inString + request.getParameter(ADDRESS.inString));
+            request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
+            request.getSession().setAttribute(LAST_COMMAND,
+                    "FrontController?command=goToPage&address=" + request.getParameter(ADDRESS));
             request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);

@@ -1,14 +1,15 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.entity.Page;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class ShowUsersCommand implements Command {
 
-    private static final Logger logger = Logger.getLogger(ShowUsersCommand.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShowUsersCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private UserService userService = serviceFactory.getUserService();
 
@@ -27,21 +28,18 @@ public class ShowUsersCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowUsersCommand");
         try {
-            int currentPage = Integer.parseInt(request.getParameter(PAGE.inString));
-            int maxPage = (int) Math.ceil(((double) userService.countUsers()) / Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-            int row = (currentPage - 1) * Integer.parseInt(MAX_ROWS_AT_PAGE.inString);
+            Page page = new Page(request.getParameter(PAGE), userService.countUsers());
+            List<User> users = userService.getUsers(page.getRow());
 
-            List<User> users = userService.getAllUsers(row);
-
+            request.setAttribute("page", page);
             request.setAttribute("users", users);
-            request.setAttribute("maxPage", maxPage);
-            request.setAttribute("currentPage", currentPage);
-            request.getSession().setAttribute(LAST_COMMAND_PAGE.inString,
-                    "FrontController?command=showUsers&page=");
-            request.getSession().setAttribute(LAST_COMMAND.inString,
-                    "FrontController?command=showUsers&page=" + currentPage);
+            String lastCommandNeedPage = "FrontController?command=showUsers&page=";
+            request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
+            request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
 
-            request.getRequestDispatcher("/jsp/admin/users.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/" +
+                    request.getSession().getAttribute(ROLE) +
+                    "/users.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {
             throw new ControllerException(e);
         }

@@ -1,15 +1,14 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.bean.User;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
-import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,34 +18,31 @@ import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class RegistrationCommand implements Command {
 
-	private final static Logger logger = Logger.getLogger(RegistrationCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegistrationCommand.class);
 	private ServiceFactory serviceFactory = ServiceFactory.getInstance();
 	private UserService userService = serviceFactory.getUserService();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
-		logger.info(REGISTRATION_COMMAND);
+		logger.info("We got to RegistrationCommand");
 		try {
-			User user = new User(request.getParameter(LOGIN.inString).trim(),
-					request.getParameter(PASSWORD.inString).trim(),
-					USER.inString);
-			boolean isRegistered = false;
-			boolean passwordEquals = request.getParameter("password2").trim().equals(user.getPassword());
+			User user = new User(request.getParameter(LOGIN).trim(),
+					request.getParameter(PASSWORD).trim(),
+					String.valueOf(request.getSession().getAttribute(ROLE)));
 
-			if(passwordEquals && request.getSession().getAttribute(ROLE.inString) == null) {
-				isRegistered = userService.registration(user);
-			}
-
-			if (isRegistered) {
-				request.setAttribute("isRegistered", true);
+			String password2 = request.getParameter(PASSWORD_2).trim();
+			String lastCommand = "";
+			if (userService.registration(user, password2)) {
+				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=true";
 			} else {
-				String errorMessage = passwordEquals ? "exists" : "passwordsUnequal";
-				errorMessage = request.getSession().getAttribute(ROLE.inString) == null ? errorMessage : "logOutFirst";
-				request.setAttribute(ERROR_MESSAGE.inString, errorMessage);
+				String message = password2.equals(user.getPassword()) ? "exists" : "passwordsUnequal";
+				message = request.getSession().getAttribute(ROLE) == null ? message : "logOutFirst";
+				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=" + message;
 			}
-			request.getSession().setAttribute(LAST_COMMAND.inString, INDEX.inString);
-			request.getRequestDispatcher(INDEX.inString).forward(request, response);
-		} catch (ServiceException | ServletException | IOException e) {
+
+			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+			response.sendRedirect(lastCommand);
+		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
 		}
 	}

@@ -1,11 +1,12 @@
 package by.asrohau.iShop.dao.impl;
 
-import by.asrohau.iShop.bean.User;
-import by.asrohau.iShop.bean.UserDTO;
-import by.asrohau.iShop.dao.AbstractConnection;
+import by.asrohau.iShop.dao.AbstractDAO;
 import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
-import org.apache.log4j.Logger;
+import by.asrohau.iShop.entity.User;
+import by.asrohau.iShop.entity.UserDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,126 +15,201 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
+import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
 
-public class UserDAOImpl extends AbstractConnection implements UserDAO {
+public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
-	private final static Logger logger = Logger.getLogger(UserDAOImpl.class);
-
-	private PreparedStatement preparedStatement = null;
-	private Connection connection = null;
-	private ResultSet resultSet = null;
+	private final static Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
+	/*
+    UserDAO queries
+     */
+	private static final String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password) VALUES (?,?)";
+	private static final String FIND_USER_BY_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
+	private static final String FIND_USER_BY_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";
+	private static final String FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY = "SELECT * FROM shop.users WHERE login = ? AND password = ?";
+	private static final String FIND_USERS_LIMIT_QUERY = "SELECT * FROM shop.users LIMIT ?,?";
+	private static final String COUNT_USERS_QUERY = "SELECT COUNT(*) FROM shop.users";
+	private static final String UPDATE_USER_BY_ID_QUERY = "UPDATE shop.users SET login = ?, password = ? WHERE id = ?";
+	private static final String UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY = "UPDATE shop.users SET password = ? WHERE login = ? AND password = ?";
+	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ? AND role = 'user'";
+	private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
+	private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
 
 	/*
 	save new User
 	 */
 	@Override
 	public boolean save(User user) throws DAOException {
-		if(findUserWithLogin(user) != null){
-			return false;
-		}
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			int result = 0;
 			connection = getConnection();
 			connection.setAutoCommit(false);
-			preparedStatement = connection.prepareStatement(SAVE_USER_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setString(3, user.getRole());
-			int result = preparedStatement.executeUpdate();
+			resultSet = preparedStatement.executeQuery();
+			User userCheck = new User();
+			while (resultSet.next()) {
+				userCheck.setId(resultSet.getLong(1));
+				userCheck.setLogin(resultSet.getString(2));
+				userCheck.setRole(resultSet.getString(4));
+			}
 
+			if (userCheck.getLogin() == null) {
+				preparedStatement = connection.prepareStatement(SAVE_USER_QUERY);
+				preparedStatement.setString(1, user.getLogin());
+				preparedStatement.setString(2, user.getPassword());
+				result = preparedStatement.executeUpdate();
+			}
 			connection.commit();
 			return (result != 0);
 		} catch (SQLException e) {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	/*
-	find with login and password
+	find by login and password
 	 */
 	@Override
 	public User find(User user) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_WITH_LOGIN_PASSWORD_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
 			resultSet = preparedStatement.executeQuery();
 			user = new User();
-
 			while (resultSet.next()) {
 				user.setId(resultSet.getLong(1));
 				user.setLogin(resultSet.getString(2));
+				user.setRole(resultSet.getString(4));
+			}
+			if (user.getLogin() != null) {
+				return user;
+			}
+			logger.info("Can not identify User by login and password");
+			return null;
+		} catch (SQLException e) {
+			throw new DAOException("Error in DAO method", e);
+		} finally {
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
+		}
+	}
+
+	/*
+	find user by id
+	 */
+	@Override
+	public User findOne(long id) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		try {
+			connection = getConnection();
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_ID_QUERY);
+			preparedStatement.setLong(1, id);
+			resultSet = preparedStatement.executeQuery();
+
+			User user = new User();
+			while (resultSet.next()) {
+				user.setId(resultSet.getLong(1));
+				user.setLogin(resultSet.getString(2));
+				user.setPassword(resultSet.getString(3));
 				user.setRole(resultSet.getString(4));
 			}
 
 			if (user.getLogin() != null) {
 				return user;
 			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_LOGIN_AND_PASSWORD.inString);
+			logger.info("Can not identify User with id");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	/*
-	change user's credentials
+	change user's credentials where id=?
 	 */
 	@Override
 	public boolean update(User user) throws DAOException {
-		UserDTO userCheck = findUserWithLogin(user);
-		if(userCheck != null && userCheck.getId() != user.getId()){
-			return false;
-		}
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			int result = 0;
 			connection = getConnection();
 			connection.setAutoCommit(false);
-
-			preparedStatement = connection.prepareStatement(UPDATE_USER_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
-			preparedStatement.setLong(3, user.getId());
+			resultSet = preparedStatement.executeQuery();
+			User userCheck = new User();
+			while (resultSet.next()) {
+				userCheck.setId(resultSet.getLong(1));
+				userCheck.setLogin(resultSet.getString(2));
+				userCheck.setRole(resultSet.getString(4));
+			}
 
-			int result = preparedStatement.executeUpdate();
+			if(userCheck.getId() == 0 || user.getId() == userCheck.getId()) {
+				preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID_QUERY);
+				preparedStatement.setString(1, user.getLogin());
+				preparedStatement.setString(2, user.getPassword());
+				preparedStatement.setLong(3, user.getId());
+				result = preparedStatement.executeUpdate();
+			}
 			connection.commit();
 			return (result != 0);
 		} catch (SQLException e) {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	/*
-	delete User
+	delete User by id - all his reserved products and all orders, NO EFFECTS FOR ADMIN
 	 */
 	@Override
-	public boolean delete(User user) throws DAOException {
-		if(find(user) == null){
-			return false;
-		}
+	public boolean delete(long id) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID_QUERY);
+			preparedStatement.setLong(1, id);
+			preparedStatement.executeUpdate();
 
-			preparedStatement = connection.prepareStatement(DELETE_USER_QUERY.inString);
-			preparedStatement.setString(1, user.getLogin());
-			preparedStatement.setString(2, user.getPassword());
+			preparedStatement = connection.prepareStatement(DELETE_RESERVATIONS_BY_USER_ID_QUERY);
+			preparedStatement.setLong(1, id);
+			preparedStatement.executeUpdate();
+
+			preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID_QUERY);
+			preparedStatement.setLong(1, id);
 
 			int result = preparedStatement.executeUpdate();
 			connection.commit();
@@ -142,25 +218,29 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(preparedStatement, connection);
+			close(null, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	/*
-	find all Users
+	find all Users limit
 	 */
 	@Override
 	public List<User> findAll(int row) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(SELECT_ALL_USERS_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USERS_LIMIT_QUERY);
 			preparedStatement.setInt(1, row);
-			preparedStatement.setInt(2, Integer.parseInt(MAX_ROWS_AT_PAGE.inString));
-			List<User> userArrayList = new ArrayList<>();
+			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
+			List<User> users = new ArrayList<>();
 			resultSet = preparedStatement.executeQuery();
 			User user;
 
@@ -174,14 +254,14 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 				password = resultSet.getString(3);
 				role = resultSet.getString(4);
 				user = new User(id, login, password, role);
-				userArrayList.add(user);
+				users.add(user);
 			}
-
-			return userArrayList;
+			return users;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
@@ -190,24 +270,31 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 	 */
 	@Override
 	public long countAll() throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY.inString);
+			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
 			return resultSet.getLong(1);
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	@Override
-	public UserDTO findUserWithLogin(User user) throws DAOException {
+	public UserDTO findUserByLogin(User user) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
 			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_WITH_LOGIN_QUERY.inString);
+			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			resultSet = preparedStatement.executeQuery();
 			UserDTO userDTO = new UserDTO();
@@ -221,52 +308,28 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			if (userDTO.getLogin() != null) {
 				return userDTO;
 			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_LOGIN_AND_PASSWORD.inString);
+			logger.info("Can not identify User by login and password");
 			return null;
 		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(resultSet, preparedStatement, connection);
+			close(resultSet, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
 	@Override
-	public User findUserWithId(User user) throws DAOException {
-		try {
-			connection = getConnection();
-			preparedStatement = connection.prepareStatement(FIND_USER_WITH_ID_QUERY.inString);
-			preparedStatement.setLong(1, user.getId());
-			resultSet = preparedStatement.executeQuery();
-
-			while (resultSet.next()) {
-				user.setId(resultSet.getLong(1));
-				user.setLogin(resultSet.getString(2));
-				user.setPassword(resultSet.getString(3));
-				user.setRole(resultSet.getString(4));
-			}
-
-			if (user.getLogin() != null) {
-				return user;
-			}
-			logger.info(CANNOT_IDENTIFY_USER_BY_ID.inString);
-			return null;
-		} catch (SQLException e) {
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
-		} finally {
-			close(resultSet, preparedStatement, connection);
-		}
-	}
-
-	@Override
-	public boolean renewPassword(User user, String newPassword) throws DAOException {
+	public boolean changeUserPassword(User user, String newPassword) throws DAOException {
 		if(find(user) == null){
 			return false;
 		}
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = getConnection();
 			connection.setAutoCommit(false);
 
-			preparedStatement = connection.prepareStatement(CHANGE_PASSWORD_QUERY.inString);
+			preparedStatement = connection.prepareStatement(UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, newPassword);
 			preparedStatement.setString(2, user.getLogin());
 			preparedStatement.setString(3, user.getPassword());
@@ -279,11 +342,12 @@ public class UserDAOImpl extends AbstractConnection implements UserDAO {
 			try {
 				connection.rollback();
 			} catch (SQLException ex) {
-				throw new DAOException(EXCEPTION_WHILE_ROLL_BACK.inString, ex);
+				throw new DAOException("Error during rollback", ex);
 			}
-			throw new DAOException(EXCEPTION_WHILE_EXECUTING_DAO_METHOD.inString, e);
+			throw new DAOException("Error in DAO method", e);
 		} finally {
-			close(preparedStatement, connection);
+			close(null, preparedStatement);
+			returnConnection(connection);
 		}
 	}
 
