@@ -9,6 +9,11 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <listener>
+    <listener-class>
+      by.asrohau.iShop.controller.listener.Listener
+    </listener-class>
+  </listener>
   <!-- Filter-->
   <filter>
     <filter-name>EncodingFilter</filter-name>
