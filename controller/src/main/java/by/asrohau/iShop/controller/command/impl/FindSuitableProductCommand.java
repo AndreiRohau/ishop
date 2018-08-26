@@ -48,8 +48,8 @@ public class FindSuitableProductCommand extends CommandAbstract {
                     "&price=" + product.getPrice() +
                     "&page=";
             logger.info(lastCommand);
-            logger.info(defindCommand(request, true));
-            logger.info(defindCommand(request, false));
+            logger.info(defineCommand(request, true));
+            logger.info(defineCommand(request, false));
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
 
