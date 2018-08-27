@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ServiceFactory;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class OrderSetStatusCommand implements Command {
+public class OrderSetStatusCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderSetStatusCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -28,7 +28,6 @@ public class OrderSetStatusCommand implements Command {
                     Long.parseLong(request.getParameter(ID)),
                     request.getParameter(STATUS));
 
-            request.setAttribute(MESSAGE, statusChanged);
             response.sendRedirect((String) request.getSession().getAttribute(LAST_COMMAND));
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

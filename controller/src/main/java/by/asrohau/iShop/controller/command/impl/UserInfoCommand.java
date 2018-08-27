@@ -1,8 +1,8 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.User;
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
+import by.asrohau.iShop.entity.User;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class UserInfoCommand implements Command {
+public class UserInfoCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(UserInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -30,8 +30,7 @@ public class UserInfoCommand implements Command {
 
             if(user != null){
                 request.setAttribute("user", user);
-                request.getSession().setAttribute(LAST_COMMAND,
-                        "FrontController?command=userInfo&id=" + request.getParameter(ID));
+                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
             } else {
                 request.setAttribute("cannotFindUser", true);
             }

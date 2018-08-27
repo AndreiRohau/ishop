@@ -1,10 +1,10 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.controller.command.AbstractCommand;
+import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.entity.Reserve;
-import by.asrohau.iShop.controller.command.Command;
-import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.ServiceFactory;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class ShowReservedCommand implements Command {
+public class ShowReservedCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(ShowReservedCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -30,7 +30,6 @@ public class ShowReservedCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to ShowReservedCommand");
-        //todo errors occupies
         try {
             long userId = (Long) request.getSession().getAttribute(ID);
             Page page = new Page(request.getParameter(PAGE), reserveService.countReserved(userId));
@@ -40,7 +39,7 @@ public class ShowReservedCommand implements Command {
             request.setAttribute("products", products);
             request.setAttribute("page", page);
             request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
-            String lastCommand = "FrontController?command=showReserved&page=";
+            String lastCommand = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
 

@@ -180,7 +180,7 @@
             </div>
         </div>
     </c:if>
-    <c:if test="${requestScope.deleted == true}">
+    <c:if test="${requestScope.message == 'deleted'}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${deleted}"/></h3>
@@ -222,7 +222,7 @@
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="productInfo" />
                                         <input type="hidden" name="id" value="${product.id}" />
-                                        <input type="submit" name="info" value="${info}" class="btn btn-default"/><br/>
+                                        <button type="submit" class="btn btn-default">${info}</button><br/>
                                     </form>
                                 </td>
                                 <td>${product.company}</td>
@@ -233,7 +233,7 @@
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="deleteReserve" />
                                         <input type="hidden" name="reserveId" value="${product.reserveId}" />
-                                        <input type="submit" name="remove" value="${remove}" class="btn btn-default"/><br/>
+                                        <button type="submit" class="btn btn-default">${remove}</button><br/>
                                     </form>
                                 </td>
                             </tr>

@@ -1,9 +1,9 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.CommandAbstract;
+import by.asrohau.iShop.controller.command.AbstractCommand;
+import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
-import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -18,8 +18,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-//public class FindSuitableProductCommand implements Command {
-public class FindSuitableProductCommand extends CommandAbstract {
+public class FindSuitableProductCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(FindSuitableProductCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -40,16 +39,14 @@ public class FindSuitableProductCommand extends CommandAbstract {
 
             request.setAttribute("products", products);
             request.setAttribute("page", page);
-            String lastCommand = "FrontController?" +
-                    "command=findSuitableProduct" +
-                    "&company=" + product.getCompany() +
-                    "&name=" + product.getName() +
-                    "&type=" + product.getType() +
-                    "&price=" + product.getPrice() +
-                    "&page=";
-            logger.info(lastCommand);
-            logger.info(defineCommand(request, true));
-            logger.info(defineCommand(request, false));
+//            String lastCommand = "FrontController?" +
+//                    "command=findSuitableProduct" +
+//                    "&company=" + product.getCompany() +
+//                    "&name=" + product.getName() +
+//                    "&type=" + product.getType() +
+//                    "&price=" + product.getPrice() +
+//                    "&page=";
+            String lastCommand = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
 

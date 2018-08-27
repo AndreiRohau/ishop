@@ -187,9 +187,9 @@
                                     <td>
                                         <form title="Observe the order" action="FrontController" method="post">
                                             <input type="hidden" name="command" value="orderInfo" />
-                                            <input type="hidden" name="page" value="1"/>
                                             <input type="hidden" name="id" value="${order.id}" />
-                                            <input class="btn btn-default" type="submit" name="button_ok" value="${order.id}" /><br/>
+                                            <input type="hidden" name="page" value="1"/>
+                                            <button class="btn btn-default" type="submit">${order.id}</button><br/>
                                         </form>
                                     </td>
                                     <td>

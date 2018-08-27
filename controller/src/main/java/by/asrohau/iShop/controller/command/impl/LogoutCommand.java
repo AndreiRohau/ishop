@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class LogoutCommand implements Command{
+public class LogoutCommand extends AbstractCommand {
     private static final Logger logger = LoggerFactory.getLogger(LogoutCommand.class);
 
     @Override

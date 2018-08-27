@@ -1,9 +1,9 @@
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.controller.command.AbstractCommand;
+import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.User;
-import by.asrohau.iShop.controller.command.Command;
-import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ServiceFactory;
 import by.asrohau.iShop.service.UserService;
 import by.asrohau.iShop.service.exception.ServiceException;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class ShowUsersCommand implements Command {
+public class ShowUsersCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(ShowUsersCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -33,7 +33,7 @@ public class ShowUsersCommand implements Command {
 
             request.setAttribute("page", page);
             request.setAttribute("users", users);
-            String lastCommandNeedPage = "FrontController?command=showUsers&page=";
+            String lastCommandNeedPage = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
             request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
 

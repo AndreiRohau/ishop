@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.User;
@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class ShowUserOrdersCommand implements Command {
+public class ShowUserOrdersCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(ShowUserOrdersCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -38,11 +38,12 @@ public class ShowUserOrdersCommand implements Command {
             request.setAttribute("orders", orderService.getUserOrders(page.getRow(), user.getId()));
             request.setAttribute("user", user);
             request.setAttribute("page", page);
-            String lastCommandNeedPage = "FrontController?" +
-                    "command=showUserOrders" +
-                    "&id=" + user.getId() +
-                    "&login=" + user.getLogin() +
-                    "&page=";
+//            String lastCommandNeedPage = "FrontController?" +
+//                    "command=showUserOrders" +
+//                    "&id=" + user.getId() +
+//                    "&login=" + user.getLogin() +
+//                    "&page=";
+            String lastCommandNeedPage = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
 

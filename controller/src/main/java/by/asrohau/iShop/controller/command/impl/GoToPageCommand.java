@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class GoToPageCommand implements Command {
+public class GoToPageCommand extends AbstractCommand {
     private final static Logger logger = LoggerFactory.getLogger(GoToPageCommand.class);
 
     @Override
@@ -23,8 +23,7 @@ public class GoToPageCommand implements Command {
                     "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
             request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
-            request.getSession().setAttribute(LAST_COMMAND,
-                    "FrontController?command=goToPage&address=" + request.getParameter(ADDRESS));
+            request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
             request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);

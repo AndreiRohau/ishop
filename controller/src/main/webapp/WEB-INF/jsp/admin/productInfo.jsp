@@ -153,7 +153,7 @@
                 </a>
             </li>
             <li role="presentation" class="active">
-                <a href="${sessionScope.lastCMD}">
+                <a href="${sessionScope.lastCommand}">
                     <c:out value="${requestScope.product.name}"/>
                 </a>
             </li>
@@ -214,7 +214,7 @@
                                     <form id="deleteForm" action="FrontController" method="post">
                                         <input form="deleteForm"  type="hidden" name="command" value="deleteProduct" />
                                         <input form="deleteForm"  type="hidden" name="id" value="${requestScope.product.id}" />
-                                        <input form="deleteForm" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                                        <button form="deleteForm" class="btn btn-default" type="submit">${delete}</button><br/>
                                     </form>
                                 </td>
                             </tr>
@@ -242,7 +242,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input type="submit" form="editProduct" name="edit" value="${edit}" class="btn btn-default"/>
+                                                <button type="submit" form="editProduct" class="btn btn-default">${edit}</button>
                                             </td>
                                         </tr>
                                     </div>

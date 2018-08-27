@@ -3,7 +3,7 @@ package by.asrohau.iShop.controller.command;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-public abstract class CommandAbstract implements Command {
+public abstract class AbstractCommand implements Command {
 
     protected String defineCommand(HttpServletRequest req, boolean withPage) {
         /*
