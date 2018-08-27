@@ -205,12 +205,12 @@
                         <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
                             <c:if test="${i == requestScope.page.currentPage}">
                                 <li class="active">
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                             <c:if test="${i != requestScope.page.currentPage}">
                                 <li>
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                         </c:forEach>
