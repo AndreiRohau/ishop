@@ -1,7 +1,7 @@
 package by.asrohau.iShop.dao;
 
 import by.asrohau.iShop.dao.exception.DAOException;
-import by.asrohau.iShop.dao.util.ConnectionPool;
+import by.asrohau.iShop.dao.util.ConnectionPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ public abstract class AbstractDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(AbstractDAO.class);
 
-    private static ConnectionPool connectionPool = new ConnectionPool();
+    private static ConnectionPool connectionPool = new ConnectionPoolImpl();
 
     /*
     getting an available connection from ConnectionPool

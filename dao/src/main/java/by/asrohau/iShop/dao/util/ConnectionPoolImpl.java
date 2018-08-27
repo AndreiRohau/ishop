@@ -1,5 +1,6 @@
 package by.asrohau.iShop.dao.util;
 
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
 
@@ -14,24 +15,24 @@ import java.util.concurrent.BlockingQueue;
 
 import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
-public class ConnectionPool {
-    private final static Logger logger = Logger.getLogger(ConnectionPool.class);
+public class ConnectionPoolImpl implements ConnectionPool{
+    private final static Logger logger = Logger.getLogger(ConnectionPoolImpl.class);
 
     private static DatabaseConfigReader databaseConfigReader = new DatabaseConfigReader();
     private static final String DRIVER = databaseConfigReader.get(SQL_DRIVER);
-    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
     private static final String URL = databaseConfigReader.get(DB_URL);
     private static final String USER = databaseConfigReader.get(DB_LOGIN);
     private static final String PASSWORD = databaseConfigReader.get(DB_PASSWORD);
     private static final String SETTINGS = databaseConfigReader.get(DB_SETTINGS);
-
     private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
+
+    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
     private static boolean driverIsLoaded = false;
 
     private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
     private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
 
-    public ConnectionPool() {
+    public ConnectionPoolImpl() {
         try {
             getJDBCDriver();
             for (int i = 0; i < AMOUNT_OF_CONNECTIONS; i++) {
@@ -45,6 +46,7 @@ public class ConnectionPool {
     /*
     provides with a database connection if available according to connection pool
      */
+    @Override
     public Connection provide() throws DAOException {
         Connection newConnection;
         try{
@@ -62,6 +64,7 @@ public class ConnectionPool {
     /*
     returns connection back to the connection pool
      */
+    @Override
     public void retrieve(Connection connection) throws DAOException {
         if (connection != null) {
             logger.info("ConnectionPool.retrieve(Connection connection)");
