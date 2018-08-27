@@ -1,4 +1,4 @@
-package by.asrohau.iShop.dao.util;
+package by.asrohau.iShop.dao;
 
 public class DAOFinals {
 

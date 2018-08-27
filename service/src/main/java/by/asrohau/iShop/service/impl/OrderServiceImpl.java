@@ -1,10 +1,11 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.dao.util.DAOFinals;
+import by.asrohau.iShop.dao.DAOFinals;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.OrderDAO;
+import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
@@ -53,7 +54,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getOrders(int row)  throws ServiceException{ // ArrayList
+    public List<Order> getOrders(int row)  throws ServiceException{
         if (!validation(row)) {
             return null;
         }
@@ -65,7 +66,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> getOrdersByStatus(int row, String status)  throws ServiceException{ // ArrayList
+    public List<Order> getOrdersByStatus(int row, String status)  throws ServiceException{
         if (!validation(row)) {
             return null;
         }
@@ -129,7 +130,7 @@ public class OrderServiceImpl implements OrderService{
         try {
             String[] productIdsArray = order.getProductIds().split(",");
             int cp = Integer.parseInt(currentPage);
-            int iRemovingProduct = (cp - 1) * DAOFinals.MAX_ROWS_AT_PAGE + Integer.parseInt(indexRemovingProduct);
+            int iRemovingProduct = (cp - 1) * Page._MAX_ROWS_AT_PAGE + Integer.parseInt(indexRemovingProduct);
 
             StringBuilder finalIds = new StringBuilder();
             for(int i = 1; i <= productIdsArray.length; i++) {

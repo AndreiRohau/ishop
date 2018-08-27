@@ -1,6 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.dao.AbstractDAO;
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.ReserveDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.Reserve;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 
 public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
@@ -34,9 +35,13 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
     private static final String UPDATE_RESERVE_BY_ID_QUERY = "UPDATE shop.reserve SET userId = ?, productId = ? WHERE id = ?";
     private static final String DELETE_RESERVATION_BY_ID_QUERY = "DELETE FROM shop.reserve WHERE id = ?";
 
+    public ReserveDAOImpl(ConnectionPool connectionPool) {
+        super(connectionPool);
+    }
+
     /*
-    save reserve to reserve table
-     */
+        save reserve to reserve table
+         */
     @Override
     public boolean save(Reserve reserve) throws DAOException {
         PreparedStatement preparedStatement = null;

@@ -6,10 +6,10 @@
 //import java.sql.Connection;
 //import java.sql.DriverManager;
 //import java.sql.SQLException;
-//import java.util.concurrent.ArrayBlockingQueue;
-//import java.util.concurrent.BlockingQueue;
+//import java.databaseConnectionImpl.concurrent.ArrayBlockingQueue;
+//import java.databaseConnectionImpl.concurrent.BlockingQueue;
 //
-//import static by.asrohau.iShop.dao.util.DAOFinals.*;
+//import static by.asrohau.iShop.dao.databaseConnectionImpl.DAOFinals.*;
 //
 //public class ConPoolV1 {
 //    private final static Logger logger = Logger.getLogger(ConnectionPool.class);

@@ -1,6 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.dao.AbstractDAO;
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.User;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 
 public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
@@ -34,6 +35,10 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	private static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM shop.users WHERE id = ? AND role = 'user'";
 	private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
 	private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
+
+	public UserDAOImpl(ConnectionPool connectionPool) {
+		super(connectionPool);
+	}
 
 	/*
 	save new User

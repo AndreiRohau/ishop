@@ -1,6 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.dao.AbstractDAO;
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.ProductDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.Order;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 
 public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	private final static Logger logger = LoggerFactory.getLogger(ProductDAOImpl.class);
@@ -33,9 +34,13 @@ public class ProductDAOImpl extends AbstractDAO implements ProductDAO {
 	private static final String COUNT_PRODUCTS_LIKE_QUERY = "SELECT COUNT(*) FROM shop.products WHERE company LIKE ? AND name LIKE ? AND type LIKE ? AND price LIKE ?";
 	private static final String FIND_PRODUCTS_LIKE_QUERY = "SELECT * FROM shop.products WHERE company LIKE ? AND name LIKE ? AND type LIKE ? AND price LIKE ? LIMIT ?,?";
 
+	public ProductDAOImpl(ConnectionPool connectionPool) {
+		super(connectionPool);
+	}
+
 	/*
-	save new Product
-	 */
+        save new Product
+         */
 	@Override
 	public boolean save(Product product) throws DAOException {
 		Connection connection = null;

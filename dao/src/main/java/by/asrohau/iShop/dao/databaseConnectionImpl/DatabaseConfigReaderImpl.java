@@ -1,18 +1,19 @@
-package by.asrohau.iShop.dao.util;
+package by.asrohau.iShop.dao.databaseConnectionImpl;
 
+import by.asrohau.iShop.dao.DatabaseConfigReader;
 import by.asrohau.iShop.dao.exception.DAOException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
+import static by.asrohau.iShop.dao.DAOFinals.*;
 
-public class DatabaseConfigReader {
+public class DatabaseConfigReaderImpl implements DatabaseConfigReader{
 
 	private Properties properties;
 
-	public DatabaseConfigReader() {
+	public DatabaseConfigReaderImpl() {
 		try {
 			load();
 		} catch (DAOException e) {
@@ -21,7 +22,7 @@ public class DatabaseConfigReader {
 	}
 
 	private void load() throws DAOException {
-		try (InputStream is = DatabaseConfigReader.class.getClassLoader().getResourceAsStream(DATABASE_SETTINGS_PATH)) {
+		try (InputStream is = DatabaseConfigReaderImpl.class.getClassLoader().getResourceAsStream(DATABASE_SETTINGS_PATH)) {
 			properties = new Properties();
 			properties.load(is);
 			is.close();
@@ -30,6 +31,7 @@ public class DatabaseConfigReader {
 		}
 	}
 
+	@Override
 	public String get(String name) {
 		return properties.getProperty(name);
 	}

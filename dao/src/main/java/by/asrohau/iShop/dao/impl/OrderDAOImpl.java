@@ -1,6 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.dao.AbstractDAO;
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.OrderDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.Order;
@@ -11,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 
 
 public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
@@ -36,6 +37,10 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
     private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
     private static final String DELETE_ORDER_BY_ID_QUERY = "DELETE FROM shop.orders WHERE id = ?";
     private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
+
+    public OrderDAOImpl(ConnectionPool connectionPool) {
+        super(connectionPool);
+    }
 
     /*
     create new Order - this is a transactional method with roleback

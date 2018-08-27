@@ -1,4 +1,4 @@
-package by.asrohau.iShop.dao.util;
+package by.asrohau.iShop.dao.databaseConnectionImpl;
 
 import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.exception.DAOException;
@@ -10,27 +10,12 @@ import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
 
 public class ConnectionPoolImpl implements ConnectionPool{
+
     private final static Logger logger = Logger.getLogger(ConnectionPoolImpl.class);
-
-    private static DatabaseConfigReader databaseConfigReader = new DatabaseConfigReader();
-    private static final String DRIVER = databaseConfigReader.get(SQL_DRIVER);
-    private static final String URL = databaseConfigReader.get(DB_URL);
-    private static final String USER = databaseConfigReader.get(DB_LOGIN);
-    private static final String PASSWORD = databaseConfigReader.get(DB_PASSWORD);
-    private static final String SETTINGS = databaseConfigReader.get(DB_SETTINGS);
-    private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
-
-    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
     private static boolean driverIsLoaded = false;
 
-    private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
-    private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
 
     public ConnectionPoolImpl() {
         try {
