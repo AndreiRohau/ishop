@@ -1,5 +1,7 @@
 package by.asrohau.iShop.controller.filter;
 
+import by.asrohau.iShop.controller.FrontController;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,9 +10,10 @@ import java.util.Map;
 
 public class AntiInjectionFilter implements Filter {
 
+    private static final String DOES_NOT_CONTAIN = "^((?!<|>|script).)*$";
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -23,26 +26,15 @@ public class AntiInjectionFilter implements Filter {
             sb.append(v[0]);
         }
         System.out.println(sb.toString());
-        if (sb.toString().trim().matches("[<|>]")) {
-            System.out.println("script");
-            System.out.println("script");
-            System.out.println("script");
-            System.out.println("script");
-            System.out.println("script");
-            res.sendRedirect("WEB-INF/errors/antiInjection.jsp");
-        } else {
-            System.out.println("normal logic");
-            System.out.println("normal logic");
-            System.out.println("normal logic");
-            System.out.println("normal logic");
-            System.out.println("normal logic");
+        if (sb.toString().trim().matches(DOES_NOT_CONTAIN)) {
             chain.doFilter(req, res);
+        } else {
+            request.getRequestDispatcher("/WEB-INF/errors/antiInjection.jsp").forward(request, response);
         }
     }
 
     @Override
     public void destroy() {
-
     }
 
 }

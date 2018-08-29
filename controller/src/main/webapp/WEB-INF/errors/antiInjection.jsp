@@ -13,13 +13,18 @@
     <fmt:message bundle="${loc}" key="local.toIndexPage" var="toIndexPage" />
     <fmt:message bundle="${loc}" key="local.injectionDetected" var="injectionDetected" />
     <fmt:message bundle="${loc}" key="local.antiInjection" var="antiInjection" />
+    <fmt:message bundle="${loc}" key="local.toPreviousPage" var="toPreviousPage" />
     <title>${antiInjection}</title>
 </head>
 <body style="">
 
 <hr/>
 <h1>
-    ${errorOccupied} ${injectionDetected}
+    ${errorOccupied} ...
+</h1>
+<hr/>
+<h1>
+    ${injectionDetected}
 </h1>
 
 <hr/>
@@ -28,6 +33,13 @@
     <a href="FrontController?command=goToPage&address=index.jsp">
         ${toIndexPage}
     </a>
+</h3>
+<h3>
+    <c:if test="${sessionScope.lastCommand != null}">
+        <a href="${sessionScope.lastCommand}">
+            ${toPreviousPage}
+        </a>
+    </c:if>
 </h3>
 </body>
 </html>
