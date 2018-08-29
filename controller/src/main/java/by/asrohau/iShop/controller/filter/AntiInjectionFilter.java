@@ -23,7 +23,6 @@ public class AntiInjectionFilter implements Filter {
         for (String [] v : params.values()) {
             sb.append(v[0]);
         }
-        System.out.println(sb.toString());
         if (sb.toString().trim().matches(DOES_NOT_CONTAIN)) {
             chain.doFilter(req, res);
         } else {
