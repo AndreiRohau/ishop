@@ -182,7 +182,7 @@
                         <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="status" value="new" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getNewOrders" value="${newOrders}" /><br/>
+                        <button class="btn btn-default" type="submit">${newOrders}</button><br/>
                     </form>
                     <br/>
                     <form action="FrontController" method="post">
@@ -191,7 +191,7 @@
                         <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="status" value="active" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getActiveOrders" value="${activeOrders}" /><br/>
+                        <button class="btn btn-default" type="submit">${activeOrders}</button><br/>
                     </form>
                     <br/>
                     <form id="deleteForm" action="FrontController" method="post">
@@ -200,7 +200,7 @@
                         <input type="hidden" name="login" value="${requestScope.user.login}" />
                         <input type="hidden" name="status" value="closed" />
                         <input type="hidden" name="page" value="1" />
-                        <input class="btn btn-default" type="submit" name="getSuccessOrders" value="${closedOrders}" /><br/>
+                        <button class="btn btn-default" type="submit">${closedOrders}</button><br/>
                     </form>
                 </div>
             </div>
@@ -236,7 +236,7 @@
                                             <form title="${info}" action="FrontController" method="post">
                                                 <input type="hidden" name="command" value="userInfo" />
                                                 <input type="hidden" name="id" value="${order.userId}" />
-                                                <input class="btn btn-default" type="submit" name="ok" value="${user} ${order.userId}" /><br/>
+                                                <button class="btn btn-default" type="submit">${user} ${order.userId}</button><br/>
                                             </form>
                                         </td>
                                         <td>
@@ -253,9 +253,9 @@
                                         <td>
                                             <form title="${edit}" action="FrontController" method="post">
                                                 <input type="hidden" name="command" value="orderInfo" />
-                                                <input type="hidden" name="page" value="1"/>
                                                 <input type="hidden" name="id" value="${order.id}" />
-                                                <input class="btn btn-default" type="submit" name="ok" value="${order.id}" /><br/>
+                                                <input type="hidden" name="page" value="1"/>
+                                                <button class="btn btn-default" type="submit">${order.id}</button><br/>
                                             </form>
                                         </td>
                                     </tr>
@@ -266,12 +266,12 @@
                             <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
                                 <c:if test="${i == requestScope.page.currentPage}">
                                     <li class="active">
-                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                                 <c:if test="${i != requestScope.page.currentPage}">
                                     <li>
-                                        <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                        <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                     </li>
                                 </c:if>
                             </c:forEach>
@@ -281,6 +281,5 @@
             </div>
         </div>
     </div>
-
 </body>
 </html>

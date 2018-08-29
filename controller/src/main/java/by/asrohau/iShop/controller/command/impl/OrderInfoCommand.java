@@ -2,11 +2,11 @@
 
 package by.asrohau.iShop.controller.command.impl;
 
+import by.asrohau.iShop.controller.command.AbstractCommand;
+import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.entity.Product;
-import by.asrohau.iShop.controller.command.Command;
-import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.ProductService;
 import by.asrohau.iShop.service.ServiceFactory;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class OrderInfoCommand implements Command {
+public class OrderInfoCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -39,17 +39,12 @@ public class OrderInfoCommand implements Command {
 
             if(AllProducts.size() == 0) {
                 orderService.deleteOrder(order.getId());
-                response.sendRedirect("FrontController?command=showUserOrders&page=1&id=" + order.getUserId());
+                response.sendRedirect((String) request.getSession().getAttribute(LAST_COMMAND));
             } else {
                 request.setAttribute("order", order);
                 request.setAttribute("products", productService.subList(AllProducts, page));
                 request.setAttribute("page", page);
-                String lastCommand = "FrontController?command=orderInfo"
-                        + "&id=" + order.getId()
-                        + "&userId=" + order.getUserId()
-                        + "&address=" + order.getUserAddress()
-                        + "&phone=" + order.getUserPhone()
-                        + "&page=";
+                String lastCommand = defineCommand(request, false);
                 request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
                 request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
 

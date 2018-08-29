@@ -1,5 +1,7 @@
-package by.asrohau.iShop.dao.util;
+package by.asrohau.iShop.dao.databaseConnectionImpl;
 
+import by.asrohau.iShop.dao.ConnectionPool;
+import by.asrohau.iShop.dao.DatabaseConfigReader;
 import by.asrohau.iShop.dao.exception.DAOException;
 import org.apache.log4j.Logger;
 
@@ -12,29 +14,33 @@ import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.*;
+import static by.asrohau.iShop.dao.DAOFinals.*;
 
-public class ConnectionPool {
-    private final static Logger logger = Logger.getLogger(ConnectionPool.class);
+public class ConnectionPoolImpl implements ConnectionPool{
 
-    private static DatabaseConfigReader databaseConfigReader = new DatabaseConfigReader();
-    private static final String DRIVER = databaseConfigReader.get(SQL_DRIVER);
-    private static final int AMOUNT_OF_CONNECTIONS = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
-    private static final String URL = databaseConfigReader.get(DB_URL);
-    private static final String USER = databaseConfigReader.get(DB_LOGIN);
-    private static final String PASSWORD = databaseConfigReader.get(DB_PASSWORD);
-    private static final String SETTINGS = databaseConfigReader.get(DB_SETTINGS);
-
-    private static final String FIXED_URL = URL + "?user=" + USER + "&password=" + PASSWORD + "&" + SETTINGS;
+    private final static Logger logger = Logger.getLogger(ConnectionPoolImpl.class);
+    private final String DRIVER;
+    private final String FIXED_URL;
     private static boolean driverIsLoaded = false;
 
-    private BlockingQueue<Connection> availableConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
-    private BlockingQueue<Connection> takenConnections = new ArrayBlockingQueue<>(AMOUNT_OF_CONNECTIONS);
+    private final BlockingQueue<Connection> availableConnections;
+    private final BlockingQueue<Connection> takenConnections;
 
-    public ConnectionPool() {
+
+    public ConnectionPoolImpl(DatabaseConfigReader databaseConfigReader) {
+        this.DRIVER = databaseConfigReader.get(SQL_DRIVER);
+        String url = databaseConfigReader.get(DB_URL);
+        String user = databaseConfigReader.get(DB_LOGIN);
+        String password = databaseConfigReader.get(DB_PASSWORD);
+        String settings = databaseConfigReader.get(DB_SETTINGS);
+        this.FIXED_URL = url + "?user=" + user + "&password=" + password + "&" + settings;
+        int amountOfConnections = Integer.parseInt(databaseConfigReader.get(DB_CONNECTIONS));
+        this.availableConnections = new ArrayBlockingQueue<>(amountOfConnections);
+        this.takenConnections = new ArrayBlockingQueue<>(amountOfConnections);
+
         try {
             getJDBCDriver();
-            for (int i = 0; i < AMOUNT_OF_CONNECTIONS; i++) {
+            for (int i = 0; i < amountOfConnections; i++) {
                 availableConnections.add(getConnection());
             }
         } catch (DAOException e) {}
@@ -42,9 +48,7 @@ public class ConnectionPool {
         logger.info("takenConnections.size() is " + takenConnections.size());
     }
 
-    /*
-    provides with a database connection if available according to connection pool
-     */
+    @Override
     public Connection provide() throws DAOException {
         Connection newConnection;
         try{
@@ -59,9 +63,7 @@ public class ConnectionPool {
         return newConnection;
     }
 
-    /*
-    returns connection back to the connection pool
-     */
+    @Override
     public void retrieve(Connection connection) throws DAOException {
         if (connection != null) {
             logger.info("ConnectionPool.retrieve(Connection connection)");
@@ -75,10 +77,10 @@ public class ConnectionPool {
         logger.info("ConnectionPool.takenConnections.size() is " + takenConnections.size());
     }
 
-    /*
-    creates a connection
+    /**
+     * creates a connection
      */
-    private static Connection getConnection() throws DAOException{
+    private Connection getConnection() throws DAOException{
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(FIXED_URL);
@@ -90,10 +92,10 @@ public class ConnectionPool {
         return connection;
     }
 
-    /*
-    method loads database driver
+    /**
+     * method loads database driver
      */
-    private static void getJDBCDriver() throws DAOException {
+    private void getJDBCDriver() throws DAOException {
         if (!driverIsLoaded) {
             try {
                 Class.forName(DRIVER);
@@ -107,8 +109,8 @@ public class ConnectionPool {
         }
     }
 
-    /*
-    in case of any fatal errors we can stop tomcat
+    /**
+     * in case of errors we can stop tomcat
      */
     private static void shutdownTomcat() throws DAOException{
         try {
@@ -124,5 +126,4 @@ public class ConnectionPool {
             throw new DAOException("Can NOT stop TOMCAT", e);
         }
     }
-
 }

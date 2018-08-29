@@ -1,14 +1,14 @@
-package by.asrohau.iShop.dao.util;
+package by.asrohau.iShop.dao;
 
 public class DAOFinals {
 
-    /*
-    simple finals
+    /**
+     * simple finals
      */
     public static final int MAX_ROWS_AT_PAGE = 7;
 
-    /*
-    Database config finals
+    /**
+     * Database config finals
      */
     public static final String DATABASE_SETTINGS_PATH = "databaseConfig.properties";
     public static final String SQL_DRIVER = "sql.driver";

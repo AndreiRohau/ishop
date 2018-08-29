@@ -1,6 +1,7 @@
 package by.asrohau.iShop.dao.impl;
 
 import by.asrohau.iShop.dao.AbstractDAO;
+import by.asrohau.iShop.dao.ConnectionPool;
 import by.asrohau.iShop.dao.UserDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.entity.User;
@@ -15,14 +16,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.asrohau.iShop.dao.util.DAOFinals.MAX_ROWS_AT_PAGE;
+import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 
 public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
-	/*
-    UserDAO queries
-     */
+	/**
+	 * UserDAO queries
+	 */
 	private static final String SAVE_USER_QUERY = "INSERT INTO shop.users (login, password) VALUES (?,?)";
 	private static final String FIND_USER_BY_ID_QUERY = "SELECT * FROM shop.users WHERE id = ?";
 	private static final String FIND_USER_BY_LOGIN_QUERY = "SELECT * FROM shop.users WHERE login = ?";
@@ -35,8 +36,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 	private static final String DELETE_ORDERS_BY_USER_ID_QUERY = "DELETE FROM shop.orders WHERE user = ?";
 	private static final String DELETE_RESERVATIONS_BY_USER_ID_QUERY = "DELETE FROM shop.reserve WHERE userId = ?";
 
-	/*
-	save new User
+	public UserDAOImpl(ConnectionPool connectionPool) {
+		super(connectionPool);
+	}
+
+	/**
+	 * save new User
 	 */
 	@Override
 	public boolean save(User user) throws DAOException {
@@ -45,7 +50,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			int result = 0;
-			connection = getConnection();
+			connection = connectionPool.provide();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
@@ -74,12 +79,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	find by login and password
+	/**
+	 * find by login and password
 	 */
 	@Override
 	public User find(User user) throws DAOException {
@@ -87,7 +92,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_AND_PASSWORD_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			preparedStatement.setString(2, user.getPassword());
@@ -107,12 +112,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	find user by id
+	/**
+	 * find user by id
 	 */
 	@Override
 	public User findOne(long id) throws DAOException {
@@ -120,7 +125,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			preparedStatement = connection.prepareStatement(FIND_USER_BY_ID_QUERY);
 			preparedStatement.setLong(1, id);
 			resultSet = preparedStatement.executeQuery();
@@ -142,12 +147,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	change user's credentials where id=?
+	/**
+	 * change user's credentials where id=?
 	 */
 	@Override
 	public boolean update(User user) throws DAOException {
@@ -156,7 +161,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			int result = 0;
-			connection = getConnection();
+			connection = connectionPool.provide();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
@@ -186,19 +191,19 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	delete User by id - all his reserved products and all orders, NO EFFECTS FOR ADMIN
+	/**
+	 * delete User by id - all his reserved products and all orders, NO EFFECTS FOR ADMIN
 	 */
 	@Override
 	public boolean delete(long id) throws DAOException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID_QUERY);
 			preparedStatement.setLong(1, id);
@@ -223,12 +228,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	find all Users limit
+	/**
+	 * find all Users limit
 	 */
 	@Override
 	public List<User> findAll(int row) throws DAOException {
@@ -236,7 +241,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			preparedStatement = connection.prepareStatement(FIND_USERS_LIMIT_QUERY);
 			preparedStatement.setInt(1, row);
 			preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
@@ -261,12 +266,12 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
-	/*
-	count amount of user in the table 'users'
+	/**
+	 * count amount of user in the table 'users'
 	 */
 	@Override
 	public long countAll() throws DAOException {
@@ -274,7 +279,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			preparedStatement = connection.prepareStatement(COUNT_USERS_QUERY);
 			resultSet = preparedStatement.executeQuery();
 			resultSet.next();
@@ -283,7 +288,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
@@ -293,7 +298,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			preparedStatement = connection.prepareStatement(FIND_USER_BY_LOGIN_QUERY);
 			preparedStatement.setString(1, user.getLogin());
 			resultSet = preparedStatement.executeQuery();
@@ -314,7 +319,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(resultSet, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 
@@ -326,7 +331,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {
-			connection = getConnection();
+			connection = connectionPool.provide();
 			connection.setAutoCommit(false);
 
 			preparedStatement = connection.prepareStatement(UPDATE_PASSWORD_BY_LOGIN_AND_PASSWORD_QUERY);
@@ -347,7 +352,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 			throw new DAOException("Error in DAO method", e);
 		} finally {
 			close(null, preparedStatement);
-			returnConnection(connection);
+			connectionPool.retrieve(connection);
 		}
 	}
 

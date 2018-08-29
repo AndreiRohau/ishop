@@ -187,7 +187,7 @@
                                         <input type="hidden" name="id" value="${user.id}" />
                                         <input type="hidden" name="login" value="${user.login}" />
                                         <input type="hidden" name="page" value="1" />
-                                        <input type="submit" name="edit" value="${orders}" class="btn btn-default"/><br/>
+                                        <button type="submit" class="btn btn-default">${orders}</button><br/>
                                     </form>
                                 </td>
                                 <td>
@@ -206,12 +206,12 @@
                         <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
                             <c:if test="${i == requestScope.page.currentPage}">
                                 <li class="active">
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                             <c:if test="${i != requestScope.page.currentPage}">
                                 <li>
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                         </c:forEach>

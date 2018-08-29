@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.service.ProductService;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class ProductInfoCommand implements Command {
+public class ProductInfoCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductInfoCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -30,7 +30,7 @@ public class ProductInfoCommand implements Command {
 
             if(product != null){
                 request.setAttribute("product", product);
-                request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=productInfo&id=" + product.getId());
+                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
             } else {
                 request.setAttribute("cannotFindProduct", true);
             }

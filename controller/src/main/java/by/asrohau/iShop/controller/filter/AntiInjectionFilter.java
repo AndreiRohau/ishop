@@ -4,35 +4,34 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
-import static by.asrohau.iShop.controller.ControllerFinals.*;
+public class AntiInjectionFilter implements Filter {
 
-public class AuthenticationFilter implements Filter {
+    private static final String DOES_NOT_CONTAIN = "^((?!<|>|script).)*$";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        if (req.getParameter(COMMAND).matches("logout") ||
-                req.getParameter(COMMAND).matches("logination") ||
-                req.getParameter(COMMAND).matches("registration") ||
-                req.getParameter(COMMAND).matches("changeLanguage") ||
-                req.getParameter(COMMAND).matches("goToPage") ||
-                req.getSession().getAttribute(ROLE) != null) {
-
-            chain.doFilter(request, response);
+        StringBuilder sb = new StringBuilder();
+        Map<String, String[]> params = request.getParameterMap();
+        for (String [] v : params.values()) {
+            sb.append(v[0]);
+        }
+        if (sb.toString().trim().matches(DOES_NOT_CONTAIN)) {
+            chain.doFilter(req, res);
         } else {
-            res.sendRedirect("index.jsp");
+            request.getRequestDispatcher("/WEB-INF/errors/antiInjection.jsp").forward(request, response);
         }
     }
 
     @Override
     public void destroy() {
-
     }
+
 }

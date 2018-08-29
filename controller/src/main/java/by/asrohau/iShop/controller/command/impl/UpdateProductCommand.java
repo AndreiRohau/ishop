@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Product;
 import by.asrohau.iShop.service.ProductService;
@@ -13,10 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.ID;
 import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
 
-public class UpdateProductCommand implements Command {
+public class UpdateProductCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(UpdateProductCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -34,7 +33,7 @@ public class UpdateProductCommand implements Command {
                     request.getParameter("description"));
             boolean productUpdated = productService.updateProduct(product);
 
-            String lastCommand = "FrontController?command=productInfo&id=" + request.getParameter(ID) +"&message=" + productUpdated;
+            String lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&message=" + productUpdated;
 
             request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);

@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.controller.command.Command;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.service.OrderService;
@@ -14,10 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static by.asrohau.iShop.controller.ControllerFinals.ID;
-import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
-public class CreateOrderCommand implements Command {
+public class CreateOrderCommand extends AbstractCommand {
 
     private static final Logger logger = Logger.getLogger(CreateOrderCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -27,16 +26,15 @@ public class CreateOrderCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to CreateOrderCommand");
-        try{
+        try {
             long userId = (Long) request.getSession().getAttribute(ID);
             List<Long> reservedProductIds = reserveService.getReservedProductIds(userId);
-            logger.info(reservedProductIds.size());
-            logger.info(reservedProductIds);
             Order order = new Order(userId, request.getParameter("userAddress"), request.getParameter("userPhone"));
             boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 
-            request.getSession().setAttribute(LAST_COMMAND, "FrontController?command=showReserved&page=1&orderCreated=" + orderCreated);
-            response.sendRedirect("FrontController?command=showReserved&page=1&message=" + orderCreated);
+            String lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&" + MESSAGE + "=" + orderCreated;
+            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+            response.sendRedirect(lastCommand);
         } catch (ServiceException  | IOException e) {
             throw new ControllerException(e);
         }

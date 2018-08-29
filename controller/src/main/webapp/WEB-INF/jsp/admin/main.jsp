@@ -191,7 +191,7 @@
                                     <form action="FrontController" method="post">
                                         <input type="hidden" name="command" value="productInfo" />
                                         <input type="hidden" name="id" value="${product.id}" />
-                                        <input type="submit" name="buy" value="${edit}" class="btn btn-default"/><br/>
+                                        <button class="btn btn-default" type="submit">${edit}</button><br/>
                                     </form>
                                 </td>
                             </tr>
@@ -203,12 +203,12 @@
                         <c:forEach begin="1" end="${requestScope.page.maxPage}" var="i">
                             <c:if test="${i == requestScope.page.currentPage}">
                                 <li class="active">
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                             <c:if test="${i != requestScope.page.currentPage}">
                                 <li>
-                                    <a href="${sessionScope.lastCMDneedPage}${i}">${i}</a>
+                                    <a href="${sessionScope.lastCommandNeedPage}${i}">${i}</a>
                                 </li>
                             </c:if>
                         </c:forEach>

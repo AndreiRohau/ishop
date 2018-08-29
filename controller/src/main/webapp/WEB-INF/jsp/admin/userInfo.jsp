@@ -195,7 +195,7 @@
                             <input type="hidden" name="id" value="${requestScope.user.id}" />
                             <input type="hidden" name="login" value="${requestScope.user.login}" />
                             <input type="hidden" name="page" value="1" />
-                            <input class="btn btn-default" type="submit" name="showOrders" value="${orders} ${requestScope.user.login}" /><br/>
+                            <button class="btn btn-default" type="submit">${orders} ${requestScope.user.login}</button><br/>
                         </form>
                         <br/>
                         <br/>
@@ -207,7 +207,7 @@
                             <input type="hidden" name="id" value="${requestScope.user.id}" />
                             <input type="hidden" name="login" value="${requestScope.user.login}" />
                             <input type="hidden" name="password" value="${requestScope.user.password}" />
-                            <input title="${delete} ${requestScope.user.login}" class="btn btn-default" type="submit" name="delete" value="${delete}" /><br/>
+                            <button title="${delete} ${requestScope.user.login}" class="btn btn-default" type="submit">${delete}</button><br/>
                         </form>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                <input type="submit" form="editUser" name="edit" value="${edit}" class="btn btn-default"/>
+                                                <button class="btn btn-default" type="submit" form="editUser">${edit}</button>
                                             </td>
                                         </tr>
                                     </form>

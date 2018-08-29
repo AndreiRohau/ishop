@@ -1,9 +1,9 @@
 package by.asrohau.iShop.entity;
 
-import by.asrohau.iShop.dao.util.DAOFinals;
+import by.asrohau.iShop.dao.DAOFinals;
 
 public class Page {
-    private static final int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
+    public static final int _MAX_ROWS_AT_PAGE = DAOFinals.MAX_ROWS_AT_PAGE;
     private int currentPage;
     private int maxPage;
     private int row;

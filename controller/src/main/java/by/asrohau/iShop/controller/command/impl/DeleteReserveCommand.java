@@ -1,6 +1,6 @@
 package by.asrohau.iShop.controller.command.impl;
 
-import by.asrohau.iShop.entity.Reserve;
+import by.asrohau.iShop.controller.command.AbstractCommand;
 import by.asrohau.iShop.controller.command.Command;
 import by.asrohau.iShop.controller.exception.ControllerException;
 import by.asrohau.iShop.service.ReserveService;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
 
-public class DeleteReserveCommand implements Command {
+public class DeleteReserveCommand extends AbstractCommand {
 
     private static final Logger logger = LoggerFactory.getLogger(DeleteReserveCommand.class);
     private ServiceFactory serviceFactory = ServiceFactory.getInstance();
@@ -27,7 +27,7 @@ public class DeleteReserveCommand implements Command {
         try {
             boolean deleted = reserveService.deleteReserved(Long.parseLong(request.getParameter("reserveId")));
 
-            response.sendRedirect(String.valueOf(request.getSession().getAttribute(LAST_COMMAND)) + "&deleted=" + deleted);
+            response.sendRedirect((String) request.getSession().getAttribute(LAST_COMMAND));
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }

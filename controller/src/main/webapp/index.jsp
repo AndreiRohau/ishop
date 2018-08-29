@@ -113,14 +113,14 @@
 					</div>
 					<div class="col-md-1">
 						<div class="col-md-12" style="padding-bottom:15px; padding-top:5px">
-							<button form="loginForm" class="btn btn-default" type="submit" name="logIn" value="logIn">
+							<button form="loginForm" class="btn btn-default" type="submit">
 								<c:out value="${signIn}"/>
 							</button>
 						</div>
 						<div class="col-md-12">
 							<form action="FrontController" method="post">
 								<input type="hidden" name="command" value="logout"/>
-								<button class="btn btn-default" type="submit" value="logOut">
+								<button class="btn btn-default" type="submit">
 									<c:out value="${logOut}"/>
 								</button>
 							</form>
