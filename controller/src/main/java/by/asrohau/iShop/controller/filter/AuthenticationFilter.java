@@ -15,19 +15,19 @@ public class AuthenticationFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-        if (request.getParameter(COMMAND).matches("logout") ||
-                request.getParameter(COMMAND).matches("logination") ||
-                request.getParameter(COMMAND).matches("registration") ||
-                request.getParameter(COMMAND).matches("changeLanguage") ||
-                request.getParameter(COMMAND).matches("goToPage") ||
-                request.getSession().getAttribute(ROLE) != null) {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        if (req.getParameter(COMMAND).matches("logout") ||
+                req.getParameter(COMMAND).matches("logination") ||
+                req.getParameter(COMMAND).matches("registration") ||
+                req.getParameter(COMMAND).matches("changeLanguage") ||
+                req.getParameter(COMMAND).matches("goToPage") ||
+                req.getSession().getAttribute(ROLE) != null) {
 
-            chain.doFilter(req, res);
+            chain.doFilter(request, response);
         } else {
-            response.sendRedirect("index.jsp");
+            res.sendRedirect("index.jsp");
         }
     }
 

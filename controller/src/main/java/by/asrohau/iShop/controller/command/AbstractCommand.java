@@ -5,11 +5,11 @@ import java.util.Map;
 
 public abstract class AbstractCommand implements Command {
 
-    protected String defineCommand(HttpServletRequest req, boolean withPage) {
+    protected String defineCommand(HttpServletRequest request, boolean withPage) {
         /*
         name and value as Map<String, String[]>
          */
-        Map<String, String[]> params = req.getParameterMap();
+        Map<String, String[]> params = request.getParameterMap();
         /*
         FrontController is only servlet
          */
