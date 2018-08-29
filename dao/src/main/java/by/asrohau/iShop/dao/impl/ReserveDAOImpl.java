@@ -21,8 +21,8 @@ import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(ReserveDAOImpl.class);
-    /*
-    ReserveDAO queries
+    /**
+     * ReserveDAO queries
      */
     private static final String SAVE_RESERVATION_QUERY = "INSERT INTO shop.reserve (userId, productId) VALUES (?,?)";
     private static final String FIND_RESERVES_LIMIT_QUERY = "SELECT * FROM shop.reserve LIMIT ?,?";
@@ -39,15 +39,15 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         super(connectionPool);
     }
 
-    /*
-        save reserve to reserve table
-         */
+    /**
+     * save reserve to reserve table
+     * */
     @Override
     public boolean save(Reserve reserve) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(SAVE_RESERVATION_QUERY);
             preparedStatement.setLong(1, reserve.getUserId());
             preparedStatement.setLong(2, reserve.getProductId());
@@ -57,12 +57,12 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    finds reserve by user id and product id
+    /**
+     * finds reserve by user id and product id
      */
     @Override
     public Reserve find(Reserve reserve) throws DAOException {
@@ -70,7 +70,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_RESERVE_BY_USER_ID_AND_PRODUCT_ID_QUERY);
             preparedStatement.setLong(1, reserve.getUserId());
             preparedStatement.setLong(2, reserve.getProductId());
@@ -92,13 +92,13 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
 
     }
 
-    /*
-    finds reservation by id
+    /**
+     * finds reservation by id
      */
     @Override
     public Reserve findOne(long id) throws DAOException {
@@ -106,7 +106,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_RESERVE_BY_ID_QUERY);
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
@@ -127,19 +127,19 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    updates reservation by id
+    /**
+     * updates reservation by id
      */
     @Override
     public boolean update(Reserve reserve) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(UPDATE_RESERVE_BY_ID_QUERY);
             preparedStatement.setLong(1, reserve.getUserId());
@@ -158,19 +158,19 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    delete reservation by id
+    /**
+     * delete reservation by id
      */
     @Override
     public boolean delete(long id) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(DELETE_RESERVATION_BY_ID_QUERY);
             preparedStatement.setLong(1, id);
@@ -187,12 +187,12 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    finds all reservations in table
+    /**
+     * finds all reservations in table
      */
     @Override
     public List<Reserve> findAll(int row) throws DAOException {
@@ -200,7 +200,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_RESERVES_LIMIT_QUERY);
             preparedStatement.setInt(1, row);
             preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
@@ -218,12 +218,12 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    count all reservations in table
+    /**
+     * count all reservations in table
      */
     @Override
     public long countAll() throws DAOException {
@@ -231,7 +231,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_RESERVED_QUERY);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -240,7 +240,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -250,7 +250,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_RESERVES_BY_USER_ID_LIMIT_QUERY);
             preparedStatement.setLong(1, userId);
             preparedStatement.setInt(2, row);
@@ -269,7 +269,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -279,7 +279,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_RESERVES_BY_USER_ID_QUERY);
             preparedStatement.setLong(1, userId);
             List<Long> productIdsList = new LinkedList<>();
@@ -294,7 +294,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -304,7 +304,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_RESERVED_BY_USER_ID_QUERY);
             preparedStatement.setLong(1, userId);
             resultSet = preparedStatement.executeQuery();
@@ -314,7 +314,7 @@ public class ReserveDAOImpl extends AbstractDAO implements ReserveDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 }

@@ -198,7 +198,7 @@
 										<form action="FrontController" method="post">
 											<input type="hidden" name="command" value="productInfo" />
 											<input type="hidden" name="id" value="${product.id}" />
-											<button type="submit" class="btn btn-default">${info}"</button><br/>
+											<button type="submit" class="btn btn-default">${info}</button><br/>
 										</form>
 									</td>
 									<td>${product.company}</td>

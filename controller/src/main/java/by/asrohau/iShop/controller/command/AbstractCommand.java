@@ -5,6 +5,12 @@ import java.util.Map;
 
 public abstract class AbstractCommand implements Command {
 
+    /**
+     * Defines incoming url (command or action) as a String
+     * @param request, which comes from web
+     * @param withPage, required when the command is pageable
+     * @return url as a String, with all parameters
+     */
     protected String defineCommand(HttpServletRequest request, boolean withPage) {
         /*
         name and value as Map<String, String[]>
@@ -17,20 +23,27 @@ public abstract class AbstractCommand implements Command {
         /*
         creating a line of [name=value&]
          */
+        String page = "0";
         for (String k : params.keySet()) {
-            sb.append(k).append("=").append(params.get(k)[0]).append("&");
+            sb.append(k).append("=");
+            if (!k.equals("page")) {
+                sb.append(params.get(k)[0]).append("&");
+            } else {
+                page = params.get(k)[0];
+                break;
+            }
         }
         /*
-        if withPage = false, then [...page=]
+        when withPage=true, and command has key("page"), then returns command with page number
          */
-        int end = sb.length() - 2;
-        /*
-        else [...page=?], not ?, but any number according to the 'web' value
-         */
-        if (withPage) {
-            end++;
+        if (!page.equals("0")) {
+            if (withPage) {
+                return sb.append(page).toString();
+            } else {
+                return sb.toString();
+            }
+        } else {
+            return sb.substring(0, sb.length() - 1);
         }
-        return sb.substring(0, end);
     }
-
 }

@@ -18,8 +18,8 @@ import static by.asrohau.iShop.dao.DAOFinals.MAX_ROWS_AT_PAGE;
 public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(OrderDAOImpl.class);
-    /*
-    OrderDAO queries
+    /**
+     * OrderDAO queries
      */
     private static final String SAVE_NEW_ORDER_QUERY = "INSERT INTO shop.orders (user, products, address, phone, status, dateCreated) VALUES (?,?,?,?,?,?)";
     private static final String FIND_ORDER_BY_ID_USER_PRODUCTS_ADDRESS_PHONE_QUERY = "SELECT * FROM shop.orders WHERE id = ? AND user = ? AND products = ? AND address = ? AND phone = ?";
@@ -42,15 +42,15 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         super(connectionPool);
     }
 
-    /*
-    create new Order - this is a transactional method with roleback
+    /**
+     * create new Order - this is a transactional method with roleback
      */
     @Override
     public boolean save(Order order) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
 
             preparedStatement = connection.prepareStatement(SAVE_NEW_ORDER_QUERY);
@@ -77,12 +77,12 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    find Order equals
+    /**
+     * find Order equals
      */
     @Override
     public Order find(Order order) throws DAOException {
@@ -90,7 +90,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDER_BY_ID_USER_PRODUCTS_ADDRESS_PHONE_QUERY);
             preparedStatement.setLong(1, order.getId());
             preparedStatement.setLong(2, order.getUserId());
@@ -117,12 +117,12 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
     
-    /*
-    find Order by id
+    /**
+     * find Order by id
      */
     @Override
     public Order findOne(long id) throws DAOException {
@@ -130,7 +130,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDER_BY_ID_QUERY);
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
@@ -155,19 +155,19 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    updates list of products in Order
+    /**
+     * updates list of products in Order
      */
     @Override
     public boolean update(Order order) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(UPDATE_ORDER_PRODUCTS_QUERY);
             preparedStatement.setString(1, order.getProductIds());
             preparedStatement.setLong(2, order.getId());
@@ -183,19 +183,19 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    delete Order by Id
+    /**
+     * delete Order by Id
      */
     @Override
     public boolean delete(long id) throws DAOException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
 
             preparedStatement = connection.prepareStatement(DELETE_ORDER_BY_ID_QUERY);
@@ -213,12 +213,12 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    find all Orders in schema:shop table:orders
+    /**
+     * find all Orders in schema:shop table:orders
      */
     @Override
     public List<Order> findAll(int row) throws DAOException {
@@ -226,7 +226,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDERS_LIMIT_QUERY);
             preparedStatement.setInt(1, row);
             preparedStatement.setInt(2, MAX_ROWS_AT_PAGE);
@@ -250,12 +250,12 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
-    /*
-    count All Orders in schema:shop table:orders
+    /**
+     * count All Orders in schema:shop table:orders
      */
     @Override
     public long countAll() throws DAOException {
@@ -263,7 +263,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_ORDERS_QUERY);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
@@ -272,7 +272,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -281,7 +281,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(DELETE_ORDERS_BY_USER_ID_QUERY);
             preparedStatement.setLong(1, userId);
@@ -298,7 +298,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -308,7 +308,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_ORDERS_BY_STATUS_QUERY);
             preparedStatement.setString(1, status);
             resultSet = preparedStatement.executeQuery();
@@ -318,7 +318,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -328,7 +328,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDERS_BY_STATUS_LIMIT_QUERY);
             preparedStatement.setString(1, status);
             preparedStatement.setInt(2, row);
@@ -351,7 +351,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -360,7 +360,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS_QUERY);
             preparedStatement.setString(1, status);
@@ -377,7 +377,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(null, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -387,7 +387,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_ORDERS_BY_USER_ID_QUERY);
             preparedStatement.setLong(1, userId);
             resultSet = preparedStatement.executeQuery();
@@ -398,7 +398,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -408,7 +408,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(COUNT_ORDERS_BY_USER_ID_AND_STATUS_QUERY);
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getStatus());
@@ -419,7 +419,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -429,7 +429,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDERS_BY_USER_ID_LIMIT_QUERY);
             preparedStatement.setLong(1, userId);
             preparedStatement.setInt(2, row);
@@ -452,7 +452,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 
@@ -462,7 +462,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = getConnection();
+            connection = connectionPool.provide();
             preparedStatement = connection.prepareStatement(FIND_ORDERS_BY_USER_ID_AND_STATUS_LIMIT_QUERY);
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getStatus());
@@ -486,7 +486,7 @@ public class OrderDAOImpl extends AbstractDAO implements OrderDAO {
             throw new DAOException("Error in DAO method", e);
         } finally {
             close(resultSet, preparedStatement);
-            returnConnection(connection);
+            connectionPool.retrieve(connection);
         }
     }
 }
