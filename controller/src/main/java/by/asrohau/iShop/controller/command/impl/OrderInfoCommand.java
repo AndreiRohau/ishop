@@ -39,18 +39,11 @@ public class OrderInfoCommand extends AbstractCommand {
 
             if(AllProducts.size() == 0) {
                 orderService.deleteOrder(order.getId());
-                //response.sendRedirect("FrontController?command=showUserOrders&page=1&id=" + order.getUserId());
-                response.sendRedirect((String) request.getAttribute(LAST_COMMAND));
+                response.sendRedirect((String) request.getSession().getAttribute(LAST_COMMAND));
             } else {
                 request.setAttribute("order", order);
                 request.setAttribute("products", productService.subList(AllProducts, page));
                 request.setAttribute("page", page);
-//                String lastCommand = "FrontController?command=orderInfo"
-//                        + "&id=" + order.getId()
-//                        + "&userId=" + order.getUserId()
-//                        + "&address=" + order.getUserAddress()
-//                        + "&phone=" + order.getUserPhone()
-//                        + "&page=";
                 String lastCommand = defineCommand(request, false);
                 request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
                 request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);

@@ -27,11 +27,12 @@ public class DeleteUserCommand extends AbstractCommand {
 		try {
 			String lastCommand;
 			boolean isUser = "user".equals(request.getSession().getAttribute(ROLE));
-			boolean isDeleted = userService.deleteUser(
-												new User(Long.parseLong(request.getParameter(ID)),
-														request.getParameter(LOGIN).trim(),
-														request.getParameter(PASSWORD).trim()),
-												isUser);
+			User user = new User(
+					Long.parseLong(request.getParameter(ID)),
+					request.getParameter(LOGIN).trim(),
+					request.getParameter(PASSWORD).trim());
+
+			boolean isDeleted = userService.deleteUser(user, isUser);
 
 			if(isDeleted && isUser){
 				request.getSession().invalidate();

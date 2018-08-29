@@ -41,14 +41,8 @@ public class ShowUserOrdersByStatusCommand extends AbstractCommand {
             request.setAttribute("orders", orderService.getUserOrdersByStatus(page.getRow(), order));
             request.setAttribute("user", user);
             request.setAttribute("page", page);
-//            String lastCommandNeedPage = "FrontController?" +
-//                    "command=showUserOrdersByStatus" +
-//                    "&id=" + user.getId() +
-//                    "&login=" + user.getLogin() +
-//                    "&status=" + status +
-//                    "&page=";
-            String lastCommandNeedPage = defineCommand(request, false);
 
+            String lastCommandNeedPage = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
 

@@ -61,10 +61,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> findProductsWithIds(List<Reserve> reservations) throws ServiceException {
+	public synchronized List<Product> findProductsWithIds(List<Reserve> reservations) throws ServiceException {
 		try {
 			List<Product> products = new ArrayList<>();
-			for(Reserve reservation : reservations){
+			for (Reserve reservation : reservations) {
 				Product product = productDAO.findOne(reservation.getProductId());
 				product.setReserveId(reservation.getId());
 				products.add(product);

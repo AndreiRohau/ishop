@@ -39,13 +39,7 @@ public class FindSuitableProductCommand extends AbstractCommand {
 
             request.setAttribute("products", products);
             request.setAttribute("page", page);
-//            String lastCommand = "FrontController?" +
-//                    "command=findSuitableProduct" +
-//                    "&company=" + product.getCompany() +
-//                    "&name=" + product.getName() +
-//                    "&type=" + product.getType() +
-//                    "&price=" + product.getPrice() +
-//                    "&page=";
+
             String lastCommand = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommand);
             request.getSession().setAttribute(LAST_COMMAND, lastCommand + page.getCurrentPage());
