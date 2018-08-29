@@ -1,7 +1,5 @@
 package by.asrohau.iShop.controller.filter;
 
-import by.asrohau.iShop.controller.FrontController;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
