@@ -1,10 +1,9 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.entity.Product;
-import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.dao.DAOFactory;
 import by.asrohau.iShop.dao.ReserveDAO;
 import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.entity.Reserve;
 import by.asrohau.iShop.service.ReserveService;
 import by.asrohau.iShop.service.exception.ServiceException;
 
@@ -58,7 +57,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public List<Long> getReservedProductIds(long userId) throws ServiceException { // LinkedList
+    public List<Long> getReservedProductIds(long userId) throws ServiceException {
         try {
             return reserveDAO.findReservedProductIdsByUserId(userId);
         } catch (DAOException e) {

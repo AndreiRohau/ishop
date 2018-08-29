@@ -1,10 +1,9 @@
 package by.asrohau.iShop.service.impl;
 
-import by.asrohau.iShop.dao.DAOFinals;
-import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.dao.DAOFactory;
-import by.asrohau.iShop.dao.exception.DAOException;
 import by.asrohau.iShop.dao.OrderDAO;
+import by.asrohau.iShop.dao.exception.DAOException;
+import by.asrohau.iShop.entity.Order;
 import by.asrohau.iShop.entity.Page;
 import by.asrohau.iShop.service.OrderService;
 import by.asrohau.iShop.service.exception.ServiceException;
