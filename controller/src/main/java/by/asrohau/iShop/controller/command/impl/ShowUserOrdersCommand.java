@@ -38,11 +38,6 @@ public class ShowUserOrdersCommand extends AbstractCommand {
             request.setAttribute("orders", orderService.getUserOrders(page.getRow(), user.getId()));
             request.setAttribute("user", user);
             request.setAttribute("page", page);
-//            String lastCommandNeedPage = "FrontController?" +
-//                    "command=showUserOrders" +
-//                    "&id=" + user.getId() +
-//                    "&login=" + user.getLogin() +
-//                    "&page=";
             String lastCommandNeedPage = defineCommand(request, false);
             request.getSession().setAttribute(LAST_COMMAND, lastCommandNeedPage + page.getCurrentPage());
             request.getSession().setAttribute(LAST_COMMAND_NEED_PAGE, lastCommandNeedPage);
