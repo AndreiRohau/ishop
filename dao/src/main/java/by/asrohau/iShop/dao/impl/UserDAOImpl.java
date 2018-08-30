@@ -325,9 +325,6 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
 	@Override
 	public boolean changeUserPassword(User user, String newPassword) throws DAOException {
-		if(find(user) == null){
-			return false;
-		}
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		try {

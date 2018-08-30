@@ -41,7 +41,6 @@ public class LoginationCommand extends AbstractCommand {
 				request.getSession().setAttribute(LOGIN, userDTO.getLogin());
 			}
 
-			request.getSession(true).setAttribute(LAST_COMMAND, lastCommand);
 			response.sendRedirect(lastCommand);
 		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);

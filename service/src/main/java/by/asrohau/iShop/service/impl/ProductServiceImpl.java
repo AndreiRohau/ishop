@@ -95,8 +95,8 @@ public class ProductServiceImpl implements ProductService {
 						.stream()
 						.map(Product::getId)
 						.collect(Collectors.toList());
-				String id_s = idsList.toString().replaceAll("\\[|\\]| ", "");
-				order.setProductIds(id_s);
+				String idsInString = idsList.toString().replaceAll("\\[|\\]| ", "");
+				order.setProductIds(idsInString);
 				productDAO.updateProductsInOrder(order);
 			}
 			return products;
@@ -150,7 +150,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public List<Product> getProductsLike(Product product, int row) throws ServiceException { //ArrayList
+	public List<Product> getProductsLike(Product product, int row) throws ServiceException {
 		try {
 			return productDAO.findProductsLike(product, row);
 		} catch (DAOException e) {

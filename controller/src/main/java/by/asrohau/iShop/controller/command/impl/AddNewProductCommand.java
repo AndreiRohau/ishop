@@ -35,7 +35,6 @@ public class AddNewProductCommand extends AbstractCommand {
 
             String lastCommand = request.getSession().getAttribute(LAST_COMMAND) +
                     "&" + MESSAGE + "=" + productAdded;
-            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

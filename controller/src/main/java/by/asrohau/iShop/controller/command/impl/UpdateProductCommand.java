@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.asrohau.iShop.controller.ControllerFinals.LAST_COMMAND;
+import static by.asrohau.iShop.controller.ControllerFinals.*;
 
 public class UpdateProductCommand extends AbstractCommand {
 
@@ -33,9 +33,9 @@ public class UpdateProductCommand extends AbstractCommand {
                     request.getParameter("description"));
             boolean productUpdated = productService.updateProduct(product);
 
-            String lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&message=" + productUpdated;
+            String lastCommand = request.getSession().getAttribute(LAST_COMMAND) +
+                    "&" + MESSAGE + "=" + productUpdated;
 
-            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

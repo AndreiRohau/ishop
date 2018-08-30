@@ -33,7 +33,7 @@ public class CreateOrderCommand extends AbstractCommand {
             boolean orderCreated = orderService.saveNewOrder(order, reservedProductIds);
 
             String lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&" + MESSAGE + "=" + orderCreated;
-            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
+            //request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException  | IOException e) {
             throw new ControllerException(e);

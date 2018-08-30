@@ -114,7 +114,9 @@ public class ConnectionPoolImpl implements ConnectionPool{
      */
     private static void shutdownTomcat() throws DAOException{
         try {
-            // path to command C:\Program Files\apache-tomcat-8.5.15\conf\server.xml
+            /*
+             path to command C:\Program Files\apache-tomcat-8.5.15\conf\server.xml , choose localhost and port
+              */
             Socket socket = new Socket("localhost", 8005);
             if (socket.isConnected()) {
                 PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);

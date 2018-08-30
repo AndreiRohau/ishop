@@ -23,7 +23,7 @@ public class DeleteProductCommand extends AbstractCommand {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ControllerException {
         logger.info("We got to delete PRODUCT Command");
         try {
-            String lastCommand = "";
+            String lastCommand;
             long productId = Long.parseLong(request.getParameter(ID));
 
             if (productService.deleteProduct(productId)) {
@@ -32,7 +32,6 @@ public class DeleteProductCommand extends AbstractCommand {
                 lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&" + MESSAGE + "=" + false;
             }
 
-            request.getSession().setAttribute(LAST_COMMAND, lastCommand);
             response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);

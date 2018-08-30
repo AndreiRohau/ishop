@@ -171,7 +171,7 @@
         </div>
     </c:if>
 
-    <c:if test="${requestScope.updateFailed == true}">
+    <c:if test="${requestScope.message == false}">
         <div class="panel-body">
             <div class="alert alert-info" role="alert" style="padding:15px">
                 <h3><c:out value="${nothingHappened}"/></h3>
