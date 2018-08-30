@@ -30,12 +30,14 @@ public class ProductInfoCommand extends AbstractCommand {
 
             if(product != null){
                 request.setAttribute("product", product);
-                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
             } else {
                 request.setAttribute("cannotFindProduct", true);
             }
 
-            request.setAttribute("message", request.getParameter(MESSAGE));
+            request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
+            if (request.getParameter(MESSAGE) == null) {
+                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
+            }
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/productInfo.jsp")
                     .forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {

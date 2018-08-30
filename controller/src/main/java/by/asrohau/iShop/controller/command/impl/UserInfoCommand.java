@@ -30,11 +30,14 @@ public class UserInfoCommand extends AbstractCommand {
 
             if(user != null){
                 request.setAttribute("user", user);
-                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
             } else {
                 request.setAttribute("cannotFindUser", true);
             }
 
+            request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
+            if (request.getParameter(MESSAGE) == null) {
+                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
+            }
             request.getRequestDispatcher("/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE)
                     + "/userInfo.jsp").forward(request, response);
         } catch (ServiceException | ServletException | IOException e) {

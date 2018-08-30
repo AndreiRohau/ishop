@@ -23,7 +23,9 @@ public class GoToPageCommand extends AbstractCommand {
                     "/WEB-INF/jsp/" + request.getSession().getAttribute(ROLE) + "/" + request.getParameter(ADDRESS);
 
             request.setAttribute(MESSAGE, request.getParameter(MESSAGE));
-            request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
+            if (request.getParameter(MESSAGE) == null) {
+                request.getSession().setAttribute(LAST_COMMAND, defineCommand(request, true));
+            }
             request.getRequestDispatcher(goToPage).forward(request, response);
         } catch (IOException | ServletException e) {
             throw new ControllerException(e);

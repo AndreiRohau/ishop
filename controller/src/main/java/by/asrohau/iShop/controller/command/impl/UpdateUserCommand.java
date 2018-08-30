@@ -29,13 +29,17 @@ public class UpdateUserCommand extends AbstractCommand {
                     request.getParameter(LOGIN),
                     request.getParameter(PASSWORD));
 
-            if(!userService.updateUser(user)){
-                request.setAttribute("updateFailed", true);
+            boolean success = userService.updateUser(user);
+
+            if(!success){
                 user = userService.findUserWithId(user.getId());
             }
 
+            String lastCommand = request.getSession().getAttribute(LAST_COMMAND) +
+                    "&" + MESSAGE + "=" + success;
+
             request.setAttribute("user", user);
-            response.sendRedirect((String) request.getSession().getAttribute(LAST_COMMAND));
+            response.sendRedirect(lastCommand);
         } catch (ServiceException | IOException e) {
             throw new ControllerException(e);
         }
