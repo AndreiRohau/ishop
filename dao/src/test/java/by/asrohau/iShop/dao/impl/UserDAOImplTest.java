@@ -20,12 +20,6 @@ import static org.mockito.Mockito.times;
 
 public class UserDAOImplTest {
 
-    /*
-    ?????
-    необходимо ли проверка еще чего нибудь
-    выброс СКЛ исключения?
-    рол бэк?
-     */
     @Test
     public void save() throws Exception {
         User user = new User("Andy", "12345", "user");
@@ -249,9 +243,6 @@ public class UserDAOImplTest {
         Mockito.verify(connectionPool).retrieve(connection);
     }
 
-    /*
-    problem with anyString() can't be stubbed
-     */
     @Test
     public void findAll() throws Exception {
         int row = 0;
@@ -304,11 +295,9 @@ public class UserDAOImplTest {
         Mockito.when(connection.prepareStatement(query)).thenReturn(preparedStatement);
         Mockito.when(preparedStatement.executeQuery()).thenReturn(resultSet);
         Mockito.when(resultSet.next()).thenReturn(Boolean.TRUE, Boolean.FALSE);
-        //todo ?? return anyLong()
+
         Mockito.when(resultSet.getLong(1)).thenReturn(15L);
 
-        //todo cant be stubbed
-        //Mockito.doNothing().when(connectionPool).retrieve(connection);
 
         UserDAO userDAO = new UserDAOImpl(connectionPool);
         userDAO.countAll();
@@ -319,7 +308,6 @@ public class UserDAOImplTest {
         Mockito.verify(resultSet, times(1)).next();
         Mockito.verify(resultSet).getLong(1);
 
-        //Mockito.verify(connectionPool).retrieve(connection);
     }
 
     /*
