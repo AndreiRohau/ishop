@@ -322,6 +322,9 @@ public class UserDAOImplTest {
         //Mockito.verify(connectionPool).retrieve(connection);
     }
 
+    /*
+    log4j WARN
+     */
     @Test
     public void findUserByLogin() throws Exception {
         User user = new User("Andy", "12345", "user");
