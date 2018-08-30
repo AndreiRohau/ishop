@@ -33,7 +33,6 @@ public class ChangePasswordCommand extends AbstractCommand {
 
 			String lastCommand = request.getSession().getAttribute(LAST_COMMAND) +
 					"&" + MESSAGE + "=" + passwordChanged;
-			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
 			response.sendRedirect(lastCommand);
 		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);

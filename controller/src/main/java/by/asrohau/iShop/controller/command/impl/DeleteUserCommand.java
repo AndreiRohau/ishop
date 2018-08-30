@@ -43,7 +43,6 @@ public class DeleteUserCommand extends AbstractCommand {
 				lastCommand = request.getSession().getAttribute(LAST_COMMAND) + "&message=deleteUserError";
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
 			response.sendRedirect(lastCommand);
 		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);

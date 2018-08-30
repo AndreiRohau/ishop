@@ -28,18 +28,17 @@ public class RegistrationCommand extends AbstractCommand {
 			User user = new User(request.getParameter(LOGIN).trim(),
 					request.getParameter(PASSWORD).trim(),
 					String.valueOf(request.getSession().getAttribute(ROLE)));
-
 			String password2 = request.getParameter(PASSWORD_2).trim();
-			String lastCommand = "";
+
+			String lastCommand = "FrontController?command=goToPage&address=index.jsp";
 			if (userService.registration(user, password2)) {
-				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=true";
+				lastCommand = lastCommand + "&message=true";
 			} else {
 				String message = password2.equals(user.getPassword()) ? "exists" : "passwordsUnequal";
 				message = request.getSession().getAttribute(ROLE) == null ? message : "logOutFirst";
-				lastCommand = "FrontController?command=goToPage&address=index.jsp&message=" + message;
+				lastCommand = lastCommand + "&message=" + message;
 			}
 
-			request.getSession().setAttribute(LAST_COMMAND, lastCommand);
 			response.sendRedirect(lastCommand);
 		} catch (ServiceException | IOException e) {
 			throw new ControllerException(e);
